@@ -1,0 +1,21 @@
+{
+  "name": "kaspa-ux",
+  "version": "0.0.1",
+  "description": "Kaspa Wallet User Interface Framework",
+  "main": "kaspa-ux.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aspectron/kaspa-ux"
+  },
+  "keywords": [],
+  "dependencies": {},
+  "files": [
+    "kaspa-ux.js",
+    "kaspa-ux.css",
+    "src",
+    "README.md",
+    "LICENSE",
+    "resources"
+  ]
+}
