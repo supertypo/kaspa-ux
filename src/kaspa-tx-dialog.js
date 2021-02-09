@@ -1,5 +1,5 @@
 import {
-	html, css, Dialog, askForPassword, KAS,
+	html, css, KaspaDialog, askForPassword, KAS,
 	formatForMachine, formatForHuman, paginationStyle, buildPagination, renderPagination
 } from './kaspa-dialog.js';
 

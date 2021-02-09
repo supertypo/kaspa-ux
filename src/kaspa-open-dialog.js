@@ -1,4 +1,4 @@
-import {html, css, Dialog} from './kaspa-dialog.js';
+import {html, css, KaspaDialog} from './kaspa-dialog.js';
 const pass = "";
 
 class KDXWalletOpenDialog extends KaspaDialog{

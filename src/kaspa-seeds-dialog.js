@@ -1,8 +1,8 @@
-import {html, css, Dialog, chunks, getRandomInt, shuffle} from './kaspa-dialog.js';
-import {
-	Wallet,
-	setLocalWallet, getLocalWallet
-} from './wallet.js';
+import {html, css, KaspaDialog, chunks, getRandomInt, shuffle} from './kaspa-dialog.js';
+// import {
+// 	Wallet,
+// 	setLocalWallet, getLocalWallet
+// } from './wallet.js';
 
 class KDXWalletSeedsDialog extends KaspaDialog{
 

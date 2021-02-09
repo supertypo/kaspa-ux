@@ -3,7 +3,7 @@ import {
 } from '/node_modules/@aspectron/flow-ux/src/base-element.js';
 export * from '/node_modules/@aspectron/flow-ux/src/base-element.js';
 import {validatePassword} from './wallet.js';
-export * from './wallet.js';;
+export * from './wallet.js';
 
 export class KaspaDialog extends BaseElement{
 

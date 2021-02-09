@@ -1,5 +1,5 @@
 import {
-	html, css, Dialog, askForPassword, KAS,
+	html, css, KaspaDialog, askForPassword, KAS,
 	formatForMachine, formatForHuman
 } from './kaspa-dialog.js';
 const pass = "";

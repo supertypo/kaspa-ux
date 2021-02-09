@@ -4,3 +4,4 @@ export * from './src/kaspa-receive-dialog.js';
 export * from './src/kaspa-seeds-dialog.js';
 export * from './src/kaspa-send-dialog.js';
 export * from './src/kaspa-tx-dialog.js';
+export * from './src/kaspa-wallet.js';
