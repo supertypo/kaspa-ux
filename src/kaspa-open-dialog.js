@@ -12,7 +12,7 @@ class KDXWalletOpenDialog extends KaspaDialog{
 	}
 
 	static get styles(){
-		return [Dialog.styles, css`
+		return [KaspaDialog.styles, css`
 			:host([mode="create"]) .container{max-height:400px}
 			:host([mode="init"]) .container{max-height:200px}
 			:host([mode="recover"]) .container{max-height:450px}

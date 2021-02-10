@@ -3,11 +3,24 @@
 // 	FlowFormat, SpinnerStyle
 // } from '/node_modules/@aspectron/flow-ux/flow-ux.js';
 
+import {initKaspaFramework} from 'kaspa-wallet-worker';
+/*
+import {test as test2} from '/kaspa-wallet-worker/kaspa-wallet-worker.js';
+test2();
+
+import {test as test3} from '/kaspa-wallet-worker/kaspa-wallet-worker.js';
+test3();
+
+import {test as test4} from '/kaspa-wallet-worker/kaspa-wallet-worker.js';
+test4();
+*/
+
 import {html, css, BaseElement, ScrollbarStyle, SpinnerStyle} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
 import {FlowFormat} from '/node_modules/@aspectron/flow-ux/src/flow-format.js';
 import { Deffered } from './wallet.js';
 import '/node_modules/@aspectron/flow-ux/resources/extern/decimal.js/decimal.js'
 
+let getLocalWallet = ()=>{}//TODO
 /*
 import {
 	initKaspaFramework, Wallet, RPC,
@@ -17,12 +30,14 @@ import {
 	GetTS, Deffered, askForPassword
 } from './wallet.js';
 
-export * from './kaspa-wallet-open-dialog.js';
+
 export * from './kaspa-wallet-seeds-dialog.js';
 export * from './kaspa-wallet-send-dialog.js';
 export * from './kaspa-wallet-receive-dialog.js';
 export * from './kaspa-wallet-tx-dialog.js';
 */
+
+export * from './kaspa-open-dialog.js';
 
 
 class KaspaWallet extends BaseElement{
@@ -126,7 +141,7 @@ class KaspaWallet extends BaseElement{
 	constructor() {
 		super();
 		this.txs = [];
-		this.walletSignal = Deffered()
+		this.walletSignal = Deffered();
 	}
 
 	setNetworkSettings(settings){
@@ -492,8 +507,13 @@ class KaspaWallet extends BaseElement{
 	}
 	connectedCallback(){
 		super.connectedCallback();
-
-		initKaspaFramework().then(()=>{
+		let openDialog = document.createElement('kdx-wallet-open-dialog');
+		this.parentNode.insertBefore(openDialog, this.nextSibling)
+		console.log("connectedCallback1", openDialog)
+		initKaspaFramework({
+			workerPath: "/kaspa-wallet-worker/worker.js"
+		}).then(()=>{
+			console.log("connectedCallback2")
 			let encryptedMnemonic = getLocalWallet()?.mnemonic
 			if(encryptedMnemonic){
 				showWalletInitDialog({
