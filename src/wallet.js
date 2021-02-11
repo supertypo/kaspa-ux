@@ -1,3 +1,6 @@
+import {helper} from '@kaspa/wallet-worker';
+export const {Deferred, KAS} = helper;
+
 /*
 const {Wallet, initKaspaFramework, Storage} = require("kaspa-wallet-worker");
 let {Mnemonic} = Wallet;
@@ -41,16 +44,7 @@ export const formatForHuman = (val)=>{
 export const formatForMachine = (val)=>{
   return Number(val) * 1e8;
 }
-
-export const KAS = (v, trailingZeros) => {
-    var [int,frac] = Decimal(v).mul(1e-8).toFixed(8).split('.');
-    int = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    if(trailingZeros)
-        return `${int}.${frac}`;
-    frac = frac?.replace(/0+$/,'');
-    return frac ? `${int}.${frac}` : int;
-}
-
+/*
 export const setLocalSetting = (name, value, prefix='kaspa-')=>{
 	if(!window.localStorage)
 		return
@@ -70,6 +64,7 @@ export const getLocalSetting = (name, defaults=undefined, prefix='kaspa-')=>{
 
 	return JSON.parse(value);
 }
+*/
 
 export const getLocalWallet = ()=>{
 	let meta = storage.getWallet();
@@ -173,16 +168,5 @@ export const askForPassword = async (args, callback)=>{
 // Wallet.setLocalWallet = setLocalWallet;
 
 window.askForPassword = askForPassword;
-
-export const Deffered = ()=>{
-	let resolve, reject;
-	let p = new Promise((_resolve, _reject)=>{
-		resolve = _resolve;
-		reject = _reject;
-	})
-	p.resolve = resolve;
-	p.reject = reject;
-	return p;
-}
 
 // export {Wallet, initKaspaFramework};

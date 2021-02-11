@@ -1,7 +1,7 @@
 import {html, css, KaspaDialog} from './kaspa-dialog.js';
 const pass = "";
 
-class KDXWalletOpenDialog extends KaspaDialog{
+class KaspaOpenDialog extends KaspaDialog{
 
 	static get properties() {
 		return {
@@ -255,4 +255,4 @@ class KDXWalletOpenDialog extends KaspaDialog{
     }
 }
 
-KDXWalletOpenDialog.define("kdx-wallet-open-dialog");
+KaspaOpenDialog.define("kaspa-open-dialog");

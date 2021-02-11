@@ -3,35 +3,19 @@
 // 	FlowFormat, SpinnerStyle
 // } from '/node_modules/@aspectron/flow-ux/flow-ux.js';
 
-import {initKaspaFramework} from 'kaspa-wallet-worker';
-/*
-import {test as test2} from '/kaspa-wallet-worker/kaspa-wallet-worker.js';
-test2();
-
-import {test as test3} from '/kaspa-wallet-worker/kaspa-wallet-worker.js';
-test3();
-
-import {test as test4} from '/kaspa-wallet-worker/kaspa-wallet-worker.js';
-test4();
-*/
-
+import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
 import {html, css, BaseElement, ScrollbarStyle, SpinnerStyle} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
 import {FlowFormat} from '/node_modules/@aspectron/flow-ux/src/flow-format.js';
-import { Deffered } from './wallet.js';
+import { Deferred, GetTS, KAS, formatForMachine} from './wallet.js';
 import '/node_modules/@aspectron/flow-ux/resources/extern/decimal.js/decimal.js'
 
 let getLocalWallet = ()=>{}//TODO
+let setLocalWallet = ()=>{}//TODO
+
+export * from './kaspa-seeds-dialog.js';
+
 /*
-import {
-	initKaspaFramework, Wallet, RPC,
-	setLocalWallet, getLocalWallet,
-	//getLocalSetting, setLocalSetting,
-	getUniqueId, formatForMachine, KAS,
-	GetTS, Deffered, askForPassword
-} from './wallet.js';
 
-
-export * from './kaspa-wallet-seeds-dialog.js';
 export * from './kaspa-wallet-send-dialog.js';
 export * from './kaspa-wallet-receive-dialog.js';
 export * from './kaspa-wallet-tx-dialog.js';
@@ -141,15 +125,15 @@ class KaspaWallet extends BaseElement{
 	constructor() {
 		super();
 		this.txs = [];
-		this.walletSignal = Deffered();
+		this.walletSignal = Deferred();
 	}
 
-	setNetworkSettings(settings){
-		this.local_kaspad_settings = settings;
+	setRPCBuilder(rpcBuilder){
+		this.rpcBuilder = rpcBuilder;
 	}
 
 	async initNetworkSettings() {
-		console.log("$$$$$$$$$$$$$$$ KASPAD SETTINGS", this.local_kaspad_settings);
+		console.log("$$$$$$$$$$$$$$$ rpcBuilder", this.rpcBuilder);
 
 		if(this.rpc) {
 			this.rpc.disconnect();
@@ -157,13 +141,14 @@ class KaspaWallet extends BaseElement{
 			delete this.rpc;
 		}
 
-		if(!this.local_kaspad_settings)
+		if(!this.rpcBuilder)
 			return false;
 		
-		const { network, port } = this.local_kaspad_settings;
+		//const { network, port } = this.local_kaspad_settings;
 		//const port = Wallet.networkTypes[network].port;
-		this.rpc = new RPC({ clientConfig:{ host : `127.0.0.1:${port}` } });
+		const {rpc, network} = this.rpcBuilder();//new RPC({ clientConfig:{ host : `127.0.0.1:${port}` } });
 		this.network = network;
+		this.rpc = rpc;
 	}
 	disconnectRPC(){
 		if(this.rpc)
@@ -403,7 +388,7 @@ class KaspaWallet extends BaseElement{
 	}
 
 	async getWalletInfo(wallet){
-    	this.uid = getUniqueId(await wallet.mnemonic);
+    	//this.uid = getUniqueId(await wallet.mnemonic);
     	const cache = false//getLocalSetting(`cache-${this.uid}`);
     	const {addresses} = cache||{};
     	if (cache && (addresses?.receiveCounter !== 0 || addresses?.changeCounter !== 0)) {
@@ -507,7 +492,7 @@ class KaspaWallet extends BaseElement{
 	}
 	connectedCallback(){
 		super.connectedCallback();
-		let openDialog = document.createElement('kdx-wallet-open-dialog');
+		let openDialog = document.createElement('kaspa-open-dialog');
 		this.parentNode.insertBefore(openDialog, this.nextSibling)
 		console.log("connectedCallback1", openDialog)
 		initKaspaFramework({
@@ -625,7 +610,7 @@ class KaspaWallet extends BaseElement{
 	}
 	openSeedsDialog(args, callback){
 		if(!this.seedsDialog){
-			this.seedsDialog = document.createElement("kdx-wallet-seeds-dialog");
+			this.seedsDialog = document.createElement("kaspa-seeds-dialog");
 			this.parentNode.appendChild(this.seedsDialog);
 		}
 		//console.log("encryptedMnemonic", encryptedMnemonic)
@@ -633,7 +618,7 @@ class KaspaWallet extends BaseElement{
 	}
 	showTxDialog(){
 		if(!this.txDialog){
-			this.txDialog = document.createElement("kdx-wallet-tx-dialog");
+			this.txDialog = document.createElement("kaspa-tx-dialog");
 			this.parentNode.appendChild(this.txDialog);
 		}
 		console.log("this.txDialog", this.txDialog)
@@ -641,7 +626,7 @@ class KaspaWallet extends BaseElement{
 	}
 	showSendDialog(){
 		if(!this.sendDialog){
-			this.sendDialog = document.createElement("kdx-wallet-send-dialog");
+			this.sendDialog = document.createElement("kaspa-send-dialog");
 			this.parentNode.appendChild(this.sendDialog);
 		}
 		console.log("this.sendDialog", this.sendDialog)
@@ -651,7 +636,7 @@ class KaspaWallet extends BaseElement{
 	}
 	showReceiveDialog(){
 		if(!this.receiveDialog){
-			this.receiveDialog = document.createElement("kdx-wallet-receive-dialog");
+			this.receiveDialog = document.createElement("kaspa-receive-dialog");
 			this.parentNode.appendChild(this.receiveDialog);
 		}
 		let address = this.receiveAddress;

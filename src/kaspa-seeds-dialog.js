@@ -1,10 +1,6 @@
 import {html, css, KaspaDialog, chunks, getRandomInt, shuffle} from './kaspa-dialog.js';
-// import {
-// 	Wallet,
-// 	setLocalWallet, getLocalWallet
-// } from './wallet.js';
 
-class KDXWalletSeedsDialog extends KaspaDialog{
+class KaspaSeedsDialog extends KaspaDialog{
 
 	static get properties() {
 		return {
@@ -14,7 +10,7 @@ class KDXWalletSeedsDialog extends KaspaDialog{
 	}
 
 	static get styles(){
-		return [Dialog.styles, css`
+		return [KaspaDialog.styles, css`
 			.heading{text-align:center}
 			.container{max-height:660px}
 			.buttons{justify-content:flex-end}
@@ -238,4 +234,4 @@ class KDXWalletSeedsDialog extends KaspaDialog{
 
 }
 
-KDXWalletSeedsDialog.define("kdx-wallet-seeds-dialog");
+KaspaSeedsDialog.define("kaspa-seeds-dialog");
