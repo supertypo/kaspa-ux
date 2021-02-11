@@ -1,5 +1,6 @@
-import {helper} from '@kaspa/wallet-worker';
+import {helper, Storage} from '@kaspa/wallet-worker';
 export const {Deferred, KAS} = helper;
+const storage = new Storage({logLevel:'debug'});
 
 /*
 const {Wallet, initKaspaFramework, Storage} = require("kaspa-wallet-worker");
@@ -75,12 +76,12 @@ export const getLocalWallet = ()=>{
 	return meta;
 }
 
-export const setLocalWallet = async (wallet)=>{
+export const setLocalWallet = async (wallet, meta={})=>{
 	let oldWallet = await getLocalWallet();
 	if(oldWallet)
-		return storage.createWallet(wallet, {generator:'kdx'})
+		return storage.createWallet(wallet, meta)
 
-	return storage.saveWallet(wallet, {generator:'kdx'});
+	return storage.saveWallet(wallet, meta);
 }
 
 

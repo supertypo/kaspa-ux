@@ -4,12 +4,12 @@ import {
 } from './kaspa-dialog.js';
 const pass = "";
 
-class KDXWalletSendDialog extends KaspaDialog{
+class KaspaSendDialog extends KaspaDialog{
 	static get styles(){
-		return [Dialog.styles, 
+		return [KaspaDialog.styles, 
 		css`
 			.container{
-				max-height:670px;
+				max-height:var(--kaspa-dialog-container-max-height, 670px);
 				--flow-input-label-font-size: 0.9rem;
 				--flow-input-label-padding: 5px 7px;
 				--flow-input-font-family: 'Consolas';
@@ -204,4 +204,4 @@ class KDXWalletSendDialog extends KaspaDialog{
     }
 }
 
-KDXWalletSendDialog.define("kdx-wallet-send-dialog");
+KaspaSendDialog.define("kaspa-send-dialog");

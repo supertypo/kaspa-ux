@@ -3,14 +3,14 @@ import {
 	formatForMachine, formatForHuman, paginationStyle, buildPagination, renderPagination
 } from './kaspa-dialog.js';
 
-class KDXWalletTXDialog extends KaspaDialog{
+class KaspaTXDialog extends KaspaDialog{
 	static get properties(){
 		return {
 			skip:{type:Number}
 		}
 	}
 	static get styles(){
-		return [Dialog.styles, paginationStyle,
+		return [KaspaDialog.styles, paginationStyle,
 		css`
 			:host{
 				position:fixed;
@@ -23,8 +23,14 @@ class KDXWalletTXDialog extends KaspaDialog{
 				border-radius:var(--flow-btn-radius, 8px);
 				border-width:var(--flow-btn-border-width, 2px);
 			}
+			.pagination-box{
+				padding:var(--kaspa-pagination-box-padding, 10px 5px;);
+			}
 			.inner-body, .buttons{width:calc(100% - 5px)}
-			.container{max-height:90%;max-width:90%}
+			.container{
+				max-height:var(--kaspa-dialog-container-max-height, 90%);
+				max-width:var(--kaspa-dialog-container-max-width, 90%)
+			}
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}	
 			.tx-row{
@@ -125,4 +131,4 @@ class KDXWalletTXDialog extends KaspaDialog{
     }
 }
 
-KDXWalletTXDialog.define("kdx-wallet-tx-dialog");
+KaspaTXDialog.define("kaspa-tx-dialog");

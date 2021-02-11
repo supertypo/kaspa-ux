@@ -4,25 +4,19 @@
 // } from '/node_modules/@aspectron/flow-ux/flow-ux.js';
 
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
-import {html, css, BaseElement, ScrollbarStyle, SpinnerStyle} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
+import {
+	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
+	isSmallScreen
+} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
 import {FlowFormat} from '/node_modules/@aspectron/flow-ux/src/flow-format.js';
-import { Deferred, GetTS, KAS, formatForMachine} from './wallet.js';
+import {
+	Deferred, GetTS, KAS, formatForMachine,
+	getLocalWallet, setLocalWallet
+} from './wallet.js';
 import '/node_modules/@aspectron/flow-ux/resources/extern/decimal.js/decimal.js'
 
-let getLocalWallet = ()=>{}//TODO
-let setLocalWallet = ()=>{}//TODO
-
-export * from './kaspa-seeds-dialog.js';
-
-/*
-
-export * from './kaspa-wallet-send-dialog.js';
-export * from './kaspa-wallet-receive-dialog.js';
-export * from './kaspa-wallet-tx-dialog.js';
-*/
-
-export * from './kaspa-open-dialog.js';
-
+if(isSmallScreen)
+	document.body.classList.add('small-screen');
 
 class KaspaWallet extends BaseElement{
 
@@ -35,7 +29,8 @@ class KaspaWallet extends BaseElement{
 			changeAddress:{type:String},
 			txs:{type:Array},
 			blueScore:{type:Number},
-			status:{type:String}
+			status:{type:String},
+			walletMeta:{type:Object, value:{}}
 		};
 	}
 
@@ -99,7 +94,9 @@ class KaspaWallet extends BaseElement{
 			input.address{
 				border:0px;-webkit-appearance:none;outline:none;margin:5px 10px 0px 0px;
 				flex:1;overflow: hidden;text-overflow:ellipsis;font-size:16px;
-				max-width:500px;min-width:460px;background-color:transparent;color:var(--flow-primary-color);
+				max-width:500px;
+				min-width:var(--kaspa-wallet-address-input-min-width, 460px);
+				background-color:transparent;color:var(--flow-primary-color);
 				font-family:"Exo 2";
 			}
 			.qr-code-holder{
@@ -117,7 +114,11 @@ class KaspaWallet extends BaseElement{
 				--flow-dropdown-trigger-width:auto;
 			}
 			.top-menu{
-				position:absolute;right:20px;top:-4px;
+				position:var(--kaspa-wallet-top-menu-position, absolute);
+				right:var(--kaspa-wallet-top-menu-right, 20px);
+				top:var(--kaspa-wallet-top-menu-top, -4px);
+				z-index:2;
+				background-color:var(--flow-background-color, #FFF);
 			}
 			fa-icon.md{--fa-icon-size:24px}
 		`];
@@ -126,6 +127,7 @@ class KaspaWallet extends BaseElement{
 		super();
 		this.txs = [];
 		this.walletSignal = Deferred();
+		this.walletMeta = {};
 	}
 
 	setRPCBuilder(rpcBuilder){
@@ -561,7 +563,7 @@ class KaspaWallet extends BaseElement{
 					return
 
 				encryptedMnemonic = await wallet.export(password);
-				setLocalWallet(encryptedMnemonic);
+				setLocalWallet(encryptedMnemonic, this.walletMeta);
 				//setLocalSetting("have-backup", 1);
 				this.setWallet(wallet);
 			})
@@ -592,7 +594,7 @@ class KaspaWallet extends BaseElement{
 				dialog.setError("Invalid password.");
 				return
 			}*/
-			setLocalWallet(encryptedMnemonic);
+			setLocalWallet(encryptedMnemonic, this.walletMeta);
 			//setLocalSetting("have-backup", 1);
 			dialog.hide();
 			this.setWallet(wallet);

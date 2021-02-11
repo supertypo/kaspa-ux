@@ -18,10 +18,14 @@ export class KaspaDialog extends BaseElement{
 		return [ScrollbarStyle, SpinnerStyle, css`
 			:host{
 				z-index:-10;opacity:0;
-				position:absolute;top:0px;left:0px;width:100%;height:100%;
+				position:var(--kaspa-dialog-position, absolute);
+				top:0px;
+				left:0px;
+				width:100%;
+				height:100%;
 				background-color:rgba(255, 255, 255, 0.5);
 				box-sizing:border-box;
-				font-family: "Open Sans";
+				font-family: "Open Sans", sans-serif;
 				display:none;
 				align-items:center;
 				justify-content:center;
@@ -35,8 +39,8 @@ export class KaspaDialog extends BaseElement{
 				z-index:1;
 				border:2px solid var(--flow-primary-color);
 				border-radius:3px;
-				max-width:700px;
-				max-height:300px;
+				max-width:var(--kaspa-dialog-container-max-width, 700px);
+				max-height:var(--kaspa-dialog-container-max-height, 300px);
 				margin:5px auto;
 				padding:10px;
 				position:relative;
@@ -66,7 +70,7 @@ export class KaspaDialog extends BaseElement{
 			}
 			flow-btn{vertical-align:bottom;margin-bottom:5px;}
 			[hidden]{display:none}
-			.buttons{margin:10px auto;display:flex;width:90%}
+			.buttons{margin:var(--kaspa-dialog-buttons-margin, 10px auto);display:flex;width:90%}
 			.buttons flow-btn{margin:5px;}
 			.buttons flow-btn:first-child{margin-left:0px;}
 			.buttons flow-btn:last-child{margin-right:0px;}

@@ -12,7 +12,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 	static get styles(){
 		return [KaspaDialog.styles, css`
 			.heading{text-align:center}
-			.container{max-height:660px}
+			.container{max-height:var(--kaspa-dialog-container-max-height, 660px)}
 			.buttons{justify-content:flex-end}
 			.dull-text{opacity:0.5}
 			.text-center{text-align:center;}

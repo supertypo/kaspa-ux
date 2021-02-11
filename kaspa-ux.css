@@ -1,4 +1,4 @@
-*{margin:0px;padding:0px;}
+/**{margin:0px;padding:0px;}*/
 html{font-size:16px;}
 body{
 	background:white;display:flex;flex-direction:column;
@@ -87,6 +87,34 @@ body.flow-theme-dark{
 	0 0px 1px 0 rgba(65, 255, 212, 0.12);
 }
 
+body.small-screen{
+	--kaspa-dialog-position:fixed;
+	--kaspa-dialog-container-max-height:100%;
+	--kaspa-dialog-container-max-width:100%;
+	--kaspa-dialog-buttons-margin:0px auto;
+	--kaspa-pagination-box-padding:2px;
+}
+
+@media(max-width:768px){
+	body{
+		--flow-input-min-width:100px;
+		--kaspa-wallet-address-input-min-width:100px;
+	}
+}
+/*
+@media(max-height:500px){
+	body{
+		--kaspa-dialog-container-max-height:100%;
+	}
+}
+*/
+
+@media(max-width:320px){
+	body{
+		--flow-input-min-width:80px;
+	}
+}
+
 
 *[caption] {
 	text-transform: uppercase;
@@ -98,15 +126,15 @@ body.ui-loading{
 
 @font-face {
 	font-family:'Exo 2';font-style:normal;
-	src: url("../../resources/extern/fonts/Exo2/Exo2-Regular.ttf") format('truetype');
+	src: url("resources/extern/fonts/Exo2/Exo2-Regular.ttf") format('truetype');
 }
 @font-face {
 	font-family:'Exo 2';font-style:normal;font-weight:300;
-	src: url("../../resources/extern/fonts/Exo2/Exo2-Light.ttf") format('truetype');
+	src: url("resources/extern/fonts/Exo2/Exo2-Light.ttf") format('truetype');
 }
 @font-face {
 	font-family:'Exo 2';font-style:normal; font-weight:bold;
-	src: url("../../resources/extern/fonts/Exo2/Exo2-Bold.ttf") format('truetype');
+	src: url("resources/extern/fonts/Exo2/Exo2-Bold.ttf") format('truetype');
 }
 
 kdx-app{flex:1;display:flex;flex-direction:column;overflow:hidden;}
@@ -265,7 +293,7 @@ flow-selector .menu-item{padding:2px 4px;}
 .h-box-stretched-group{
 	display:flex;flex-direction:column;align-items:stretch;
 }
-[row]{display:flex;flex-direction:row;max-width: 350px;justify-content: space-between;margin-bottom: 15px;}
+/*[row]{display:flex;flex-direction:row;max-width: 350px;justify-content: space-between;margin-bottom: 15px;}*/
 .h-box-stretched-group>flow-selector{margin:0px 5px 0px 0px}
 .h-box-stretched-group>flow-btn{margin-top:7px;max-width:60px;padding:7px 2px;}
 .h-box-stretched-group>flow-selector .menu-item{padding:4px;}
