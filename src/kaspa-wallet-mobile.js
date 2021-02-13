@@ -220,7 +220,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<fa-icon icon="upload"></fa-icon>
 					<span>Send</span>
 				</a>
-				<a class="scan-btn" @click="${this.showSendDialog}">
+				<a class="scan-btn" @click="${this.showSendDialogWithQrScanner}">
 					<fa-icon icon="qrcode"></fa-icon>
 					<span>Scan</span>
 				</a>
@@ -267,5 +267,33 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		this.sendDialog.open({wallet:this}, (args)=>{
 			this.sendTx(args);
 		})
+	}
+
+	showSendDialogWithQrScanner() {
+
+// TODO: DESKTOP VERSION WILL ALSO NEED QR CODE SCANNER
+// TODO: AS DESKTOP VERSION WILL RUN / WORK ON TABLETS
+// TODO: WE SHOULD HAVE SETTINGS/SWITCH TO MOBILE/DESKTOP
+// TODO: AND STORE THAT IN LOCALSTORAGE
+const el = document.createElement('div');
+el.style.width = '200px';
+el.style.height = '200px';
+el.id = 'reader';
+el.style.zIndex = '100;'
+document.body.append(el);
+
+// https://github.com/mebjas/html5-qrcode
+
+		let html5QrcodeScanner = new Html5QrcodeScanner(
+			"reader", { fps: 10, qrbox: 250 }, /* verbose= */ true);
+		html5QrcodeScanner.render((qr)=>{
+			alert(qr);
+		}, (error)=>{
+			alert(error);
+		});
+
+		// this.sendDialog.open({wallet:this}, (args)=>{
+		// 	this.sendTx(args);
+		// })
 	}
 }
