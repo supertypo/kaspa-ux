@@ -1,6 +1,12 @@
 import {helper, Storage} from '@kaspa/wallet-worker';
-export const {Deferred, KAS} = helper;
+export const {Deferred, KAS, Decimal} = helper;
 const storage = new Storage({logLevel:'debug'});
+let {baseUrl, debug} = window.KaspaConfig || {};
+if(!baseUrl){
+	baseUrl = (new URL("../", import.meta.url)).href;
+	debug && console.log("KaspaUX: baseUrl", baseUrl)
+}
+export {baseUrl, debug}
 
 /*
 const {Wallet, initKaspaFramework, Storage} = require("kaspa-wallet-worker");
@@ -45,27 +51,6 @@ export const formatForHuman = (val)=>{
 export const formatForMachine = (val)=>{
   return Number(val) * 1e8;
 }
-/*
-export const setLocalSetting = (name, value, prefix='kaspa-')=>{
-	if(!window.localStorage)
-		return
-
-	console.log("setLocalSetting ", name+":", value)
-
-	window.localStorage.setItem(prefix+name, JSON.stringify(value));
-}
-
-export const getLocalSetting = (name, defaults=undefined, prefix='kaspa-')=>{
-	if(!window.localStorage)
-		return defaults;
-
-	let value = window.localStorage.getItem(prefix+name);
-	if(typeof(value) == 'undefined')
-		return defaults
-
-	return JSON.parse(value);
-}
-*/
 
 export const getLocalWallet = ()=>{
 	let meta = storage.getWallet();
@@ -165,9 +150,5 @@ export const askForPassword = async (args, callback)=>{
 	callback(result)
 }
 
-// Wallet.getLocalWallet = getLocalWallet;
-// Wallet.setLocalWallet = setLocalWallet;
-
+window.Decimal = Decimal;
 window.askForPassword = askForPassword;
-
-// export {Wallet, initKaspaFramework};
