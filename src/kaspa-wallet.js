@@ -1,5 +1,5 @@
-//import {isSmallScreen} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
-let isSmallScreen = true;
+import {isSmallScreen} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
+//let isSmallScreen = true;
 import {KaspaWalletDesktop} from './kaspa-wallet-desktop';
 import {KaspaWalletMobile} from './kaspa-wallet-mobile';
 
