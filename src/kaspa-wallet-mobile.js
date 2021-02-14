@@ -276,8 +276,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 // TODO: WE SHOULD HAVE SETTINGS/SWITCH TO MOBILE/DESKTOP
 // TODO: AND STORE THAT IN LOCALSTORAGE
 const el = document.createElement('div');
-el.style.width = '200px';
-el.style.height = '200px';
+el.style.width = '300px';
+el.style.height = '300px';
 el.id = 'reader';
 el.style.zIndex = '100;'
 document.body.append(el);
@@ -287,9 +287,9 @@ document.body.append(el);
 		let html5QrcodeScanner = new Html5QrcodeScanner(
 			"reader", { fps: 10, qrbox: 250 }, /* verbose= */ true);
 		html5QrcodeScanner.render((qr)=>{
-			alert(qr);
+			console.log('qr status',qr);
 		}, (error)=>{
-			alert(error);
+			// console.log('qr error',error);
 		});
 
 		// this.sendDialog.open({wallet:this}, (args)=>{
