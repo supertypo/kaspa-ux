@@ -160,6 +160,20 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 			<div class="tab-content ${sCls('wallet')}" for="wallet">
 				<h1>Wallet</h1>
+
+				Network ${this.receiveAddress}
+
+				${this.faucetStatus ? this.faucetStatus : html`
+				
+					TODO - ${this.faucetFundsAvailable}
+
+					${ !this.faucetPeriod ? html`` : html`
+						Additional funds will be available in ${FlowFormat.duration(this.faucetPeriod)}
+					`}
+				
+				`}
+
+
 			</div>
 			<div class="tab-content ${sCls('settings')}" for="settings">
 				<h1>Settings</h1>
@@ -272,7 +286,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	}
 
 	showSendDialogWithQrScanner() {
-
+/*
 // TODO: DESKTOP VERSION WILL ALSO NEED QR CODE SCANNER
 // TODO: AS DESKTOP VERSION WILL RUN / WORK ON TABLETS
 // TODO: WE SHOULD HAVE SETTINGS/SWITCH TO MOBILE/DESKTOP
@@ -287,7 +301,7 @@ document.body.append(el);
 // https://github.com/mebjas/html5-qrcode
 
 		let html5QrcodeScanner = new Html5QrcodeScanner(
-			"reader", { fps: 10, qrbox: 250 }, /* verbose= */ true);
+			"reader", { fps: 10, qrbox: 250 }, );
 		html5QrcodeScanner.render((qr)=>{
 			console.log('qr status',qr);
 		}, (error)=>{
@@ -297,5 +311,11 @@ document.body.append(el);
 		// this.sendDialog.open({wallet:this}, (args)=>{
 		// 	this.sendTx(args);
 		// })
+*/
+
 	}
+
+
+
+
 }

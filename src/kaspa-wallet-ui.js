@@ -23,7 +23,12 @@ export class KaspaWalletUI extends BaseElement{
 			txs:{type:Array},
 			blueScore:{type:Number},
 			status:{type:String},
-			walletMeta:{type:Object, value:{}}
+			walletMeta:{type:Object, value:{}},
+
+			faucetFundsAvailable:{type:Number},
+			faucetPeriod:{type:Number},
+			faucetStatus:{type:String}
+
 		};
 	}
 
@@ -491,4 +496,63 @@ export class KaspaWalletUI extends BaseElement{
 
 		return result;
 	}
+
+
+
+	async updateFaucetBalance() {
+		faucetRPC('available', this.receiveAddress)
+		.then(resp => {
+			// TODO
+			const { available, period } = resp;
+			this.faucetStatus = null;
+			this.faucetFundsAvailable = available;
+			this.faucetPeriod = period;
+		})
+		.catch(ex => {
+			console.log(ex);
+			this.faucetStatus = ex.toString();
+		})
+	}
+
+	async getKaspaFromFaucet(amount) {
+		return await faucetRPC('get', this.receiveAddress, { amount });
+	}
+
+	async faucetRPC(method, param, args) {
+
+		this.faucetStatus = null;
+		const faucetUrl = 'https://faucet.kaspanet.io';
+
+		let queryString = '';
+		if(args) {
+			let params = new URLSearchParams();
+			queryString = '?'+Object.entries(args).forEach(([k,v])=>{
+				params.set(k,v);
+			}).toString();
+		}
+
+		try {
+			const response = await fetch(`${faucetUrl}/api/${method}/${param}${queryString}`, {
+				method: 'GET', // *GET, POST, PUT, DELETE, etc.
+				mode: 'cors', // no-cors, *cors, same-origin
+				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+				credentials: 'same-origin', // include, *same-origin, omit
+				headers: {
+					'Content-Type': 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				redirect: 'follow', // manual, *follow, error
+				referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+				// body: JSON.stringify(data) // body data type must match "Content-Type" header
+			});
+
+			const resp = response.json(); // parses JSON response into native JavaScript objects
+			return resp;
+		} catch(ex) {
+			this.faucetStatus = ex.toString();
+		}
+	}
+
+
+
 }
