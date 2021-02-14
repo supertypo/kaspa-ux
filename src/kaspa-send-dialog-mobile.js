@@ -122,6 +122,13 @@ class KaspaSendDialogMobile extends KaspaDialog{
     		input.value = "";
     	})
 	}
+	scanQRCode(){
+		showQRScanner({}, ({value, dialog})=>{
+			console.log("SCAN result", value)
+			this.address = value;
+			dialog.hide();
+		})
+	}
 	showT9(e){
 		let input = e.target.closest("flow-input");
 		let {value=''} = input;

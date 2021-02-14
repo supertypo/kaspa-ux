@@ -7,4 +7,5 @@ export * from './src/kaspa-send-dialog.js';
 export * from './src/kaspa-send-dialog-mobile.js';
 export * from './src/kaspa-tx-dialog.js';
 export * from './src/kaspa-wallet.js';
+export * from './src/kaspa-qrscanner-dialog.js';
 export {isSmallScreen} from './src/kaspa-wallet.js';

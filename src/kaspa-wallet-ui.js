@@ -292,13 +292,13 @@ export class KaspaWalletUI extends BaseElement{
 	
 	initWallet(encryptedMnemonic){
 		if(encryptedMnemonic){
-			/*
-			let info = {dialog:{mode:"open", hide:()=>{}}};
-			info.encryptedMnemonic = encryptedMnemonic;
-			info.password = "Asd123###";
-			this.handleInitDialogCallback(info)
-			return
-			*/
+			if(window.mobileMode){
+				let info = {dialog:{mode:"open", hide:()=>{}}};
+				info.encryptedMnemonic = encryptedMnemonic;
+				info.password = "Asd123###";
+				this.handleInitDialogCallback(info)
+				return
+			}
 			showWalletInitDialog({
 				mode:"open",
 				wallet:this,

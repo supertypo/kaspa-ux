@@ -122,6 +122,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		this.parentNode.appendChild(this.sendDialog);
 		let t9Dialog = document.createElement("kaspa-t9-dialog");
 		this.parentNode.appendChild(t9Dialog);
+		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
+		this.parentNode.appendChild(qrscannerDialog);
 	}
 	render(){
 		let {selectedTab} = this;
@@ -140,16 +142,13 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		<div class="tabs-container hide-scrollbar">
 			<flow-menu class="tabs" selected="${selectedTab}"
 				selector=".tab" valueAttr="tab" @select="${this.onTabSelect}">
-				<div class="tab" tab="accounts">Accounts</div>
 				<div class="tab" tab="balance">Balance</div>
 				<div class="tab" tab="transactions">Transactions</div>
+				<div class="tab" tab="wallet">Wallet</div>
 				<div class="tab" tab="settings">Settings</div>
 			</flow-menu>
 		</div>
 		<div class="tab-contents">
-			<div class="tab-content ${sCls('accounts')}" for="accounts">
-				<h1>Accounts</h1>
-			</div>
 			<div class="tab-content ${sCls('balance')}" for="balance">
 				<div class="error-message" 
 					?hidden=${!this.errorMessage}>${this.errorMessage}</div>
@@ -158,6 +157,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 			<div class="tab-content ${sCls('transactions')}" for="transactions">
 				${this.renderTX()}
+			</div>
+			<div class="tab-content ${sCls('wallet')}" for="wallet">
+				<h1>Wallet</h1>
 			</div>
 			<div class="tab-content ${sCls('settings')}" for="settings">
 				<h1>Settings</h1>
