@@ -34,16 +34,16 @@ export class KaspaDialog extends BaseElement{
 			:host(.active){opacity:1;z-index:100000;display:flex;}
 			.container{
 				box-sizing:border-box;
-				width:98%;
-				height:calc(100% - 10px);
+				width:100%;
+				height:var(--kaspa-dialog-container-height, calc(100% - 10px));
 				background-color:var(--flow-background-color, #F00);
 				z-index:1;
-				border:2px solid var(--flow-primary-color);
+				border:var(--kaspa-dialog-container-border, 2px solid var(--flow-primary-color));
 				border-radius:3px;
 				max-width:var(--kaspa-dialog-container-max-width, 700px);
 				max-height:var(--kaspa-dialog-container-max-height, 300px);
-				margin:5px auto;
-				padding:10px;
+				margin:var(--kaspa-dialog-container-margin, 5px auto);
+				padding:var(--kaspa-dialog-container-padding, 10px);
 				position:relative;
 				display:flex;flex-direction:column;
 			}
@@ -56,7 +56,9 @@ export class KaspaDialog extends BaseElement{
 			    cursor:pointer;z-index:2;
 			    line-height:0px;display:none;
 			}
-			:host([hideable]) .close-btn{display:inline-block}
+			:host([hideable]) .close-btn{
+				display:var(--kaspa-dialog-container-close-btn-display, inline-block)
+			}
 			.heading{
 				margin:0px;padding:5px 10px;font-size:1rem;min-height:30px;
 				display:flex;align-items:center;

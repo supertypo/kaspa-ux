@@ -19,7 +19,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 			.words{margin:20px 0px;}
 			.words .row, .button-row{display:flex;justify-content:center;}
 			.words .cell{flex:1;text-align:center;padding:5px}
-			.words .word{color:var(--flow-primary-color)}
+			.words .word{margin:4px;color:var(--flow-primary-color)}
 			.dots{text-align:center;padding:10px;}
 			.dots .dot{margin:2px}
 			.button-row{margin:20px 0px;}
@@ -50,7 +50,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 		return {stepName};
 	}
 	renderHeading({stepName}){
-		return `Recovery Seed`;
+		return html`${this.hideable?this.renderBackBtn():''} Recovery Seed`;
 	}
 	renderBody({stepName}){
 		return this[`render${stepName}`]();
@@ -188,7 +188,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 	}
 	renderStep1Buttons(){
 		if(this.args?.showOnlySeed)
-			return html`<flow-btn primary @click="${this.finish}">Close</flow-btn>`
+			return// html`<flow-btn primary @click="${this.finish}">Close</flow-btn>`
 		return html`<flow-btn primary @click="${e=>this.step=2}">NEXT</flow-btn>`
 	}
 	renderStep2Buttons(){

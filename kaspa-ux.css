@@ -89,10 +89,15 @@ body.flow-theme-dark{
 
 body.small-screen{
 	--kaspa-dialog-position:fixed;
+	--kaspa-dialog-container-height:100%;
 	--kaspa-dialog-container-max-height:100%;
 	--kaspa-dialog-container-max-width:100%;
+	--kaspa-dialog-container-padding:0px;
+	--kaspa-dialog-container-margin:0px;
+	--kaspa-dialog-container-border:0px;
 	--kaspa-dialog-buttons-margin:0px auto;
 	--kaspa-pagination-box-padding:2px;
+	--kaspa-dialog-container-close-btn-display:none;
 }
 
 @media(max-width:768px){
@@ -316,7 +321,14 @@ flow-selector .menu-item{padding:2px 4px;}
 }
 .short-dialog .fa-btn{align-self:center;margin:5px 10px;cursor:pointer;}
 .short-dialog .full-width{width:100%;max-width:100%;}
-.short-dialog dialog{min-width:10px;width:95%;max-width:510px}
+.short-dialog dialog{min-width:10px;width:95%;max-width:510px;box-sizing:border-box;}
+.small-screen .short-dialog dialog,
+.small-screen dialog{
+	width:100%;margin:0px;height:100%;max-width:none;max-height:none;border-radius:0px;
+	display:flex;flex-direction:column;justify-content:center;border:0px;
+	box-sizing:border-box;align-items:center;
+}
+.small-screen dialog .heading{width:100%;max-width:400px;}
 
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(359deg)}}
 .spin{

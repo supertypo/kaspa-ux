@@ -20,13 +20,13 @@ class KaspaOpenDialog extends KaspaDialog{
 			:host([mode="init"]) .buttons{justify-content:center}
 
 			.text-center, .heading{text-align:center;}
-			.words{margin:20px 0px;}
+			.words{margin:20px 0px;max-width:500px;margin:auto;}
 			.words .row{display:flex;justify-content:center;}
-			.words .cell{flex:1;text-align:center;padding:5px}
+			.words .cell{flex:1;width:10px;text-align:center;padding:5px}
 			input.seed{
 				border:2px solid var(--flow-primary-color);
-				border-radius:7px;padding:10px 5px;width:120px;
-				text-align:center;
+				border-radius:7px;padding:10px 5px;max-width:120px;
+				text-align:center;width:100%;box-sizing:border-box;
 			}
 			:host[isFresh] .close-btn{display:none}
 			flow-input{

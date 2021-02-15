@@ -109,7 +109,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.send-scan-buttons{display:flex;justify-content:space-evenly;margin:30px 0px;}
 			.send-scan-buttons a{display:block}
 			.send-scan-buttons a fa-icon{
-				--fa-icon-size:20px;border-radius:50%;padding:14px;
+				--fa-icon-size:20px;border-radius:50%;padding:18px;
 				background-color:var(--kaspa-wallet-send-button-bg, #3d4e58);
 				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
 				box-shadow:var(--flow-box-shadow);
@@ -145,6 +145,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.tx-num{min-width:60px}
 			.br{min-width:100%;}
 			.pb-0{padding-bottom:0px}
+			.badge{margin:10px auto;width:90%;}
+			.center-btn{min-width:120px;max-width:120px;display:block;margin:5px auto}
 		`];
 	}
 	constructor() {
@@ -172,7 +174,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<fa-icon ?hidden=${!this.isLoading} 
 				class="spinner" icon="spinner"
 				style="position:absolute"></fa-icon>
-			${this.renderMenu()}
 		</div>
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>
 			<flow-menu class="tabs" selected="${selectedTab}"
@@ -181,6 +182,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab" tab="transactions">Transactions</div>
 				<div class="tab" tab="wallet">Wallet</div>
 				<div class="tab" tab="settings">Settings</div>
+				<div class="tab" tab="faucet">Faucet</div>
 			</flow-menu>
 		</div>
 		<div class="tab-contents" ?not-ready=${!isReady}>
@@ -194,10 +196,19 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				${this.renderTX()}
 			</div>
 			<div class="tab-content ${sCls('wallet')}" for="wallet">
-				<h1>Wallet</h1>
+				<div class="badge"><span>Status:</span> ${this.status}</div>
+				<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
-				Network ${this.receiveAddress}
-
+				<flow-btn class="center-btn primary"
+					@click="${this.showSeeds}">Backup Seed</flow-btn>
+				<flow-btn class="center-btn primary"
+					@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
+				<flow-btn class="center-btn primary"
+					@click="${this.exportWalletFile}">Export Wallet Seed File</flow-btn>
+				<flow-btn class="center-btn primary"
+					@click="${this.importWalletFile}">Import Wallet Seed File</flow-btn>
+			</div>
+			<div class="tab-content ${sCls('faucet')}" for="faucet">
 				${this.faucetStatus ? this.faucetStatus : html`
 				
 					TODO - ${this.faucetFundsAvailable}
