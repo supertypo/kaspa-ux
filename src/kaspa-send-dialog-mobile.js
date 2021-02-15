@@ -145,7 +145,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
     	})
 	}
 	scanQRCode(){
-		showQRScanner({}, ({value, dialog})=>{
+		showQRScanner({wallet:this.wallet, isAddressQuery:true}, ({value, dialog})=>{
 			console.log("SCAN result", value)
 			dialog.hide();
 			if(!value)
@@ -167,16 +167,18 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		const address = await navigator.clipboard.readText();
 		this.setAddress(address)
 	}
-	setAddress(address){
+	async setAddress(address){
 		if(!address){
 			this.address = "";
 			return
 		}
 
 		[address] = address.split("?");
-
-		if(!this.wallet?.isValidAddress(address))
+		let valid = await this.wallet?.isValidAddress(address);
+		if(!valid){
+			this.setError("Invalid address")
 			return
+		}
 
 		this.address = address;
 	}

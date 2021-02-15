@@ -50,8 +50,9 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		<flow-input class="full-width" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>
 		</flow-input>
+		<div class="error">${this.errorMessage}</div>
 		<div class="buttons">
-			<flow-btn class="primary" ?disabled=${!this.value}
+			<flow-btn class="primary" ?disabled=${!this.isValid}
 				@click="${this.sendBack}">Next</flow-btn>
 		</div>
 		`;
@@ -69,10 +70,23 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	}
 	onInputChange(e){
 		//console.log("onInputChange", e.detail)
-		this.value = e.detail.value;
+		let value = e.detail.value;
+		this.setValue(value);
 	}
 	onQRChange(e){
-		this.value = e.detail.code;
+		let value = e.detail.code;
+		this.setValue(value);
+	}
+	async setValue(value){
+		let isValid = !!value;
+		this.setError("")
+		if(value && this.isAddressQuery){
+			isValid = await this.wallet.isValidAddress(value)
+			if(!isValid)
+				this.setError("Invalid Address")
+		}
+		this.isValid = isValid;
+		this.value = value;
 		//console.log("onT9Change:this.value", this.value)
 	}
 	open(args, callback){
@@ -81,6 +95,8 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.value = args.value||'';
 		this.heading = args.title||args.heading||'Scan QR code';
 		this.inputLabel = args.inputLabel||'Scan result';
+		this.isAddressQuery = !!args.isAddressQuery;
+		this.wallet = args.wallet
 		this.show();
 		this.startScanning();
 	}
