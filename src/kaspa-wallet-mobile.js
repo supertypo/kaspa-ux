@@ -145,7 +145,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.tx-num{min-width:60px}
 			.br{min-width:100%;}
 			.pb-0{padding-bottom:0px}
-			.badge{margin:10px auto;width:90%;}
+			.badge{margin:15px auto;width:calc(100% - 30px);}
 			.center-btn{min-width:120px;max-width:120px;display:block;margin:5px auto}
 		`];
 	}

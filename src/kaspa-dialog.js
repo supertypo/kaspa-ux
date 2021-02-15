@@ -67,7 +67,7 @@ export class KaspaDialog extends BaseElement{
 			.flex{flex:1}
 			.sub-heading{margin:5px;font-size:1.2rem;}
 			.body{flex:1;display:flex;justify-content:center;overflow:auto;}
-			.inner-body{width:90%;height:fit-content;padding:20px 0px;}
+			.inner-body{max-width:90%;width:700px;height:fit-content;padding:30px;}
 			.full-width{width:100%;max-width:100%;}
 			.error{
 				min-height:30px;color:#F00;padding:5px;
@@ -83,6 +83,10 @@ export class KaspaDialog extends BaseElement{
 			.buttons flow-btn:first-child{margin-left:0px;}
 			.buttons flow-btn:last-child{margin-right:0px;}
 			.back-btn{--fa-icon-size:30px;margin:0px 20px 0px 10px;}
+			.body-box{
+				display:flex;align-items:center;justify-content:center;overflow:hidden;
+			}
+			.body-inner{overflow:hidden;max-height:100%;display:flex;flex-direction:column;}
 		`];
 	}
 	render(){
@@ -90,16 +94,20 @@ export class KaspaDialog extends BaseElement{
 		return html`
 			<div class="container">
 				<h2 class="heading">${this.renderHeading(args)}</h2>
-				<div class="body">
-					<div class="inner-body">
-						${this.renderBody(args)}
+				<div class="flex body-box">
+					<div class="body-inner">
+						<div class="body">
+							<div class="inner-body">
+								${this.renderBody(args)}
+							</div>
+						</div>
+						<div class="buttons">
+							${this.renderButtons(args)}
+						</div>
+						<span class="close-btn" title="Close" 
+							@click="${this.onCloseClick}">&times;</span>
 					</div>
 				</div>
-				<div class="buttons">
-					${this.renderButtons(args)}
-				</div>
-				<span class="close-btn" title="Close" 
-					@click="${this.onCloseClick}">&times;</span>
 			</div>
 		`
 	}
