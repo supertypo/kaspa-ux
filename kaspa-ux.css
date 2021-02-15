@@ -328,7 +328,9 @@ flow-selector .menu-item{padding:2px 4px;}
 	display:flex;flex-direction:column;justify-content:center;border:0px;
 	box-sizing:border-box;align-items:center;
 }
-.small-screen dialog .heading{width:100%;max-width:400px;}
+.small-screen dialog .heading,
+.small-screen dialog .body,
+.small-screen dialog .buttons{width:100%;max-width:400px;}
 
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(359deg)}}
 .spin{
