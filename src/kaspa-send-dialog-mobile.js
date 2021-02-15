@@ -5,6 +5,11 @@ import {
 const pass = "";
 
 class KaspaSendDialogMobile extends KaspaDialog{
+	static get properties(){
+		return {
+			address:{type:String}
+		}
+	}
 	static get styles(){
 		return [KaspaDialog.styles, 
 		css`
@@ -14,16 +19,21 @@ class KaspaSendDialogMobile extends KaspaDialog{
 				max-height:none;
 				--flow-input-label-font-size: 0.9rem;
 				--flow-input-label-padding: 5px 7px;
-				--flow-input-font-family: 'Consolas';
-				--flow-input-font-size:14px;
+				--flow-input-font-family:'EXO 2', Consolas;
+				--flow-input-font-size:1rem;
 				--flow-input-font-weight: normal;
 				--flow-input-height:50px;
 				--flow-input-margin: 20px 0px;
 				--flow-input-padding: 10px 10px 10px 16px;
 			
 			}
-			.address-option-btns label{font-size:0.9rem;margin:5px;display:block}
-			.address-option-btns flow-btn{display:block}
+			.address-option-btns{
+				width:90%;max-width:450px;margin:auto;
+				display:flex;flex-wrap:wrap;
+				justify-content:center;
+			}
+			label{font-size:0.9rem;margin:5px;display:block}
+			.address-option-btns flow-btn{flex:1;max-width:120px;min-width:120px;margin:5px}
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}
 			.estimate-tx-error{color:red}
@@ -36,26 +46,38 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			flow-input.amount,
 			flow-input.fee{flex:1}
 			flow-checkbox{margin:8px 0px;}
+			.center-button{
+				margin:5px auto;display:block;max-width:120px;
+			}
 			@media (max-width:400px){
 				[spacer] { min-width: 100%; }
 			}
 		`]
 	}
-	renderHeading(){
-		return 'SEND';
+	buildRenderArgs(){
+		const estimating = this.estimateTxSignal && !this.estimateTxSignal.isResolved;
+		const estimateFee = this.estimate?.fee;
+		return {estimating, estimateFee};
 	}
-	renderBody(){
+	renderHeading({estimating}){
+		return html`${this.renderBackBtn()} SEND 
+			<div class="flex"></div>
+			${estimating?html`<fa-icon class="spinner" icon="spinner"
+				></fa-icon>`:''}`;
+	}
+	renderBody({estimating, estimateFee}){
 		return html`
 			${this.renderAddress()}
 			<flow-input class="amount full-width" suffix-btn
 				label="Amount in KAS" @keyup=${this.onAmountChange}>
-				<flow-btn slot="suffix"
+				<flow-btn slot="suffix" class="primary"
 					@click="${this.showT9}"><fa-icon icon="keyboard"></fa-icon></flow-btn>
 			</flow-input>
 			<flow-input class="fee full-width" suffix-btn
 				label="Priority Fee"
 				@keyup="${this.onNetworkFeeChange}">
-				<flow-btn slot="suffix"><fa-icon icon="keyboard"></fa-icon></flow-btn>
+				<flow-btn slot="suffix" class="primary"
+					@click="${this.showT9}"><fa-icon icon="keyboard"></fa-icon></flow-btn>
 			</flow-input>
 			<flow-input class="note full-width" outer-border label="Note"></flow-input>
 			<flow-checkbox class="calculate-network-fee" checked
@@ -64,22 +86,33 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			<flow-checkbox class="inclusive-fee"
 				@changed="${this.onInclusiveFeeChange}">Include fee in the amount</flow-checkbox>
 			${this.renderEstimate()}
-			<div class="error">${this.errorMessage}</div>`;
+			<div class="error">${this.errorMessage}</div>
+			<flow-btn primary class="center-button"
+				?disabled=${estimating || !this.estimateTxSignal || !estimateFee}
+				@click="${this.sendAfterConfirming}">SEND
+			</flow-btn>
+			`;
 	}
 	renderAddress(){
 		if(this.address){
+			let address = this.address!="-"?this.address:'';
 			return html `
-				<flow-input class="address full-width" outer-border
-					label="Address" readonly placeholder="">
+				<flow-input class="address full-width" clear-btn outer-border
+					label="Address" _readonly placeholder=""
+					value="${address}"
+					@changed="${this.onAddressChange}">
 				</flow-input>
 			`
 		}
 		return html`
+			<label>Enter recipient address:</label>
 			<div class="address-option-btns">
-				<label>Enter recipient address:</label>
-				<flow-btn @click="${this.scanQRCode}">Scan QR Code</flow-btn>
-				<flow-btn @click="${this.copyFromClipboard}">Clipboard</flow-btn>
-				<flow-btn @click="${this.showAddressInputField}">Manual Entry</flow-btn>
+				<flow-btn @click="${this.scanQRCode}"
+					class="primary">Scan QR Code</flow-btn>
+				<flow-btn @click="${this.copyFromClipboard}"
+					class="primary">Clipboard</flow-btn>
+				<flow-btn @click="${this.showAddressInputField}" 
+					class="primary">Manual Entry</flow-btn>
 			</div>
 		`
 	}
@@ -95,18 +128,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		</div>`
 	}
 	renderButtons(){
-		const estimating = this.estimateTxSignal && !this.estimateTxSignal.isResolved;
-		const estimateFee = this.estimate?.fee;
-		console.log("renderButtons", this.estimate)
-		return html`
-			${estimating?html`<fa-icon 
-				class="spinner" icon="spinner"
-				style__="position:absolute"></fa-icon>`:''}
-			<flow-btn @click="${this.cancel}">Cancel</flow-btn>
-			<flow-btn primary 
-				?disabled=${estimating || !this.estimateTxSignal || !estimateFee}
-				@click="${this.sendAfterConfirming}">SEND
-			</flow-btn>`
+		return ''
 	}
 	open(args, callback){
 		this.callback = callback;
@@ -125,10 +147,46 @@ class KaspaSendDialogMobile extends KaspaDialog{
 	scanQRCode(){
 		showQRScanner({}, ({value, dialog})=>{
 			console.log("SCAN result", value)
-			this.address = value;
 			dialog.hide();
+			if(!value)
+				return
+			let [address, searchQuery=''] = value.split("?");
+			let searchParams = new URLSearchParams(searchQuery)
+			let args = Object.fromEntries(searchParams.entries());
+			if(args.amount){
+				let amountField = this.qS(".amount");
+				amountField.value = args.amount
+			}
+			this.setAddress(address)
 		})
 	}
+	showAddressInputField(){
+		this.address = "-";
+	}
+	async copyFromClipboard(){
+		const address = await navigator.clipboard.readText();
+		this.setAddress(address)
+	}
+	setAddress(address){
+		if(!address){
+			this.address = "";
+			return
+		}
+
+		[address] = address.split("?");
+
+		if(!this.wallet?.isValidAddress(address))
+			return
+
+		this.address = address;
+	}
+	onAddressChange(e){
+		let {value} = e.detail;
+		if(!value)
+			this.address = value;
+
+	}
+
 	showT9(e){
 		let input = e.target.closest("flow-input");
 		let {value=''} = input;

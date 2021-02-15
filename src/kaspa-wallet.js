@@ -1,5 +1,5 @@
 import {isSmallScreen as isMobile} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
-//window.mobileMode = true;
+window.mobileMode = window.localStorage?.getItem("mobileMode")==1||false;
 let isSmallScreen = window.mobileMode?true:isMobile;
 import {KaspaWalletDesktop} from './kaspa-wallet-desktop';
 import {KaspaWalletMobile} from './kaspa-wallet-mobile';

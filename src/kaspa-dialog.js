@@ -57,10 +57,15 @@ export class KaspaDialog extends BaseElement{
 			    line-height:0px;display:none;
 			}
 			:host([hideable]) .close-btn{display:inline-block}
-			.heading{margin:5px 15px 25px;font-size:1.5rem;}
+			.heading{
+				margin:0px;padding:5px 10px;font-size:1rem;min-height:30px;
+				display:flex;align-items:center;
+				border-bottom:2px solid var(--flow-primary-color, #F00);
+			}
+			.flex{flex:1}
 			.sub-heading{margin:5px;font-size:1.2rem;}
 			.body{flex:1;display:flex;justify-content:center;overflow:auto;}
-			.inner-body{width:90%;}
+			.inner-body{width:90%;height:fit-content;padding:20px 0px;}
 			.full-width{width:100%;max-width:100%;}
 			.error{
 				min-height:30px;color:#F00;padding:5px;
@@ -75,6 +80,7 @@ export class KaspaDialog extends BaseElement{
 			.buttons flow-btn{margin:5px;}
 			.buttons flow-btn:first-child{margin-left:0px;}
 			.buttons flow-btn:last-child{margin-right:0px;}
+			.back-btn{--fa-icon-size:30px;margin:0px 20px 0px 10px;}
 		`];
 	}
 	render(){
@@ -106,6 +112,13 @@ export class KaspaDialog extends BaseElement{
 	}
 	renderButtons(args){
 		return ''
+	}
+	renderBackBtn(){
+		return html`<fa-icon class="back-btn" icon="arrow-alt-left"
+			@click=${this.onBackClick}></fa-icon>`;
+	}
+	onBackClick(){
+		this.hide();
 	}
 
 	firstUpdated(...args){

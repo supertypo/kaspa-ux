@@ -75,7 +75,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				min-width:var(--kaspa-wallet-address-input-min-width, 460px);
 				background-color:transparent;color:var(--flow-primary-color);
 				font-family:"Exo 2";word-wrap:break-word;height:110px;
-				resize: none;
+				resize:none;
 			}
 			flow-qrcode{
 				flex:1;width:150px;max-width:150px;margin:15px;

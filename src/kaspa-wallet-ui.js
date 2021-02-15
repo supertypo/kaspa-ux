@@ -446,6 +446,13 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 
+	async isValidAddress(address){
+		let minningAddress = await this.getMiningAddress()
+		let [prefix] = minningAddress.split(":")
+		let [prefix2] = address.split(":");
+		return prefix == prefix2;
+	}
+
 	async getMiningAddress(){
 		await this.walletSignal
 		if(this.receiveAddress)

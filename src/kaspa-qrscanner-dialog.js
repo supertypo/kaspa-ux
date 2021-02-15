@@ -23,6 +23,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 				--flow-input-height:50px;
 				--flow-input-margin: 20px 0px;
 				--flow-input-padding: 10px 10px 10px 16px;
+				--flow-menu-item-bg:#EFEFEF;
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
 			.buttons{
@@ -37,23 +38,31 @@ class KaspaQRScannerDialog extends KaspaDialog{
 			this.open(args, callback)
 		}
 	}
-	renderHeading(){
-		return this.heading;
+	renderHeading({estimating}){
+		return html`${this.renderBackBtn()} ${this.heading}`
 	}
 	renderBody(){
 		let value = this.value || '';
 		let {inputLabel='Scan result'} = this;
 		return html`
+		<flow-qrcode-scanner qrcode="${this.value||''}" hidecode
+			@changed="${this.onQRChange}"></flow-qrcode-scanner>
 		<flow-input class="full-width" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>
 		</flow-input>
-		<flow-qrcode-scanner
-			@changed="${this.onQRChange}"></flow-qrcode-scanner>
 		<div class="buttons">
-			<flow-btn @click="${this.setMaxValue}">Max</flow-btn>
-			<flow-btn class="primary" @click="${this.sendBack}">Next</flow-btn>
+			<flow-btn class="primary" ?disabled=${!this.value}
+				@click="${this.sendBack}">Next</flow-btn>
 		</div>
 		`;
+	}
+	stopQRScanning(){
+		let scanner = this.qS("flow-qrcode-scanner");
+		scanner.stop();
+	}
+	startScanning(){
+		let scanner = this.qS("flow-qrcode-scanner");
+		scanner.start();
 	}
 	sendBack(e){
 		this.callback({value:this.value, dialog:this})
@@ -63,7 +72,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.value = e.detail.value;
 	}
 	onQRChange(e){
-		this.value = e.detail.value;
+		this.value = e.detail.code;
 		//console.log("onT9Change:this.value", this.value)
 	}
 	open(args, callback){
@@ -73,6 +82,11 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.heading = args.title||args.heading||'Scan QR code';
 		this.inputLabel = args.inputLabel||'Scan result';
 		this.show();
+		this.startScanning();
+	}
+	hide(){
+		this.stopQRScanning();
+		super.hide();
 	}
     cancel(){
     	this.hide();
