@@ -109,7 +109,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.send-scan-buttons{display:flex;justify-content:space-evenly;margin:30px 0px;}
 			.send-scan-buttons a{display:block}
 			.send-scan-buttons a fa-icon{
-				--fa-icon-size:14px;border-radius:50%;padding:20px;
+				--fa-icon-size:20px;border-radius:50%;padding:14px;
 				background-color:var(--kaspa-wallet-send-button-bg, #3d4e58);
 				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
 				box-shadow:var(--flow-box-shadow);
@@ -268,7 +268,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
             </div>
             <div class="send-scan-buttons">
 				<a class="send-btn" @click="${this.showSendDialog}">
-					<fa-icon icon="upload"></fa-icon>
+					<fa-icon icon="arrow-alt-from-bottom"></fa-icon>
 					<span>Send</span>
 				</a>
 				<a class="scan-btn" @click="${this.showSendDialogWithQrScanner}">
@@ -276,7 +276,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<span>Scan</span>
 				</a>
 				<a class="receive-btn" @click="${this.showSendDialog}">
-					<fa-icon icon="download"></fa-icon>
+					<fa-icon icon="arrow-alt-to-bottom"></fa-icon>
 					<span>Receive</span>
 				</a>
 			</div>
