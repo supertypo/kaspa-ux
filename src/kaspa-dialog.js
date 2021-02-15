@@ -1,7 +1,7 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle
-} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
-export * from '/node_modules/@aspectron/flow-ux/src/base-element.js';
+} from './flow-ux.js';
+export * from './flow-ux.js';
 import {validatePassword, baseUrl, debug} from './wallet.js';
 export * from './wallet.js';
 export {baseUrl, debug};

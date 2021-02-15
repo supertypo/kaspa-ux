@@ -74,7 +74,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 					@click="${this.showT9}"><fa-icon icon="keyboard"></fa-icon></flow-btn>
 			</flow-input>
 			<flow-input class="fee full-width" suffix-btn
-				label="Priority Fee"
+				label="Priority Fee in KAS"
 				@keyup="${this.onNetworkFeeChange}">
 				<flow-btn slot="suffix" class="primary"
 					@click="${this.showT9}"><fa-icon icon="keyboard"></fa-icon></flow-btn>
@@ -192,7 +192,10 @@ class KaspaSendDialogMobile extends KaspaDialog{
 	showT9(e){
 		let input = e.target.closest("flow-input");
 		let {value=''} = input;
-		showT9({value}, ({value, dialog})=>{
+		showT9({
+			value, heading:input.label.replace("in KAS", ""),
+			inputLabel:input.label
+		}, ({value, dialog})=>{
 			console.log("t9 result", value)
 			input.value = value;
 			dialog.hide();

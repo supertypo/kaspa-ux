@@ -1,4 +1,5 @@
-import {isSmallScreen as isMobile} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
+import {isSmallScreen as isMobile} from './flow-ux.js';
+export * from './flow-ux.js';
 window.mobileMode = window.localStorage?.getItem("mobileMode")==1||false;
 let isSmallScreen = window.mobileMode?true:isMobile;
 import {KaspaWalletDesktop} from './kaspa-wallet-desktop';

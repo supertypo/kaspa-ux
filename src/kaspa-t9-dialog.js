@@ -7,7 +7,9 @@ const pass = "";
 class KaspaT9Dialog extends KaspaDialog{
 	static get properties(){
 		return {
-			value:{type:String}
+			value:{type:String},
+			heading:{type:String},
+			inputLabel:{type:String}
 		}
 	}
 	static get styles(){
@@ -38,7 +40,7 @@ class KaspaT9Dialog extends KaspaDialog{
 		}
 	}
 	renderHeading(){
-		return this.heading;
+		return html`${this.renderBackBtn()} ${this.heading}`;
 	}
 	renderBody(){
 		let value = this.value || '';

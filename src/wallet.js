@@ -20,7 +20,7 @@ const storage = new Storage({logLevel:'debug'});
 export const {RPC} = require("kaspa-grpc-node");
 */
 
-import {html, css} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
+import {html, css} from './flow-ux.js';
 
 export const GetTS = (d=null)=>{
     d = d || new Date();

@@ -1,15 +1,15 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
-	isSmallScreen, dpc
-} from '/node_modules/@aspectron/flow-ux/src/base-element.js';
-import {FlowFormat} from '/node_modules/@aspectron/flow-ux/src/flow-format.js';
+	isSmallScreen, dpc, FlowFormat
+} from './flow-ux.js'
+export * from './flow-ux.js'
 import {
 	Deferred, GetTS, KAS, formatForMachine,
-	getLocalWallet, setLocalWallet
+	getLocalWallet, setLocalWallet, baseUrl, debug
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
-export {html, css, FlowFormat, dpc};
+export {html, css, FlowFormat, dpc, baseUrl, debug};
 
 export class KaspaWalletUI extends BaseElement{
 
@@ -34,7 +34,7 @@ export class KaspaWalletUI extends BaseElement{
 
 	static get styles(){
 		return [ScrollbarStyle, SpinnerStyle, css`
-			
+			.v-box{display:flex;flex-direction:column}
 			.hide-scrollbar::-webkit-scrollbar-track{
 			    box-shadow:none;background:transparent;
 			}
@@ -250,7 +250,7 @@ export class KaspaWalletUI extends BaseElement{
 	    wallet.on("new-transaction", (tx)=>{
 	    	tx.date = GetTS(new Date(tx.ts));
 	    	this.txs.unshift(tx);
-	    	this.txs = this.txs.slice(0, 200);
+	    	this.txs = this.txs.slice(0, 10000);
 	    	this.requestUpdate("balance", null);
 	    	if(this.txDialog)
 	    		this.txDialog.onNewTx(tx)
