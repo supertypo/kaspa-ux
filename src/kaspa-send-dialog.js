@@ -129,7 +129,7 @@ class KaspaSendDialog extends KaspaDialog{
 
     	return {
     		amount:formatForMachine(amount),
-    		fee:formatForMachine(formatForHuman(fee)),
+    		fee:formatForMachine(fee),
     		address, note, 
     		calculateNetworkFee,
     		inclusiveFee
@@ -182,7 +182,7 @@ class KaspaSendDialog extends KaspaDialog{
     		return
     	if(estimate.fee > this.alertFeeAmount){
     		let {btn} = await FlowDialog.alert("Warning", 
-    			html`Transaction Fee (${KAS(estimate.fee)} KAS) is very large.`,
+    			html`Transaction Fee (${KAS(estimate.fee)} KAS) is too large.`,
     			'',
     			['Cancel', 'Submit:primary']);
 
