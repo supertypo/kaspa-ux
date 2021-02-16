@@ -224,7 +224,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
 						<div>Available:</div>
-						<div>${KAS(this.faucetFundsAvailable)} KAS</div>
+						<div>${KAS(this.faucetFundsAvailable||0)} KAS</div>
 
 						${this.faucetPeriod ? html`
 							<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
@@ -409,12 +409,32 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		})
 	}
 
-	showSendDialogWithQrScanner() {
-		
-
+	showQRScanner(args, callback){
+		args = args||{};
+		args.wallet = this;
+		showQRScanner(args, ({value, dialog})=>{
+			console.log("SCAN result", value)
+			dialog.hide();
+			if(!value)
+				return
+			let [address, searchQuery=''] = value.split("?");
+			let searchParams = new URLSearchParams(searchQuery)
+			let args = Object.fromEntries(searchParams.entries());
+			let {amount} = args;
+			callback({address, amount})
+		})
 	}
 
-
-
+	showSendDialogWithQrScanner() {
+		this.showQRScanner({isAddressQuery:true}, ({amount, address})=>{
+			if(!address)
+				return
+			dpc(100, ()=>{
+				this.sendDialog.open({wallet:this, amount, address}, (args)=>{
+					this.sendTx(args);
+				})
+			})
+		})
+	}
 
 }

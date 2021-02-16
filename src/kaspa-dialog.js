@@ -145,9 +145,10 @@ export class KaspaDialog extends BaseElement{
 	}
 
 	onUrlHistoryPop({state, oldState}, e){
-		console.log("onUrlHistoryPop:", oldState?.uid == this.uid, JSON.stringify({state, oldState}), e)
-		if(oldState?.uid == this.uid)
+		if(oldState?.uid == this.uid){
+			console.log("onUrlHistoryPop:", oldState?.uid == this.uid, {state, oldState})
 			this._hide(true);
+		}
 	}
 	pushHistory(uid=""){
 		if(!this.withHistory)
