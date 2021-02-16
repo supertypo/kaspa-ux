@@ -9,6 +9,7 @@ import {
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
+Wallet.setWorkerLogLevel('none')
 export {html, css, FlowFormat, dpc, baseUrl, debug};
 
 export class KaspaWalletUI extends BaseElement{
