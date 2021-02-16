@@ -245,7 +245,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							${this.faucetPeriod ? html`
 								<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
 							`:``}
-						
 							${ !this.faucetFundsAvailable ? html`` : html`
 								<flow-btn class="primary" @click="${this.requestFaucetFunds}">REQUEST FUNDS FROM FAUCET</flow-btn>
 							`}
@@ -258,16 +257,17 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab-content ${sCls('network')}" for="network">
 
 					<div>Network Status</div>
-					<table>
-						<tr><td>Network</td><td>${this.networkName}</td></tr>
-						<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
-						<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
-						<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
-						<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
-						<tr><td>Median Latency</td><td>${(new Date(this.pastMedianTimeDiff)).toJSON().replace(/T/,' ')}</td></tr>
-						<tr><td>Median Time</td><td>${FlowFormat.duration(this.pastMedianTime)}</td></tr>
-					</table>
-
+					${!this.networkName ? html`OFFLINE` : html`
+						<table>
+							<tr><td>Network</td><td>${this.networkName}</td></tr>
+							<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
+							<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
+							<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
+							<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
+							<tr><td>Median Latency</td><td>${FlowFormat.duration(this.pastMedianTimeDiff)}</td></tr>
+							<tr><td>Median Time</td><td>${this.pastMedianTime?(new Date(this.pastMedianTime)).toJSON().replace(/T/,' '):''}</td></tr>
+						</table>
+					`}
 				</div>
 			</div>
 		</div>
