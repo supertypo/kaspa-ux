@@ -11,7 +11,7 @@ class KDXWalletReceiveDialog extends KaspaDialog{
 		return [Dialog.styles, 
 		css`
 			.container{max-height:400px}
-			.buttons{justify-content:flex-end}
+			.buttons{justify-content:center;}
 			flow-qrcode{width:170px;margin:auto}
 			input.address{
 				font-size:1px;padding:0px;margin:0px;border:0px;width:1px;height:1px;

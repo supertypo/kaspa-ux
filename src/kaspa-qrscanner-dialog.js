@@ -18,7 +18,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
 			.buttons{
-				justify-content:center;margin:20px 0px;width:100%;
+				justify-content:center;margin:10px 0px;width:100%;
 				box-sizing:border-box;
 			}
 		`]
