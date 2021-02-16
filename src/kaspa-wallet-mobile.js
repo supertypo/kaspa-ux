@@ -111,7 +111,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.send-scan-buttons{display:flex;justify-content:space-evenly;margin:30px 0px;}
 			.send-scan-buttons a{display:block}
 			.send-scan-buttons a fa-icon{
-				--fa-icon-size:20px;border-radius:50%;padding:18px;
+				--fa-icon-size:26px;border-radius:50%;padding:22px;
 				background-color:var(--kaspa-wallet-send-button-bg, #3d4e58);
 				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
 				box-shadow:var(--flow-box-shadow);
@@ -125,7 +125,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
 			}
 			.send-scan-buttons a span{
-				display:block;text-align:center;font-size:0.5rem;margin:8px 0px 5px;
+				display:block;text-align:center;font-size:0.75rem;margin:8px 0px 5px;
 				text-transform:uppercase;
 			}
 			[hidden]{display:none}

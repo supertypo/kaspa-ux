@@ -25,11 +25,15 @@ class KaspaT9Dialog extends KaspaDialog{
 				--flow-input-height:50px;
 				--flow-input-margin: 20px 0px;
 				--flow-input-padding: 10px 10px 10px 16px;
+				--flow-btn-padding: 12px 8px;
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
 			.buttons{
 				justify-content:center;margin:20px 0px;width:100%;
 				box-sizing:border-box;
+			}
+			.buttons flow-btn {
+				margin: 0px 18px;
 			}
 		`]
 	}
