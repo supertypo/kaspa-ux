@@ -16,17 +16,7 @@ class KaspaReceiveDialogMobile extends KaspaDialog{
 		css`
 			.container{
 				border-radius:0px;width:100%;height:100%;border:0px;
-				padding:0px;
-				max-height:none;
-				--flow-input-label-font-size: 0.9rem;
-				--flow-input-label-padding: 5px 7px;
-				--flow-input-font-family:'Exo 2', Consolas;
-				--flow-input-font-size:1rem;
-				--flow-input-font-weight: normal;
-				--flow-input-height:50px;
-				--flow-input-margin: 20px 0px;
-				--flow-input-padding: 10px 10px 10px 16px;
-			
+				padding:0px;max-height:none;
 			}
 			.address-option-btns{
 				width:90%;max-width:450px;margin:auto;
@@ -67,13 +57,13 @@ class KaspaReceiveDialogMobile extends KaspaDialog{
 			<flow-input class="address full-width" suffix-btn
 				label="Address and amount" readonly value="${address+amountStr}">
 				<flow-btn slot="suffix" class="primary"
-					@click="${this.copyAddress}"><fa-icon icon="copy"></fa-icon></flow-btn>
+					@click="${this.copyAddress}" icon="copy"></flow-btn>
 			</flow-input>
 			<flow-input class="amount full-width" suffix-btn
 				label="Amount in KAS" @keyup=${this.onAmountChange}
 				value="${this.amount}">
 				<flow-btn slot="suffix" class="primary"
-					@click="${this.showT9}"><fa-icon icon="keyboard"></fa-icon></flow-btn>
+					@click="${this.showT9}" icon="keyboard"></flow-btn>
 			</flow-input>
 			<div class="error">${this.errorMessage}</div>
 			<flow-btn primary class="center-button"	@click="${this.hide}">

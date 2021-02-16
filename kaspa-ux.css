@@ -34,30 +34,46 @@ body{
     --flow-input-color: #585858;
     --flow-input-placeholder: #555;
     --flow-input-label-border: 0px;
-    --flow-input-height: 40px;
-    --flow-input-font-size:0.75rem;
-    --flow-input-label-font-size: 0.6rem;
-    --flow-input-font-size:0.7rem;
+    --flow-input-height:50px;
+    --flow-input-font-size:1.5rem;
+    --flow-input-label-font-size: 0.9rem;
     --flow-input-font-weight:normal;
 	--flow-input-line-height:80%;
 	--flow-input-box-shadow:10px 10px 30px  rgba(0,0,0,0.05), -10px -10px 30px rgba(0,0,0,0.05);
 	--flow-input-border: 0px;
+	--flow-input-max-width:100%;
+	--flow-input-width:400px;
+    --flow-input-margin:16px auto;
+    --flow-input-display: block;
+	--flow-input-label-padding: 5px 7px;
+	--flow-input-font-family: 'Exo 2';
+	--flow-input-height:auto;
+	--flow-input-padding:15px 10px 15px 16px;
 
-	--flow-select-margin: 5px 5px;
-    --flow-select-border: var(--flow-input-border);
+
+	--flow-select-width:var(--flow-input-width);
+	--flow-select-margin:var(--flow-input-margin);
+	--flow-select-display:var(--flow-input-display);
+    --flow-select-border:var(--flow-input-border);
     --flow-select-label-border: 0px;
-    --flow-select-label-font-size: 0.6rem;
+    --flow-select-label-font-size:var(--flow-input-label-font-size);
     --flow-select-selected-min-height: 40px;
     --flow-select-input-height: 40px;
 	--flow-select-selected-min-width: 200px;
 
-	--flow-btn-font-size: 0.9rem;
+	--flow-btn-font-size:var(--flow-input-font-size);
 	--flow-btn-wrapper-min-width:50px;
-	--flow-btn-padding: 7px 2px;
+	--flow-btn-padding:11px 8px;
 
-	--flow-dialog-btn-padding: 7px 2px;
+	--flow-dialog-btn-padding: 8px 2px;
 	
+	--flow-select-selected-max-width:none;
+	--flow-qrcode-scanner-select-max-width:none;
 
+	--flow-dropdown-display:block;
+
+	--flow-iconbtn-padding:13px;
+	--flow-btn-icon-size:30px;
    
 }
 

@@ -40,7 +40,10 @@ export class KaspaDialog extends BaseElement{
 				display:none;
 				align-items:center;
 				justify-content:center;
+				--flow-menu-item-bg:#EFEFEF;
 			}
+			flow-btn{vertical-align:bottom;margin-bottom:5px;}
+			flow-input flow-btn{margin-bottom:0px;}
 			:host(.active){opacity:1;z-index:100000;display:flex;}
 			.container{
 				box-sizing:border-box;
@@ -86,7 +89,7 @@ export class KaspaDialog extends BaseElement{
 			.input-type-btn{
 				align-self:center;margin:5px 10px;cursor:pointer;
 			}
-			flow-btn{vertical-align:bottom;margin-bottom:5px;}
+			
 			[hidden]{display:none}
 			.buttons{margin:var(--kaspa-dialog-buttons-margin, 10px auto);display:flex;width:90%}
 			.buttons flow-btn{margin:5px;}

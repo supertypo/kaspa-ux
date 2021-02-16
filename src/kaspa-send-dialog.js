@@ -10,16 +10,6 @@ class KaspaSendDialog extends KaspaDialog{
 		css`
 			.container{
 				max-height:var(--kaspa-dialog-container-max-height, 670px);
-				--flow-input-label-font-size: 0.9rem;
-				--flow-select-label-font-size: 0.9rem;
-				--flow-input-label-padding: 5px 7px;
-				--flow-input-font-family: 'Consolas';
-				--flow-input-font-size:14px;
-				--flow-input-font-weight: normal;
-				--flow-input-height:50px;
-				--flow-input-margin: 20px 0px;
-				--flow-input-padding: 10px 10px 10px 16px;
-			
 			}
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}

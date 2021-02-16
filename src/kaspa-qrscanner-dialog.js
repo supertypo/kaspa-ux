@@ -15,17 +15,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 			.container{
 				border-radius:0px;width:100%;height:100%;border:0px;
 				padding:0px;max-height:none;
-				--flow-input-label-font-size: 0.9rem;
-				--flow-select-label-font-size: 0.9rem;
-				--flow-qrcode-scanner-select-label-font-size:2rem;
-				--flow-input-label-padding: 5px 7px;
-				--flow-input-font-family: 'Consolas';
-				--flow-input-font-size:14px;
-				--flow-input-font-weight: normal;
-				--flow-input-height:50px;
-				--flow-input-margin: 20px 0px;
-				--flow-input-padding: 10px 10px 10px 16px;
-				--flow-menu-item-bg:#EFEFEF;
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
 			.buttons{
@@ -50,7 +39,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		return html`
 		<flow-qrcode-scanner qrcode="${this.value||''}" hidecode ?stoped=${this.stoped}
 			@changed="${this.onQRChange}"></flow-qrcode-scanner>
-		<flow-input class="full-width" clear-btn value="${value}"
+		<flow-input class="full-width_" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>
 		</flow-input>
 		<div class="error">${this.errorMessage}</div>
