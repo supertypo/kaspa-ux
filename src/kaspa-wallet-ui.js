@@ -280,6 +280,8 @@ export class KaspaWalletUI extends BaseElement{
 			this.isLoading = false;
 			this.showError(err);
 		}
+
+		this.updateFaucetBalance();
 	}
 	connectedCallback(){
 		super.connectedCallback();
@@ -507,7 +509,7 @@ export class KaspaWalletUI extends BaseElement{
 
 
 	async updateFaucetBalance() {
-		faucetRPC('available', this.receiveAddress)
+		this.faucetRPC('available', this.receiveAddress)
 		.then(resp => {
 			// TODO
 			const { available, period } = resp;
@@ -522,13 +524,18 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async getKaspaFromFaucet(amount) {
-		return await faucetRPC('get', this.receiveAddress, { amount });
+		return await this.faucetRPC('get', this.receiveAddress, { amount });
+	}
+
+	requestFaucetFunds() {
+		
 	}
 
 	async faucetRPC(method, param, args) {
 
 		this.faucetStatus = null;
-		const faucetUrl = 'https://faucet.kaspanet.io';
+		//const faucetUrl = 'https://faucet.kaspanet.io';
+		const faucetUrl = 'http://localhost:3000';
 
 		let queryString = '';
 		if(args) {
@@ -539,9 +546,12 @@ export class KaspaWalletUI extends BaseElement{
 		}
 
 		try {
-			const response = await fetch(`${faucetUrl}/api/${method}/${param}${queryString}`, {
+			const url = `${faucetUrl}/api/${method}/${param}${queryString}`;
+			console.log('faucet req:',url);
+			const response = await fetch(url, {
 				method: 'GET', // *GET, POST, PUT, DELETE, etc.
-				mode: 'cors', // no-cors, *cors, same-origin
+				mode: 'no-cors', // no-cors, *cors, same-origin
+				//mode: 'cors', // no-cors, *cors, same-origin
 				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 				credentials: 'same-origin', // include, *same-origin, omit
 				headers: {

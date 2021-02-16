@@ -223,13 +223,17 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
-					
-						TODO - ${this.faucetFundsAvailable}
+						<div>Available:</div>
+						<div>${KAS(this.faucetFundsAvailable)} KAS</div>
 
-						${ !this.faucetPeriod ? html`` : html`
-							Additional funds will be available in ${FlowFormat.duration(this.faucetPeriod)}
-						`}
+						${this.faucetPeriod ? html`
+							<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
+						`:``}
 					
+						${ !this.faucetFundsAvailable ? html`` : html`
+							<flow-btn class="primary" @click="${this.requestFaucetFunds}">Request Funds from Faucet</flow-btn>
+						`})
+
 					`}
 
 
