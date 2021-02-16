@@ -29,8 +29,8 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			}
 			.address-option-btns{
 				width:90%;max-width:450px;margin:auto;
-				display:flex;flex-wrap:wrap;
-				justify-content:center;
+				display:flex;flex-wrap:wrap;flex-direction:column;
+				justify-content:center; align-items:center;
 			}
 			label{font-size:0.9rem;margin:5px;display:block}
 			.address-option-btns flow-btn{flex:1;max-width:120px;min-width:120px;margin:5px}
@@ -105,7 +105,9 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			`
 		}
 		return html`
-			<label>Enter recipient address:</label>
+			<center>
+				<label>Enter recipient address:</label>
+			</center>
 			<div class="address-option-btns">
 				<flow-btn @click="${this.scanQRCode}"
 					class="primary">Scan QR Code</flow-btn>
