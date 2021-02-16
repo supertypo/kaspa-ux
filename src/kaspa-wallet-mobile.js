@@ -251,18 +251,20 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		if(!this.wallet)
 			return '';
 
+		let address = this.receiveAddress||"";
+		//console.log("address", address)
 		return html`
 		<div class="address-and-qr">
 			<div class="address-box">
 				Receive Address:
 				<div class="address-holder">
-					<textarea class="address-input" readonly>${this.receiveAddress||''}</textarea>
-					<fa-icon ?hidden=${!this.receiveAddress} class="copy-address"
+					<textarea class="address-input" readonly>${address}</textarea>
+					<fa-icon ?hidden=${!address} class="copy-address"
 						@click="${this.copyAddress}"
 						title="Copy to clipboard" icon="copy"></fa-icon>
 				</div>
 			</div>
-			<flow-qrcode text="${this.receiveAddress||""}" mode="Alphanumeric"></flow-qrcode>
+			<flow-qrcode data="${address}"></flow-qrcode>
 		</div>`
 	}
 	renderBalanceAndButton(){
