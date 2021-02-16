@@ -257,9 +257,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('network')}" for="network">
 
-
+					<div>Network Status</div>
 					<table>
-						
+						<tr><td>Network</td><td>${this.networkName}</td></tr>
+						<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
+						<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
+						<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
+						<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
+						<tr><td>Median Latency</td><td>${(new Date(this.pastMedianTimeDiff)).toJSON().replace(/T/,' ')}</td></tr>
+						<tr><td>Median Time</td><td>${FlowFormat.duration(this.pastMedianTime)}</td></tr>
 					</table>
 
 				</div>

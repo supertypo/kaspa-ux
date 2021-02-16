@@ -28,8 +28,14 @@ export class KaspaWalletUI extends BaseElement{
 
 			faucetFundsAvailable:{type:Number},
 			faucetPeriod:{type:Number},
-			faucetStatus:{type:String}
+			faucetStatus:{type:String},
 
+			blockCount:{type:Number},
+			headerCount:{type:Number},
+			difficulty:{type:Number},
+			networkName:{type:String},
+			pastMedianTime:{type:Number},
+			pastMediaTimeDiff:{type:Number}
 		};
 	}
 
@@ -85,6 +91,32 @@ export class KaspaWalletUI extends BaseElement{
 		if(this.rpc)
 			return this.rpc.connect()
 	}
+
+	initDaemonRPC() {
+		const { rpc } = flow.app;
+		this.networkStatusUpdates = rpc.subscribe(`network-status`);
+		(async()=>{
+			for await(const msg of this.networkStatusUpdates) {
+
+				const {
+					blockCount,
+					headerCount,
+					difficulty,
+					networkName,
+					pastMedianTime,
+					pastMedianTimeDiff
+				} = msg.data;
+
+				this.blockCount = blockCount;
+				this.headerCount = headerCount;
+				this.difficulty = difficulty;
+				this.networkName = networkName;
+				this.pastMedianTime = pastMedianTime;
+				this.pastMedianTimeDiff = pastMedianTimeDiff;
+			}
+		})().then();
+	}
+
 	render(){
 		return html``
 	}
@@ -338,6 +370,7 @@ export class KaspaWalletUI extends BaseElement{
 		if(!rpc)
 			return FlowDialog.alert("Error", "Kaspa Daemon config is missing.");
 
+		this.initDaemonRPC();
 
 		let {mode} = dialog;
 		console.log("$$$$$$$ mode", mode)
@@ -557,54 +590,6 @@ export class KaspaWalletUI extends BaseElement{
 			console.log('faucet error:', ex);
 		})
 	}
-
-	async faucetRPC(method, param, args) {
-
-
-		flow.app.rpc.request('faucet-request', { hello : 'world' }, (resp) => {
-			console.log(resp);
-		})
-
-/*
-		this.faucetStatus = null;
-		//const faucetUrl = 'https://faucet.kaspanet.io';
-		const faucetUrl = 'http://localhost:3000';
-
-		let queryString = '';
-		if(args) {
-			let params = new URLSearchParams();
-			queryString = '?'+Object.entries(args).forEach(([k,v])=>{
-				params.set(k,v);
-			}).toString();
-		}
-
-		try {
-			const url = `${faucetUrl}/api/${method}/${param}${queryString}`;
-			console.log('faucet req:',url);
-			const response = await fetch(url, {
-				method: 'GET', // *GET, POST, PUT, DELETE, etc.
-				mode: 'no-cors', // no-cors, *cors, same-origin
-				//mode: 'cors', // no-cors, *cors, same-origin
-				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: 'same-origin', // include, *same-origin, omit
-				headers: {
-					'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				redirect: 'follow', // manual, *follow, error
-				referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-				// body: JSON.stringify(data) // body data type must match "Content-Type" header
-			});
-
-			const resp = response.json(); // parses JSON response into native JavaScript objects
-			return resp;
-		} catch(ex) {
-			this.faucetStatus = ex.toString();
-		}
-
-*/		
-	}
-
 
 
 }
