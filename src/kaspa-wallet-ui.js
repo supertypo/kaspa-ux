@@ -1,6 +1,6 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
-	isSmallScreen, dpc, FlowFormat
+	dpc, FlowFormat
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {

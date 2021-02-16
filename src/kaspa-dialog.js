@@ -1,10 +1,20 @@
 import {
-	html, css, BaseElement, ScrollbarStyle, SpinnerStyle
+	html, css, BaseElement, ScrollbarStyle, SpinnerStyle, UID
 } from './flow-ux.js';
 export * from './flow-ux.js';
-import {validatePassword, baseUrl, debug} from './wallet.js';
+import {validatePassword, baseUrl, debug, isMobile} from './wallet.js';
 export * from './wallet.js';
 export {baseUrl, debug};
+const historyStack = [];
+
+if(isMobile){
+	window.addEventListener("popstate", (e)=>{
+		let state = historyStack.pop()
+		console.log("popstate:::state", state)
+		let ce = new CustomEvent("_popstate", {detail:{state:e.state, oldState:state}})
+		window.dispatchEvent(ce)
+	});
+}
 
 export class KaspaDialog extends BaseElement{
 
@@ -111,6 +121,47 @@ export class KaspaDialog extends BaseElement{
 			</div>
 		`
 	}
+	constructor(){
+		super();
+		this._onUrlHistoryPop = e=>{
+			this.onUrlHistoryPop(e.detail, e);
+		}
+		this.withHistory = window.isMobile;
+	}
+	attachUrlHistoryPopEvent(){
+		if(this.withHistory)
+			window.addEventListener("_popstate", this._onUrlHistoryPop);
+	}
+	removeUrlHistoryPopEvent(){
+		window.removeEventListener("_popstate", this._onUrlHistoryPop);
+	}
+	connectedCallback(){
+		super.connectedCallback();
+		this.attachUrlHistoryPopEvent();
+	}
+	disconnectedCallback(){
+		super.disconnectedCallback();
+		this.removeUrlHistoryPopEvent();
+	}
+
+	onUrlHistoryPop({state, oldState}, e){
+		console.log("onUrlHistoryPop:", oldState?.uid == this.uid, JSON.stringify({state, oldState}), e)
+		if(oldState?.uid == this.uid)
+			this._hide(true);
+	}
+	pushHistory(uid=""){
+		if(!this.withHistory)
+			return
+		let name = this.name || this.constructor.name
+		let key = name.toLowerCase().replace(/(kaspa|dialog|mobile)/g, '')
+		let state = {type:this.constructor.name, uid, key};
+		console.log("pushHistory:state", state)
+		history.pushState(state, name, "/"+key+"/"+uid);
+		historyStack.push(state)
+	}
+	historyGoBack(){
+		history.back();
+	}
 	buildRenderArgs(){
 		return {};
 	}
@@ -141,9 +192,17 @@ export class KaspaDialog extends BaseElement{
     }
     show(){
 		this.classList.add('active');
+		this.uid  = this.uid || UID()
+		this.pushHistory(this.uid)
 	}
-	hide(){
+	_hide(skipHistory=false){
 		this.classList.remove('active');
+		if(!skipHistory && this.withHistory){
+			this.historyGoBack();
+		}
+	}
+	hide(skipHistory=false){
+		this._hide(skipHistory);
 	}
 	onCloseClick(){
 		this.hide();

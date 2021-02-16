@@ -1,15 +1,13 @@
-import {isSmallScreen as isMobile} from './flow-ux.js';
 export * from './flow-ux.js';
-window.mobileMode = window.localStorage?.getItem("mobileMode")==1||false;
-let isSmallScreen = window.mobileMode?true:isMobile;
+
 import {KaspaWalletDesktop} from './kaspa-wallet-desktop';
-import {KaspaWalletMobile} from './kaspa-wallet-mobile';
+import {KaspaWalletMobile, isMobile} from './kaspa-wallet-mobile';
 
-if(isSmallScreen)
-	document.body.classList.add('small-screen');
-export {isSmallScreen}
+if(isMobile)
+	document.body.classList.add('is-mobile');
+export {isMobile}
 
-const BaseClass = isSmallScreen? KaspaWalletMobile : KaspaWalletDesktop;
+const BaseClass = isMobile ? KaspaWalletMobile : KaspaWalletDesktop;
 /*
 class KaspaWallet extends BaseClass{
 	static get properties() {

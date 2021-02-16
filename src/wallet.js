@@ -1,3 +1,8 @@
+import {isSmallScreen as _isSmallScreen} from './flow-ux.js';
+window.mobileMode = window.localStorage?.getItem("mobileMode")==1||false;
+let isMobile = window.mobileMode?true:_isSmallScreen;
+window.isMobile = isMobile;
+
 import {helper, Storage} from '@kaspa/wallet-worker';
 export const {Deferred, KAS, Decimal} = helper;
 const storage = new Storage({logLevel:'debug'});
@@ -6,7 +11,7 @@ if(!baseUrl){
 	baseUrl = (new URL("../", import.meta.url)).href;
 	debug && console.log("KaspaUX: baseUrl", baseUrl)
 }
-export {baseUrl, debug}
+export {baseUrl, debug, isMobile}
 
 /*
 const {Wallet, initKaspaFramework, Storage} = require("kaspa-wallet-worker");
