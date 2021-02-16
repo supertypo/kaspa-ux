@@ -22,7 +22,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 			.words .word{margin:4px;color:var(--flow-primary-color)}
 			.dots{text-align:center;padding:10px;}
 			.dots .dot{margin:2px}
-			.button-row{margin:20px 0px;}
+			.button-row{margin:20px 0px;flex-wrap: wrap;}
 			.button-row flow-btn{margin:10px; flex:1;}
 			.dot[icon="check"]{--fa-icon-color:var(--flow-primary-color)}
 			.dot[icon="times"]{--fa-icon-color:#F00;}
