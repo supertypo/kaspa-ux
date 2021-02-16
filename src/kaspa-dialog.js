@@ -56,7 +56,7 @@ export class KaspaDialog extends BaseElement{
 				max-width:var(--kaspa-dialog-container-max-width, 700px);
 				max-height:var(--kaspa-dialog-container-max-height, 300px);
 				margin:var(--kaspa-dialog-container-margin, 5px auto);
-				padding:var(--kaspa-dialog-container-padding, 10px);
+				padding:var(--kaspa-dialog-container-padding, 0px);
 				position:relative;
 				display:flex;flex-direction:column;
 			}
@@ -79,7 +79,7 @@ export class KaspaDialog extends BaseElement{
 			}
 			.flex{flex:1}
 			.sub-heading{margin:5px;font-size:1.2rem;}
-			.body{flex:1;display:flex;justify-content:center;overflow:auto;}
+			.body{flex:1;display:flex;justify-content:center;overflow:hidden auto;}
 			.inner-body{max-width:90%;width:700px;height:fit-content;padding:30px;}
 			.full-width{width:100%;max-width:100%;}
 			.error{
