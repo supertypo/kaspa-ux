@@ -34,6 +34,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	}
 	constructor(){
 		super();
+		this.stoped = true;
 		window.showQRScanner = (args, callback)=>{
 			this.open(args, callback)
 		}
@@ -45,7 +46,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		let value = this.value || '';
 		let {inputLabel='Scan result'} = this;
 		return html`
-		<flow-qrcode-scanner qrcode="${this.value||''}" hidecode
+		<flow-qrcode-scanner qrcode="${this.value||''}" hidecode ?stoped=${this.stoped}
 			@changed="${this.onQRChange}"></flow-qrcode-scanner>
 		<flow-input class="full-width" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>
@@ -60,12 +61,17 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	stopQRScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
 		scanner.stop();
+		this.stoped = true;
 	}
 	startScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
 		scanner.start();
+		this.stoped = false;
 	}
 	sendBack(e){
+		this.sendValueBack();
+	}
+	sendValueBack(){
 		this.callback({value:this.value, dialog:this})
 	}
 	onInputChange(e){
@@ -87,6 +93,8 @@ class KaspaQRScannerDialog extends KaspaDialog{
 				this.setError("Invalid Address")
 		}
 		this.isValid = isValid;
+		if(isValid)
+			this.sendValueBack();
 		//console.log("onT9Change:this.value", this.value)
 	}
 	open(args, callback){
@@ -100,9 +108,9 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.show();
 		this.startScanning();
 	}
-	hide(){
+	_hide(skipHistory=false){
 		this.stopQRScanning();
-		super.hide();
+		super._hide(skipHistory);
 	}
     cancel(){
     	this.hide();

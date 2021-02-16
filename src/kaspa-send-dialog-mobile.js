@@ -137,6 +137,11 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		this.estimateError = "";
 		this.estimate = {};
 		this.alertFeeAmount = 3000;
+		this.address = args.address||"";
+		if(args.amount){
+			let amountField = this.qS(".amount");
+			amountField.value = args.amount
+		}
 		this.show();
 	}
 	cleanUpForm(){
@@ -145,18 +150,13 @@ class KaspaSendDialogMobile extends KaspaDialog{
     	})
 	}
 	scanQRCode(){
-		showQRScanner({wallet:this.wallet, isAddressQuery:true}, ({value, dialog})=>{
-			console.log("SCAN result", value)
-			dialog.hide();
-			if(!value)
-				return
-			let [address, searchQuery=''] = value.split("?");
-			let searchParams = new URLSearchParams(searchQuery)
-			let args = Object.fromEntries(searchParams.entries());
-			if(args.amount){
+		this.wallet.showQRScanner({isAddressQuery:true}, ({amount, address})=>{
+			console.log("scan result: amount, address", amount, address)
+			if(amount){
 				let amountField = this.qS(".amount");
-				amountField.value = args.amount
+				amountField.value = amount
 			}
+
 			this.setAddress(address)
 		})
 	}
