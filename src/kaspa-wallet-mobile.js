@@ -164,6 +164,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		this.parentNode.appendChild(qrscannerDialog);
 		this._onTXPaginationClick = this.onTXPaginationClick.bind(this);
 	}
+	toggleFullScreen(){
+		if (this.fullscreen)
+			document.webkitExitFullscreen();
+		else
+			document.documentElement.webkitRequestFullscreen();
+
+		this.fullscreen = !this.fullscreen;
+	}
 	render(){
 		let {selectedTab, wallet} = this;
 		let isReady = !!wallet?.balance;
@@ -172,7 +180,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		return html`
 		<div class="header" ?not-ready=${!isReady}>
 			<div class="logo">
-				<img class="logo-img" src="${baseUrl+'/resources/images/logo.png'}" />
+				<img class="logo-img" @click=${this.toggleFullScreen}
+					src="${baseUrl+'/resources/images/logo.png'}" />
 			</div>
 			<div class="flex"></div>
 			<fa-icon ?hidden=${!this.isLoading} 
