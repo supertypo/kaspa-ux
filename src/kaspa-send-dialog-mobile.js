@@ -46,6 +46,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			flow-input.amount,
 			flow-input.fee{flex:1}
 			flow-checkbox{margin:8px 0px;}
+			.body-box{align-items:flex-start;}
 			.center-button{
 				margin:5px auto;display:block;max-width:120px;
 			}
