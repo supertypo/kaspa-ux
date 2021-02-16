@@ -75,7 +75,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			}
 			.qr-code-holder{
 				display:flex;align-items:flex-end;justify-content:space-between;
-				max-width:370px;max-height:200px;margin-bottom:32px;
+				max-height:200px;margin-bottom:32px;
 			}
 			.status{
 				display:flex;
@@ -180,6 +180,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			<div class="qr-code-holder">
 				<flow-qrcode text="${this.receiveAddress||""}"></flow-qrcode>
 				<flow-btn primary @click="${this.showSendDialog}">SEND</flow-btn>
+				<flow-btn primary @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
 			</div>
 			<div class="status">
 				Wallet Status: ${this.status||'Offline'}<br/>

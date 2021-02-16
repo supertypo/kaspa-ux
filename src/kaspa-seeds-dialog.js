@@ -59,6 +59,8 @@ class KaspaSeedsDialog extends KaspaDialog{
 		return this[`render${stepName}Buttons`]();
 	}
 	renderStep1(){
+		if(!this.args)
+			return '';
 		let {mnemonic} = this.args;
 		let words = mnemonic.split(" ");
 		const wordRows = chunks(words, 4);
