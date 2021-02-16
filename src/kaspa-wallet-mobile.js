@@ -169,6 +169,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		this.selectedTab = "balance";
 		this.sendDialog = document.createElement("kaspa-send-dialog-mobile");
 		this.parentNode.appendChild(this.sendDialog);
+		this.receiveDialog = document.createElement("kaspa-receive-dialog-mobile");
+		this.parentNode.appendChild(this.receiveDialog);
 		let t9Dialog = document.createElement("kaspa-t9-dialog");
 		this.parentNode.appendChild(t9Dialog);
 		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
@@ -317,7 +319,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<fa-icon icon="qrcode"></fa-icon>
 					<span>Scan</span>
 				</a>
-				<a class="receive-btn" @click="${this.showSendDialog}">
+				<a class="receive-btn" @click="${this.showReceiveDialog}">
 					<fa-icon icon="arrow-alt-to-bottom"></fa-icon>
 					<span>Receive</span>
 				</a>
@@ -420,6 +422,12 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		console.log("this.sendDialog", this.sendDialog)
 		this.sendDialog.open({wallet:this}, (args)=>{
 			this.sendTx(args);
+		})
+	}
+	showReceiveDialog(){
+		let address = this.receiveAddress||'kaspatest:abc'
+		this.receiveDialog.open({wallet:this, address}, (args)=>{
+			//
 		})
 	}
 
