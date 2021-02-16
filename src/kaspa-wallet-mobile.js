@@ -206,6 +206,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab" tab="transactions">Transactions</div>
 				<div class="tab" tab="wallet">Wallet</div>
 				<div class="tab" tab="faucet">Faucet</div>
+				<div class="tab" tab="network">Network</div>
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
@@ -250,6 +251,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 
 					`}
 
+
+				</div>
+				<div class="tab-content ${sCls('network')}" for="network">
+
+
+					<table>
+						
+					</table>
 
 				</div>
 			</div>
