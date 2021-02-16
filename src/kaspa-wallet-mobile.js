@@ -224,13 +224,13 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
 					<flow-btn class="center-btn primary"
-						@click="${this.showSeeds}">Backup Seed</flow-btn>
+						@click="${this.showSeeds}">BACKUP SEED</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
+						@click="${this.showRecoverWallet}">RECOVER FROM SEED</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.exportWalletFile}">Export Wallet Seed File</flow-btn>
+						@click="${this.exportWalletFile}">EXPORT WALLET SEED FILE</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.importWalletFile}">Import Wallet Seed File</flow-btn>
+						@click="${this.importWalletFile}">IMPORT WALLET SEED FILE</flow-btn>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
