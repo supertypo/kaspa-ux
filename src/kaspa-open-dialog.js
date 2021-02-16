@@ -106,7 +106,8 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderOpenUI(){
 		let icon = this.inputType=="password"?'eye':'eye-slash';
 		return html`
-			<div class="sub-heading">Unlock the wallet with your password</div>
+			<div><img src="/resources/logo/kaspa.svg"></div>
+			<div class="sub-heading">Unlock the wallet with your password:</div>
 			<flow-input class="password full-width" outer-border value="${pass}"
 				type="${this.inputType}" placeholder="Password"
 				@keyup="${this.onOpenPassKeyup}">

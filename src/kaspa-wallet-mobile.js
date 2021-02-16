@@ -147,8 +147,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.tx-num{min-width:60px}
 			.br{min-width:100%;}
 			.pb-0{padding-bottom:0px}
-			.badge{margin:15px auto;width:calc(100% - 30px);}
-			.center-btn{min-width:120px;max-width:120px;display:block;margin:5px auto}
+			.badge{margin:15px auto;width:calc(100% - 30px); font-size:1.1rem; text-align:center; }
+			.center-btn{min-width:120px;max-width:180px;display:block;margin:5px auto}
 			.flow-swipeable-row{position:relative;height:100%;max-height:100%;overflow:hidden;}
 			.flow-swipeable{box-sizing:border-box;}
 
@@ -219,13 +219,13 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
 					<flow-btn class="center-btn primary"
-						@click="${this.showSeeds}">BACKUP SEED</flow-btn>
+						@click="${this.showSeeds}">Backup Seed</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.showRecoverWallet}">RECOVER FROM SEED</flow-btn>
+						@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.exportWalletFile}">EXPORT WALLET SEED FILE</flow-btn>
+						@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.importWalletFile}">IMPORT WALLET SEED FILE</flow-btn>
+						@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
@@ -237,7 +237,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							${this.faucetPeriod ? html`
 								<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
 							`:``}
-						
 							${ !this.faucetFundsAvailable ? html`` : html`
 								<flow-btn class="primary" @click="${this.requestFaucetFunds}">REQUEST FUNDS FROM FAUCET</flow-btn>
 							`}
@@ -249,11 +248,18 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('network')}" for="network">
 
-
-					<table>
-						
-					</table>
-
+					<div>Network Status</div>
+					${!this.networkName ? html`OFFLINE` : html`
+						<table>
+							<tr><td>Network</td><td>${this.networkName}</td></tr>
+							<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
+							<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
+							<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
+							<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
+							<tr><td>Median Latency</td><td>${FlowFormat.duration(this.pastMedianTimeDiff)}</td></tr>
+							<tr><td>Median Time</td><td>${this.pastMedianTime?(new Date(this.pastMedianTime)).toJSON().replace(/T/,' '):''}</td></tr>
+						</table>
+					`}
 				</div>
 			</div>
 		</div>

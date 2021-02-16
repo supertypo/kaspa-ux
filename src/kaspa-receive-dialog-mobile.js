@@ -55,7 +55,7 @@ class KaspaReceiveDialogMobile extends KaspaDialog{
 		return html`
 			<flow-qrcode data="${address+amountStr}"></flow-qrcode>
 			<flow-input class="address full-width" suffix-btn
-				label="Address and amount" readonly value="${address+amountStr}">
+				label="Request URL" readonly value="${address+amountStr}">
 				<flow-btn slot="suffix" class="primary"
 					@click="${this.copyAddress}" icon="copy"></flow-btn>
 			</flow-input>
