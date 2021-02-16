@@ -513,30 +513,59 @@ export class KaspaWalletUI extends BaseElement{
 
 
 	async updateFaucetBalance() {
-		this.faucetRPC('available', this.receiveAddress)
-		.then(resp => {
-			// TODO
+
+		flow.app.rpc.request('faucet-available', { address : this.receiveAddress })
+		.then((resp) => {
+			console.log(resp);
 			const { available, period } = resp;
 			this.faucetStatus = null;
 			this.faucetFundsAvailable = available;
 			this.faucetPeriod = period;
+
 		})
 		.catch(ex => {
-			console.log(ex);
-			this.faucetStatus = ex.toString();
+			console.log('faucet error:', ex);
 		})
 	}
 
 	async getKaspaFromFaucet(amount) {
-		return await this.faucetRPC('get', this.receiveAddress, { amount });
+		flow.app.rpc.request('faucet-available', { address : this.receiveAddress, amount })
+		.then((resp) => {
+			console.log(resp);
+			const { available, period } = resp;
+			this.faucetStatus = null;
+			this.faucetFundsAvailable = available;
+			this.faucetPeriod = period;
+
+		})
+		.catch(ex => {
+			console.log('faucet error:', ex);
+		})
 	}
 
 	requestFaucetFunds() {
-		
+		flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount : 123 })
+		.then((resp) => {
+			console.log(resp);
+			const { available, period } = resp;
+			this.faucetStatus = null;
+			this.faucetFundsAvailable = available;
+			this.faucetPeriod = period;
+
+		})
+		.catch(ex => {
+			console.log('faucet error:', ex);
+		})
 	}
 
 	async faucetRPC(method, param, args) {
 
+
+		flow.app.rpc.request('faucet-request', { hello : 'world' }, (resp) => {
+			console.log(resp);
+		})
+
+/*
 		this.faucetStatus = null;
 		//const faucetUrl = 'https://faucet.kaspanet.io';
 		const faucetUrl = 'http://localhost:3000';
@@ -572,6 +601,8 @@ export class KaspaWalletUI extends BaseElement{
 		} catch(ex) {
 			this.faucetStatus = ex.toString();
 		}
+
+*/		
 	}
 
 

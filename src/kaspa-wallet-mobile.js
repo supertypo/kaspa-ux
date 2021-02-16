@@ -151,6 +151,17 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.center-btn{min-width:120px;max-width:120px;display:block;margin:5px auto}
 			.flow-swipeable-row{position:relative;height:100%;max-height:100%;overflow:hidden;}
 			.flow-swipeable{box-sizing:border-box;}
+
+			.faucet-ux {
+				margin-top:32px;
+				display: flex;
+				flex-direction:column;
+				align-items:center;
+			}
+
+			.faucet-ux > div, .faucet-ux > flow-btn {
+				margin: 8px;
+			}
 		`];
 	}
 	constructor() {
@@ -223,16 +234,19 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
-						<div>Available:</div>
-						<div>${KAS(this.faucetFundsAvailable||0)} KAS</div>
 
-						${this.faucetPeriod ? html`
-							<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
-						`:``}
-					
-						${ !this.faucetFundsAvailable ? html`` : html`
-							<flow-btn class="primary" @click="${this.requestFaucetFunds}">Request Funds from Faucet</flow-btn>
-						`})
+						<div class="faucet-ux">
+							<div>Available:</div>
+							<div>${KAS(this.faucetFundsAvailable||0)} KAS</div>
+
+							${this.faucetPeriod ? html`
+								<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
+							`:``}
+						
+							${ !this.faucetFundsAvailable ? html`` : html`
+								<flow-btn class="primary" @click="${this.requestFaucetFunds}">REQUEST FUNDS FROM FAUCET</flow-btn>
+							`}
+						</div>
 
 					`}
 
