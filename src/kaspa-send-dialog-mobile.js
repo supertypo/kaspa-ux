@@ -19,7 +19,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 				max-height:none;
 				--flow-input-label-font-size: 0.9rem;
 				--flow-input-label-padding: 5px 7px;
-				--flow-input-font-family:'EXO 2', Consolas;
+				--flow-input-font-family:'Exo 2', Consolas;
 				--flow-input-font-size:1rem;
 				--flow-input-font-weight: normal;
 				--flow-input-height:50px;
