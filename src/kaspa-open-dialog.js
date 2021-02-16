@@ -13,7 +13,8 @@ class KaspaOpenDialog extends KaspaDialog{
 
 	static get styles(){
 		return [KaspaDialog.styles, css`
-			:host([mode="create"]) .container{max-height:var(--kaspa-dialog-container-max-height, 400px)}
+			.container{max-height:var(--kaspa-dialog-container-max-height, 350px)}
+			:host([mode="create"]) .container{max-height:var(--kaspa-dialog-container-max-height, 500px)}
 			:host([mode="init"]) .container{max-height:var(--kaspa-dialog-container-max-height, 200px)}
 			:host([mode="recover"]) .container{max-height:var(--kaspa-dialog-container-max-height, 450px)}
 			.buttons{justify-content:flex-end}
@@ -29,9 +30,6 @@ class KaspaOpenDialog extends KaspaDialog{
 				text-align:center;width:100%;box-sizing:border-box;
 			}
 			:host[isFresh] .close-btn{display:none}
-			flow-input{
-				--flow-input-font-size:1rem
-			}
 		`];
 	}
 	constructor() {

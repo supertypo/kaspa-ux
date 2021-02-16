@@ -35,7 +35,7 @@ body{
     --flow-input-placeholder: #555;
     --flow-input-label-border: 0px;
     --flow-input-height:50px;
-    --flow-input-font-size:1.5rem;
+    --flow-input-font-size:1.3rem;
     --flow-input-label-font-size: 0.9rem;
     --flow-input-font-weight:normal;
 	--flow-input-line-height:80%;
@@ -61,7 +61,7 @@ body{
     --flow-select-input-height: 40px;
 	--flow-select-selected-min-width: 200px;
 
-	--flow-btn-font-size:var(--flow-input-font-size);
+	--flow-btn-font-size:1.3rem;
 	--flow-btn-wrapper-min-width:50px;
 	--flow-btn-padding:11px 8px;
 
@@ -73,7 +73,7 @@ body{
 	--flow-dropdown-display:block;
 
 	--flow-iconbtn-padding:13px;
-	--flow-btn-icon-size:30px;
+	--flow-btn-icon-size:26px;
    
 }
 
