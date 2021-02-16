@@ -1,6 +1,7 @@
 import {
 	html, css, FlowFormat, KaspaWalletUI, dpc,
-	baseUrl, KAS, renderPagination, buildPagination, paginationStyle
+	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
+	swipeableStyle, FlowSwipeable
 } from './kaspa-wallet-ui.js';
 
 export class KaspaWalletMobile extends KaspaWalletUI{
@@ -12,7 +13,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	}
 
 	static get styles(){
-		return [KaspaWalletUI.styles, paginationStyle, css`
+		return [KaspaWalletUI.styles, paginationStyle, swipeableStyle, css`
 			:host{
 				padding:0px;display:flex;flex-direction:column;
 				font-size:1rem;
@@ -56,20 +57,21 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				border-bottom-color:var(--kaspa-wallet-tab-active-border-color, var(--flow-primary-color));
 			}
 			.tab:not(.selected){cursor:pointer}
-			.tab-contents{position:relative;flex:1}
+			.tab-contents{position:relative;flex:1;overflow:hidden}
 			.tab-content{
-				position:absolute;top:0px;bottom:0px;z-index:1;width:100%;height:100%;
+				/*position:absolute;top:0px;bottom:0px;*/
+				z-index:1;width:100%;height:100%;
 				background-color:var(--flow-background-color, #FFF);
-				left:100%;transition:left 0.5s ease;
+				/*left:100%;transition:left 0.5s ease;*/
 				overflow:auto;padding:0px 0px 20px;box-sizing:border-box;
 				/*background: -webkit-linear-gradient(left, #1e5799 0%,#f7858d 100%);*/
 			}
 			.tab-content.deactivating.selected,
 			.tab-content.deactivating{
-				left:-100%;
+				/*left:-100%;*/
 			}
 			.tab-content.selected{
-				z-index:2;left:0%;
+				/*z-index:2;left:0%;*/
 			}
 			.top-menu{
 				background-color:var(--flow-background-color, #FFF);
@@ -147,6 +149,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.pb-0{padding-bottom:0px}
 			.badge{margin:15px auto;width:calc(100% - 30px);}
 			.center-btn{min-width:120px;max-width:120px;display:block;margin:5px auto}
+			.flow-swipeable-row{position:relative;height:100%;max-height:100%;overflow:hidden;}
+			.flow-swipeable{box-sizing:border-box;}
 		`];
 	}
 	constructor() {
@@ -164,7 +168,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let {selectedTab, wallet} = this;
 		let isReady = !!wallet?.balance;
 
-		const sCls = tab=>tab==selectedTab?'selected':'';
+		const sCls = tab=>tab==selectedTab?'selected flow-swipeable':'flow-swipeable';
 		return html`
 		<div class="header" ?not-ready=${!isReady}>
 			<div class="logo">
@@ -185,44 +189,46 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab" tab="faucet">Faucet</div>
 			</flow-menu>
 		</div>
-		<div class="tab-contents" ?not-ready=${!isReady}>
-			<div class="tab-content ${sCls('balance')}" for="balance">
-				<div class="error-message" 
-					?hidden=${!this.errorMessage}>${this.errorMessage}</div>
-				${this.renderAddressAndQr()}
-				${this.renderBalanceAndButton()}
-			</div>
-			<div class="tab-content v-box pb-0 ${sCls('transactions')}" for="transactions">
-				${this.renderTX()}
-			</div>
-			<div class="tab-content ${sCls('wallet')}" for="wallet">
-				<div class="badge"><span>Status:</span> ${this.status}</div>
-				<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
+		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
+			<div class="flow-swipeable-row">
+				<div class="tab-content ${sCls('balance')}" for="balance">
+					<div class="error-message" 
+						?hidden=${!this.errorMessage}>${this.errorMessage}</div>
+					${this.renderAddressAndQr()}
+					${this.renderBalanceAndButton()}
+				</div>
+				<div class="tab-content v-box pb-0 ${sCls('transactions')}" for="transactions">
+					${this.renderTX()}
+				</div>
+				<div class="tab-content ${sCls('wallet')}" for="wallet">
+					<div class="badge"><span>Status:</span> ${this.status}</div>
+					<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
-				<flow-btn class="center-btn primary"
-					@click="${this.showSeeds}">Backup Seed</flow-btn>
-				<flow-btn class="center-btn primary"
-					@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
-				<flow-btn class="center-btn primary"
-					@click="${this.exportWalletFile}">Export Wallet Seed File</flow-btn>
-				<flow-btn class="center-btn primary"
-					@click="${this.importWalletFile}">Import Wallet Seed File</flow-btn>
-			</div>
-			<div class="tab-content ${sCls('faucet')}" for="faucet">
-				${this.faucetStatus ? this.faucetStatus : html`
-				
-					TODO - ${this.faucetFundsAvailable}
+					<flow-btn class="center-btn primary"
+						@click="${this.showSeeds}">Backup Seed</flow-btn>
+					<flow-btn class="center-btn primary"
+						@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
+					<flow-btn class="center-btn primary"
+						@click="${this.exportWalletFile}">Export Wallet Seed File</flow-btn>
+					<flow-btn class="center-btn primary"
+						@click="${this.importWalletFile}">Import Wallet Seed File</flow-btn>
+				</div>
+				<div class="tab-content ${sCls('settings')}" for="settings">
+					<h1>Settings</h1>
+				</div>
+				<div class="tab-content ${sCls('faucet')}" for="faucet">
+					${this.faucetStatus ? this.faucetStatus : html`
+					
+						TODO - ${this.faucetFundsAvailable}
 
-					${ !this.faucetPeriod ? html`` : html`
-						Additional funds will be available in ${FlowFormat.duration(this.faucetPeriod)}
+						${ !this.faucetPeriod ? html`` : html`
+							Additional funds will be available in ${FlowFormat.duration(this.faucetPeriod)}
+						`}
+					
 					`}
-				
-				`}
 
 
-			</div>
-			<div class="tab-content ${sCls('settings')}" for="settings">
-				<h1>Settings</h1>
+				</div>
 			</div>
 		</div>
 		`
@@ -256,7 +262,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						title="Copy to clipboard" icon="copy"></fa-icon>
 				</div>
 			</div>
-			<flow-qrcode text="${this.receiveAddress||""}"></flow-qrcode>
+			<flow-qrcode text="${this.receiveAddress||""}" mode="Alphanumeric"></flow-qrcode>
 		</div>`
 	}
 	renderBalanceAndButton(){
@@ -336,10 +342,41 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 		`
 	}
+	firstUpdated(){
+		super.firstUpdated();
+		let swipeableContainer = this.renderRoot.querySelector(".flow-swipeable-container");
+		this.swipeable = new FlowSwipeable(swipeableContainer, {
+			drag:false,
+			onSwipe:({index, element})=>{
+				let tab = element?.getAttribute("for");
+				console.log("onSwipe:", {index, element, tab})
+				if(!tab)
+					return
+				this.selectTab(tab);
+			}
+		});
+	}
 	onTabSelect(e){
 		let {selected} = e.detail;
-		if(this.selectedTab == selected)
+		this.selectTab(selected);
+	}
+	selectTab(tab){
+		if(this.selectedTab == tab)
 			return
+		console.log("selectTab", tab)
+		this.selectedTab = tab;
+		this.requestUpdate("selectedTab", null)
+		let tabEl = this.renderRoot.querySelector(`.tab[tab='${tab}']`);
+		console.log("selectTab", tab, tabEl)
+		if(!tabEl)
+			return
+		tabEl.scrollIntoView();
+		let index = [...tabEl.parentNode.children].indexOf(tabEl)
+		
+		if(index <0)
+			return
+		this.swipeable.setActive(index)
+		/*
 		console.log("onTabSelect", selected)
 		let oldContent = this.renderRoot.querySelector(".tab-content.selected");
 		let newContent = this.renderRoot.querySelector(`.tab-content[for='${selected}']`);
@@ -350,6 +387,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		dpc(500, ()=>{
 			oldContent.classList.remove("deactivating");
 		})
+		*/
 
 	}
 

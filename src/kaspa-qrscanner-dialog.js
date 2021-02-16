@@ -79,6 +79,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	}
 	async setValue(value){
 		let isValid = !!value;
+		this.value = value;
 		this.setError("")
 		if(value && this.isAddressQuery){
 			isValid = await this.wallet.isValidAddress(value)
@@ -86,7 +87,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 				this.setError("Invalid Address")
 		}
 		this.isValid = isValid;
-		this.value = value;
 		//console.log("onT9Change:this.value", this.value)
 	}
 	open(args, callback){
