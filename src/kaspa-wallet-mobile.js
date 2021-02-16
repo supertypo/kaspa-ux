@@ -147,8 +147,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.tx-num{min-width:60px}
 			.br{min-width:100%;}
 			.pb-0{padding-bottom:0px}
-			.badge{margin:15px auto;width:calc(100% - 30px);}
-			.center-btn{min-width:120px;max-width:120px;display:block;margin:5px auto}
+			.badge{margin:15px auto;width:calc(100% - 30px); font-size:1.1rem; text-align:center; }
+			.center-btn{min-width:120px;max-width:180px;display:block;margin:5px auto}
 			.flow-swipeable-row{position:relative;height:100%;max-height:100%;overflow:hidden;}
 			.flow-swipeable{box-sizing:border-box;}
 
@@ -227,13 +227,13 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
 					<flow-btn class="center-btn primary"
-						@click="${this.showSeeds}">BACKUP SEED</flow-btn>
+						@click="${this.showSeeds}">Backup Seed</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.showRecoverWallet}">RECOVER FROM SEED</flow-btn>
+						@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.exportWalletFile}">EXPORT WALLET SEED FILE</flow-btn>
+						@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
 					<flow-btn class="center-btn primary"
-						@click="${this.importWalletFile}">IMPORT WALLET SEED FILE</flow-btn>
+						@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
