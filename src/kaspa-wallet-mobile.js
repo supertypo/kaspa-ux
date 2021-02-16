@@ -194,7 +194,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab" tab="balance">Balance</div>
 				<div class="tab" tab="transactions">Transactions</div>
 				<div class="tab" tab="wallet">Wallet</div>
-				<div class="tab" tab="settings">Settings</div>
 				<div class="tab" tab="faucet">Faucet</div>
 			</flow-menu>
 		</div>
@@ -221,9 +220,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						@click="${this.exportWalletFile}">Export Wallet Seed File</flow-btn>
 					<flow-btn class="center-btn primary"
 						@click="${this.importWalletFile}">Import Wallet Seed File</flow-btn>
-				</div>
-				<div class="tab-content ${sCls('settings')}" for="settings">
-					<h1>Settings</h1>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
