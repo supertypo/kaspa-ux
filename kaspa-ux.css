@@ -55,6 +55,7 @@ body{
 	--flow-select-margin:var(--flow-input-margin);
 	--flow-select-display:var(--flow-input-display);
     --flow-select-border:var(--flow-input-border);
+    --flow-select-input-padding:var(--flow-input-padding);
     --flow-select-label-border: 0px;
     --flow-select-label-font-size:var(--flow-input-label-font-size);
     --flow-select-selected-min-height: 40px;
@@ -74,7 +75,7 @@ body{
 
 	--flow-iconbtn-padding:13px;
 	--flow-btn-icon-size:26px;
-   
+	--flow-btn-text-transform:uppercase;
 }
 
 body.flow-theme-dark{
