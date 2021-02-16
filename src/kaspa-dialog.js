@@ -78,7 +78,7 @@ export class KaspaDialog extends BaseElement{
 				border-bottom:2px solid var(--flow-primary-color, #F00);
 			}
 			.flex{flex:1}
-			.sub-heading{margin:5px;font-size:1.2rem;}
+			.sub-heading{padding:5px;font-size:1.2rem;}
 			.body{flex:1;display:flex;justify-content:center;overflow:hidden auto;}
 			.inner-body{max-width:90%;width:700px;height:fit-content;padding:30px;}
 			.full-width{width:100%;max-width:100%;}
