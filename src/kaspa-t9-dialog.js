@@ -18,6 +18,7 @@ class KaspaT9Dialog extends KaspaDialog{
 				border-radius:0px;width:100%;height:100%;border:0px;
 				padding:0px;max-height:none;
 				--flow-input-label-font-size: 0.9rem;
+				--flow-select-label-font-size: 0.9rem;
 				--flow-input-label-padding: 5px 7px;
 				--flow-input-font-family: 'Consolas';
 				--flow-input-font-size:14px;
