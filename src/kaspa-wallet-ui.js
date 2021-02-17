@@ -4,7 +4,7 @@ import {
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
-	Deferred, GetTS, KAS, formatForMachine,
+	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
 	getLocalWallet, setLocalWallet, baseUrl, debug
 } from './wallet.js';
 export * from './wallet.js';
@@ -318,8 +318,20 @@ export class KaspaWalletUI extends BaseElement{
 	}
 	connectedCallback(){
 		super.connectedCallback();
+		let mobileSuffix = isMobile?'-mobile':'';
 		let openDialog = document.createElement('kaspa-open-dialog');
 		this.parentNode.insertBefore(openDialog, this.nextSibling)
+		this.sendDialog = document.createElement("kaspa-send-dialog"+mobileSuffix);
+		this.parentNode.appendChild(this.sendDialog);
+		this.receiveDialog = document.createElement("kaspa-receive-dialog"+mobileSuffix);
+		this.parentNode.appendChild(this.receiveDialog);
+		this.seedsDialog = document.createElement("kaspa-seeds-dialog");
+		this.parentNode.appendChild(this.seedsDialog);
+		let t9Dialog = document.createElement("kaspa-t9-dialog");
+		this.parentNode.appendChild(t9Dialog);
+		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
+		this.parentNode.appendChild(qrscannerDialog);
+		
 		console.log("connectedCallback1", openDialog)
 		initKaspaFramework({
 			workerPath: "/kaspa-wallet-worker/worker.js"
@@ -447,10 +459,6 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 	openSeedsDialog(args, callback){
-		if(!this.seedsDialog){
-			this.seedsDialog = document.createElement("kaspa-seeds-dialog");
-			this.parentNode.appendChild(this.seedsDialog);
-		}
 		//console.log("encryptedMnemonic", encryptedMnemonic)
 		this.seedsDialog.open(args, callback)
 	}
@@ -463,20 +471,12 @@ export class KaspaWalletUI extends BaseElement{
 		this.txDialog.open({wallet:this}, (args)=>{})
 	}
 	showSendDialog(){
-		if(!this.sendDialog){
-			this.sendDialog = document.createElement("kaspa-send-dialog");
-			this.parentNode.appendChild(this.sendDialog);
-		}
 		console.log("this.sendDialog", this.sendDialog)
 		this.sendDialog.open({wallet:this}, (args)=>{
 			this.sendTx(args);
 		})
 	}
 	showReceiveDialog(){
-		if(!this.receiveDialog){
-			this.receiveDialog = document.createElement("kaspa-receive-dialog");
-			this.parentNode.appendChild(this.receiveDialog);
-		}
 		let address = this.receiveAddress;
 		this.receiveDialog.open({address}, (args)=>{
 		})
@@ -576,20 +576,64 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 
-	requestFaucetFunds() {
-		flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount : 123 })
-		.then((resp) => {
-			console.log(resp);
-			const { available, period } = resp;
-			this.faucetStatus = null;
-			this.faucetFundsAvailable = available;
-			this.faucetPeriod = period;
 
-		})
-		.catch(ex => {
-			console.log('faucet error:', ex);
+	requestFaucetFunds() {
+		let max = formatForHuman(this.faucetFundsAvailable)
+		showT9({
+			value:'',
+			max,
+			heading:'Request funds',
+			inputLabel:'Amount in KAS'
+		}, ({value:amount, dialog})=>{
+			console.log("t9 result", amount)
+			let sompis = formatForMachine(amount||0);
+			if(sompis > this.faucetFundsAvailable)
+				return dialog.setError(`You can't request more than ${KAS(this.faucetFundsAvailable||0)} KAS.`);//'
+			
+			dialog.hide();
+
+			flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount })
+			.then((resp) => {
+				console.log(resp);
+				const { available, period } = resp;
+				this.faucetStatus = null;
+				this.faucetFundsAvailable = available;
+				this.faucetPeriod = period;
+
+			})
+			.catch(ex => {
+				console.log('faucet error:', ex);
+			})
+
 		})
 	}
 
+	showQRScanner(args, callback){
+		args = args||{};
+		args.wallet = this;
+		showQRScanner(args, ({value, dialog})=>{
+			console.log("SCAN result", value)
+			dialog.hide();
+			if(!value)
+				return
+			let [address, searchQuery=''] = value.split("?");
+			let searchParams = new URLSearchParams(searchQuery)
+			let args = Object.fromEntries(searchParams.entries());
+			let {amount} = args;
+			callback({address, amount})
+		})
+	}
+
+	showSendDialogWithQrScanner() {
+		this.showQRScanner({isAddressQuery:true}, ({amount, address})=>{
+			if(!address)
+				return
+			dpc(100, ()=>{
+				this.sendDialog.open({wallet:this, amount, address}, (args)=>{
+					this.sendTx(args);
+				})
+			})
+		})
+	}
 
 }

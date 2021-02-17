@@ -13,14 +13,10 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	static get styles(){
 		return [KaspaDialog.styles, css`
 			.container{
-				border-radius:0px;width:100%;height:100%;border:0px;
+				border-radius:0px;width:100%;height:100%;
 				padding:0px;max-height:none;
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
-			.buttons{
-				justify-content:center;margin:20px 0px;width:100%;
-				box-sizing:border-box;
-			}
 		`]
 	}
 	constructor(){

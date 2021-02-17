@@ -5,7 +5,8 @@ class KaspaSeedsDialog extends KaspaDialog{
 	static get properties() {
 		return {
 			step:{type:Number, reflect:true},
-			inputType:{type:String}
+			inputType:{type:String},
+			mnemonic:{type:String}
 		};
 	}
 
@@ -41,6 +42,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 		this.step = args.step||1;
 		this.callback = callback;
 		this.args = args;
+		this.mnemonic = args.mnemonic;
 		this.hideable = !!args.hideable
 		this.show();
 	}
@@ -59,7 +61,9 @@ class KaspaSeedsDialog extends KaspaDialog{
 		return this[`render${stepName}Buttons`]();
 	}
 	renderStep1(){
-		let {mnemonic} = this.args;
+		if(!this.mnemonic)
+			return '';
+		let {mnemonic} = this;
 		let words = mnemonic.split(" ");
 		const wordRows = chunks(words, 4);
 		let indexes = [];
@@ -230,6 +234,10 @@ class KaspaSeedsDialog extends KaspaDialog{
     	this.callback({finished:true, dialog:this});
     	this.callback = null;
     	this.hide();
+    }
+    hide(skipHistory=false){
+    	this.mnemonic = "";
+    	super.hide(skipHistory);
     }
 
 }

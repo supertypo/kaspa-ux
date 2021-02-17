@@ -151,7 +151,7 @@ export const askForPassword = async (args, callback)=>{
 	});
 	const {dialog} = p;
 	const result = await p;
-	result.password = result.values.password;
+	result.password = result?.values?.password;
 	callback(result)
 }
 

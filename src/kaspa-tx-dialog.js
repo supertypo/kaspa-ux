@@ -27,6 +27,7 @@ class KaspaTXDialog extends KaspaDialog{
 				padding:var(--kaspa-pagination-box-padding, 10px 5px;);
 			}
 			.inner-body, .buttons{width:calc(100% - 5px)}
+			.inner-body{max-width:100%;padding:0px;}
 			.container{
 				max-height:var(--kaspa-dialog-container-max-height, 90%);
 				max-width:var(--kaspa-dialog-container-max-width, 90%)
@@ -74,7 +75,8 @@ class KaspaTXDialog extends KaspaDialog{
 		this._onPaginationClick = this.onPaginationClick.bind(this);
 	}
 	renderHeading(){
-		return 'Transactions';
+		return html`${this.renderBackBtn()} Transactions <div class="flex"></div>
+		${this.loading?html`<fa-icon class="spinner" icon="spinner"></fa-icon>`:''}`;
 	}
 	renderBody(args){
 		let {skip} = this;
@@ -94,12 +96,6 @@ class KaspaTXDialog extends KaspaDialog{
 				})}
 			</div>
 			<div class="error">${this.errorMessage}</div>`;
-	}
-	renderButtons(){
-		const {loading} = this;
-		return html`
-			${loading?html`<fa-icon class="spinner" icon="spinner"></fa-icon>`:''}
-			<flow-btn @click="${this.hide}">Close</flow-btn>`
 	}
 	open(args, callback){
 		this.callback = callback;

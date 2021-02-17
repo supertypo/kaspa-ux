@@ -5,6 +5,11 @@ import {
 const pass = "";
 
 class KaspaSendDialog extends KaspaDialog{
+	static get properties(){
+		return {
+			address:{type:String}
+		}
+	}
 	static get styles(){
 		return [KaspaDialog.styles, 
 		css`
@@ -38,13 +43,14 @@ class KaspaSendDialog extends KaspaDialog{
 			to: kaspatest:qrhefqj5c80m59d9cdx4ssxw96vguvn9fgy6yc0qtd
 			</div-->
 			<flow-input class="address full-width" outer-border
-				label="Recipient Address (Must start with 'kaspa' prefix)" value=""
+				label="Recipient Address (Must start with 'kaspa' prefix)"
+				value="${this.address||''}"
 				placeholder="">
 			</flow-input>
 			<div col>
 				<flow-input class="amount full-width" outer-border
 					label="Amount in KAS" @keyup=${this.onAmountChange}
-					placeholder="">
+					value="${this.amount}">
 				</flow-input>
 				<div spacer></div>
 				<flow-input class="fee full-width"
@@ -64,7 +70,7 @@ class KaspaSendDialog extends KaspaDialog{
 	renderEstimate(){
 		if(this.estimateError)
 			return html`<div class="estimate-tx-error">${this.estimateError}</div>`;
-		let {dataFee, fee, totalAmount, txSize} = this.estimate;
+		let {dataFee, fee, totalAmount, txSize} = this.estimate||{}
 		return html`<div class="estimate-tx">
 			${txSize?html`<span class="tx-size">Transaction size: ${txSize.toFileSize()}<span>`:''}
 			${dataFee?html`<span class="tx-data-fee">Data fee: ${KAS(dataFee)} KAS<span>`:''}
@@ -92,6 +98,8 @@ class KaspaSendDialog extends KaspaDialog{
 		this.wallet = args.wallet;
 		this.estimateError = "";
 		this.estimate = {};
+		this.address = args.address||'';
+		this.amount = args.amount||''
 		this.alertFeeAmount = 3000;
 		this.show();
 	}

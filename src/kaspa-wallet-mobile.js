@@ -167,14 +167,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	constructor() {
 		super();
 		this.selectedTab = "balance";
-		this.sendDialog = document.createElement("kaspa-send-dialog-mobile");
-		this.parentNode.appendChild(this.sendDialog);
-		this.receiveDialog = document.createElement("kaspa-receive-dialog-mobile");
-		this.parentNode.appendChild(this.receiveDialog);
-		let t9Dialog = document.createElement("kaspa-t9-dialog");
-		this.parentNode.appendChild(t9Dialog);
-		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
-		this.parentNode.appendChild(qrscannerDialog);
 		this._onTXPaginationClick = this.onTXPaginationClick.bind(this);
 	}
 	toggleFullScreen(){
@@ -443,34 +435,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let address = this.receiveAddress||'kaspatest:abc'
 		this.receiveDialog.open({wallet:this, address}, (args)=>{
 			//
-		})
-	}
-
-	showQRScanner(args, callback){
-		args = args||{};
-		args.wallet = this;
-		showQRScanner(args, ({value, dialog})=>{
-			console.log("SCAN result", value)
-			dialog.hide();
-			if(!value)
-				return
-			let [address, searchQuery=''] = value.split("?");
-			let searchParams = new URLSearchParams(searchQuery)
-			let args = Object.fromEntries(searchParams.entries());
-			let {amount} = args;
-			callback({address, amount})
-		})
-	}
-
-	showSendDialogWithQrScanner() {
-		this.showQRScanner({isAddressQuery:true}, ({amount, address})=>{
-			if(!address)
-				return
-			dpc(100, ()=>{
-				this.sendDialog.open({wallet:this, amount, address}, (args)=>{
-					this.sendTx(args);
-				})
-			})
 		})
 	}
 

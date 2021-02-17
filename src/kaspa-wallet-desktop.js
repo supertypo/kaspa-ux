@@ -29,7 +29,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			.body{display:flex;align-items:top;flex-wrap:wrap}
 			.tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
 			.left-area{flex:4;margin-left:20px;max-width:600px;}
-			.right-area{flex:6;margin-left:20px;max-width:750px;}
+			.right-area{flex:6;margin-right:20px;max-width:750px;}
 			.divider{flex:1}
 			@media (max-width:950px){
 				.left-area,.right-area{margin:auto;min-width:none}
@@ -42,7 +42,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			.loading-img{width:20px;height:20px;vertical-align:text-top;}
 
 			.balance-badge{
-				display:flex;flex-direction:column;padding:10px;
+				display:flex;flex-direction:column;padding:10px 0px;
 				border-radius:10px;max-width:fit-content;
 				/*
 				box-shadow:var(--flow-box-shadow);
@@ -62,7 +62,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			.tx-body .tx-address{font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
 			[row]{display:flex;flex-direction:row;justify-content:space-between;}
 			flow-qrcode{width:172px;margin-top:50px;box-shadow:var(--flow-box-shadow);}
-			.address-badge{padding:15px;}
+			.address-badge{padding:15px 0px;}
 			.address-holder{display:flex}
 			.address-holder .copy-address{cursor:pointer}
 			.address-input{
@@ -75,7 +75,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			}
 			.qr-code-holder{
 				display:flex;align-items:flex-end;justify-content:space-between;
-				max-width:370px;max-height:200px;margin-bottom:32px;
+				max-height:200px;margin-bottom:32px;
 			}
 			.status{
 				display:flex;
@@ -180,6 +180,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			<div class="qr-code-holder">
 				<flow-qrcode text="${this.receiveAddress||""}"></flow-qrcode>
 				<flow-btn primary @click="${this.showSendDialog}">SEND</flow-btn>
+				<flow-btn primary @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
 			</div>
 			<div class="status">
 				Wallet Status: ${this.status||'Offline'}<br/>
