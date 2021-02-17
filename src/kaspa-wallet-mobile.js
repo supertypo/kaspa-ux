@@ -151,6 +151,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.center-btn{min-width:120px;max-width:180px;display:block;margin:5px auto}
 			.flow-swipeable-row{position:relative;height:100%;max-height:100%;overflow:hidden;}
 			.flow-swipeable{box-sizing:border-box;}
+			.no-record{padding:20px; text-align:center;}
 
 			.faucet-ux {
 				margin-top:32px;
@@ -339,6 +340,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let items = totalItems.slice(txSkip, txSkip+limit);
 		//console.log("renderTX:items", items)
 		return html`
+			${items.length?'':html`<div class="no-record">No Transactions</div>`}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
 					return html`
