@@ -16,7 +16,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		return [KaspaWalletUI.styles, paginationStyle, swipeableStyle, css`
 			:host{
 				padding:0px;display:flex;flex-direction:column;
-				font-size:1rem;
+				font-size:1.1rem;
 				--k-pagination-active-bg:var(--flow-primary-color);
 				--k-pagination-active-border-color:var(--flow-primary-color);
 				--k-pagination-border-color:var(--flow-primary-color);
@@ -156,18 +156,24 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.no-record{padding:20px; text-align:center;}
 
 			.faucet-ux {
-				margin-top:32px;
 				display: flex;
 				flex-direction:column;
 				align-items:center;
 			}
 
-			.faucet-ux > div, .faucet-ux > flow-btn {
+			.faucet-ux > flow-btn {
 				margin: 8px;
 			}
 
+			.faucet-ux .margin {
+				margin: 24px;
+			}
+
+			.faucet-ux .margin-bottom {
+				margin-bottom: 24px;
+			}
+
 			.network-ux {
-				margin: 15px;
 				display:flex;
 				flex-direction:column;
 				align-items:center;
@@ -180,6 +186,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 
 			.network-ux table tr td { padding: 8px 4px; }
 			.network-ux table tr td:nth-child(2) { min-width:150px; }
+
+			.wallet-ux, .faucet-ux, .network-ux {
+				margin: 24px 15px;
+			}
 		`];
 	}
 	constructor() {
@@ -233,30 +243,33 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					${this.renderTX()}
 				</div>
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
-					<div class="badge"><span>Status:</span> ${this.status}</div>
-					<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
+					<div class="wallet-ux">
+						<div class="badge"><span>Status:</span> ${this.status}</div>
+						<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
-					<flow-btn class="center-btn primary v-margin"
-						@click="${this.showSeeds}">Backup Seed</flow-btn>
-					<flow-btn class="center-btn primary v-margin"
-						@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
-					<flow-btn class="center-btn primary v-margin"
-						@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
-					<flow-btn class="center-btn primary v-margin"
-						@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
+							@click="${this.showSeeds}">Backup Seed</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
+							@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
+							@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
+							@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
+					</div>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
 
 						<div class="faucet-ux">
-							<div>Available:</div>
-							<div>${KAS(this.faucetFundsAvailable||0)} KAS</div>
+							<div class="margin-bottom">KASPA FAUCET</div>
+							<div>Your IP is ${this.ip}</div>
+							<div class="margin">You have <b>${KAS(this.faucetFundsAvailable||0)} KAS</b> available.</div>
 
 							${this.faucetPeriod ? html`
-								<div>Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
+								<div class="margin-bottom">Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
 							`:``}
 							${ !this.faucetFundsAvailable ? html`` : html`
-								<flow-btn class="primary" @click="${this.requestFaucetFunds}">REQUEST FUNDS FROM FAUCET</flow-btn>
+								<flow-btn class="primary" @click="${this.requestFaucetFunds}">Request Funds from Faucet</flow-btn>
 							`}
 						</div>
 
