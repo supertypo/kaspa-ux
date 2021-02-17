@@ -29,6 +29,7 @@ export class KaspaWalletUI extends BaseElement{
 			faucetFundsAvailable:{type:Number},
 			faucetPeriod:{type:Number},
 			faucetStatus:{type:String},
+			ip:{type:String},
 
 			blockCount:{type:Number},
 			headerCount:{type:Number},
@@ -115,6 +116,14 @@ export class KaspaWalletUI extends BaseElement{
 				this.pastMedianTimeDiff = pastMedianTimeDiff;
 			}
 		})().then();
+	}
+
+	initHelpers() {
+		setInterval(()=>{
+			if(this.faucetPeriod > 0) {
+				this.faucetPeriod = Math.max(0,this.faucetPeriod-1000);
+			}
+		}, 1000);
 	}
 
 	render(){
@@ -383,6 +392,7 @@ export class KaspaWalletUI extends BaseElement{
 			return FlowDialog.alert("Error", "Kaspa Daemon config is missing.");
 
 		this.initDaemonRPC();
+		this.initHelpers();
 
 		let {mode} = dialog;
 		console.log("$$$$$$$ mode", mode)
@@ -550,10 +560,11 @@ export class KaspaWalletUI extends BaseElement{
 		flow.app.rpc.request('faucet-available', { address : this.receiveAddress })
 		.then((resp) => {
 			console.log(resp);
-			const { available, period } = resp;
+			const { available, period, ip } = resp;
 			this.faucetStatus = null;
 			this.faucetFundsAvailable = available;
 			this.faucetPeriod = period;
+			this.ip = ip;
 
 		})
 		.catch(ex => {
@@ -565,10 +576,11 @@ export class KaspaWalletUI extends BaseElement{
 		flow.app.rpc.request('faucet-available', { address : this.receiveAddress, amount })
 		.then((resp) => {
 			console.log(resp);
-			const { available, period } = resp;
+			const { available, period, ip } = resp;
 			this.faucetStatus = null;
 			this.faucetFundsAvailable = available;
 			this.faucetPeriod = period;
+			this.ip = ip;
 
 		})
 		.catch(ex => {
@@ -595,10 +607,11 @@ export class KaspaWalletUI extends BaseElement{
 			flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount })
 			.then((resp) => {
 				console.log(resp);
-				const { available, period } = resp;
+				const { available, period, ip } = resp;
 				this.faucetStatus = null;
 				this.faucetFundsAvailable = available;
 				this.faucetPeriod = period;
+				this.ip = ip;
 
 			})
 			.catch(ex => {
