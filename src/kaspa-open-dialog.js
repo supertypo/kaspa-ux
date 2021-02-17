@@ -13,7 +13,7 @@ class KaspaOpenDialog extends KaspaDialog{
 
 	static get styles(){
 		return [KaspaDialog.styles, css`
-			.container{max-height:var(--kaspa-dialog-container-max-height, 350px)}
+			.container{max-height:var(--kaspa-dialog-container-max-height, 600px)}
 			:host([mode="create"]) .container{max-height:var(--kaspa-dialog-container-max-height, 500px)}
 			:host([mode="init"]) .container{max-height:var(--kaspa-dialog-container-max-height, 200px)}
 			:host([mode="recover"]) .container{max-height:var(--kaspa-dialog-container-max-height, 450px)}
@@ -30,6 +30,7 @@ class KaspaOpenDialog extends KaspaDialog{
 				text-align:center;width:100%;box-sizing:border-box;
 			}
 			:host[isFresh] .close-btn{display:none}
+			.big-logo{max-width:150px;margin:10px auto 20px;display:block;}
 		`];
 	}
 	constructor() {
@@ -106,7 +107,7 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderOpenUI(){
 		let icon = this.inputType=="password"?'eye':'eye-slash';
 		return html`
-			<div><img src="/resources/logo/kaspa.svg"></div>
+			<div><img class="big-logo" src="/resources/images/kaspa.png" /></div>
 			<div class="sub-heading">Unlock the wallet with your password:</div>
 			<flow-input class="password full-width" outer-border value="${pass}"
 				type="${this.inputType}" placeholder="Password"
