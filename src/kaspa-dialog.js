@@ -105,6 +105,8 @@ export class KaspaDialog extends BaseElement{
 	}
 	render(){
 		const args = this.buildRenderArgs();
+		let buttons = this.renderButtons(args);
+		let hasButtons = !!buttons;
 		return html`
 			<div class="container">
 				<h2 class="heading">${this.renderHeading(args)}</h2>
@@ -115,9 +117,10 @@ export class KaspaDialog extends BaseElement{
 								${this.renderBody(args)}
 							</div>
 						</div>
+						${hasButtons?html`
 						<div class="buttons">
-							${this.renderButtons(args)}
-						</div>
+							${hasButtons}
+						</div>`:''}
 						<span class="close-btn" title="Close" 
 							@click="${this.onCloseClick}">&times;</span>
 					</div>

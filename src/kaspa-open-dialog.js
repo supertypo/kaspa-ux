@@ -32,6 +32,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			}
 			:host[isFresh] .close-btn{display:none}
 			.big-logo{max-width:150px;margin:10px auto 20px;display:block;}
+			.bottom-spacer{height:100px}
 		`];
 	}
 	constructor() {
@@ -72,7 +73,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		return this[`render${modeName}UI`]();
 	}
 	renderButtons({modeName}){
-		return this[`render${modeName}Buttons`]();
+		return this[`render${modeName}Buttons`]?.()||'';
 	}
 	renderInitUI(){
 		return html`
@@ -117,7 +118,9 @@ class KaspaOpenDialog extends KaspaDialog{
 					@click="${this.changeInputType}"
 					icon="${icon}"></fa-icon>
 			</flow-input>
-			<div class="error">${this.errorMessage}</div>	
+			<div class="error">${this.errorMessage}</div>
+			<div class='buttons'>${this._renderOpenButtons()}</div>
+			<div class="bottom-spacer"></div>
 		`
 	}
 	renderCreateUI(){
@@ -141,7 +144,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			<div class="error">${this.errorMessage}</div>
 		`
 	}
-	renderOpenButtons(){
+	_renderOpenButtons(){
 		return html`
 			<flow-btn @click="${e=>this.mode='create'}">NEW WALLET</flow-btn>
 			<flow-btn primary @click="${this.openWallet}">OPEN WALLET</flow-btn>`;
