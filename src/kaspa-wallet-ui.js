@@ -636,4 +636,24 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 
+	getTimeDelta(ts) {
+		if(!ts)
+			return '00:00:00';
+		let delta = Math.round(ts / 1000);
+		let sec = (delta % 60);
+		let min = Math.floor(delta / 60 % 60);
+		let hrs = Math.floor(delta / 60 / 60 % 24);
+		let days = Math.floor(delta / 60 / 60 / 24);
+
+		sec = (sec<10?'0':'')+sec;
+		min = (min<10?'0':'')+min;
+		hrs = (hrs<10?'0':'')+hrs;
+
+		if(days && days >= 1) {
+			return `${days.toFixed(0)} day${days>1?'s':''} ${hrs}:${min}:${sec}`;
+		} else {
+			return `${hrs}:${min}:${sec}`;
+		}
+	}
+
 }

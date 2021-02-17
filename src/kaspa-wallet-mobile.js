@@ -149,6 +149,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.pb-0{padding-bottom:0px}
 			.badge{margin:15px auto;width:calc(100% - 30px); font-size:1.1rem; text-align:center; }
 			.center-btn{min-width:120px;max-width:180px;display:block;margin:5px auto}
+			.v-margin{margin-top: 10px; margin-bottom:10px;}
 			.flow-swipeable-row{position:relative;height:100%;max-height:100%;overflow:hidden;}
 			.flow-swipeable{box-sizing:border-box;}
 			.no-record{padding:20px; text-align:center;}
@@ -163,6 +164,21 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.faucet-ux > div, .faucet-ux > flow-btn {
 				margin: 8px;
 			}
+
+			.network-ux {
+				margin: 15px;
+				display:flex;
+				flex-direction:column;
+				align-items:center;
+			}
+
+			.network-ux .caption {
+				margin-bottom: 15px;
+				text-transform: uppercase;
+			}
+
+			.network-ux table tr td { padding: 8px 4px; }
+			.network-ux table tr td:nth-child(2) { min-width:150px; }
 		`];
 	}
 	constructor() {
@@ -219,13 +235,13 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<div class="badge"><span>Status:</span> ${this.status}</div>
 					<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
-					<flow-btn class="center-btn primary"
+					<flow-btn class="center-btn primary v-margin"
 						@click="${this.showSeeds}">Backup Seed</flow-btn>
-					<flow-btn class="center-btn primary"
+					<flow-btn class="center-btn primary v-margin"
 						@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
-					<flow-btn class="center-btn primary"
+					<flow-btn class="center-btn primary v-margin"
 						@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
-					<flow-btn class="center-btn primary"
+					<flow-btn class="center-btn primary v-margin"
 						@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
@@ -249,18 +265,22 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('network')}" for="network">
 
-					<div>Network Status</div>
-					${!this.networkName ? html`OFFLINE` : html`
-						<table>
-							<tr><td>Network</td><td>${this.networkName}</td></tr>
-							<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
-							<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
-							<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
-							<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
-							<tr><td>Median Latency</td><td>${FlowFormat.duration(this.pastMedianTimeDiff)}</td></tr>
-							<tr><td>Median Time</td><td>${this.pastMedianTime?(new Date(this.pastMedianTime)).toJSON().replace(/T/,' '):''}</td></tr>
-						</table>
-					`}
+					<div class='network-ux'>
+						<div class='caption'>Network Status</div>
+						${!this.networkName ? html`<div>OFFLINE</div>` : html`
+							<div>
+								<table>
+									<tr><td>Network</td><td>${this.networkName}</td></tr>
+									<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
+									<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
+									<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
+									<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
+									<tr><td>Median Offset</td><td>${this.getTimeDelta(this.pastMedianTimeDiff)}</td></tr>
+									<tr><td>Median Time UTC</td><td>${this.pastMedianTime?(new Date(this.pastMedianTime)).toJSON().replace(/T/,' ').replace(/\..+$/,''):''}</td></tr>
+								</table>
+							</div>
+						`}
+						</div>
 				</div>
 			</div>
 		</div>

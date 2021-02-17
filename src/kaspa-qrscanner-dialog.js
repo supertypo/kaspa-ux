@@ -17,6 +17,9 @@ class KaspaQRScannerDialog extends KaspaDialog{
 				padding:0px;max-height:none;
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
+			.body-box{align-items:flex-start;}
+			.buttons {display:flex;flex-direction:column;align-items:center;}
+
 		`]
 	}
 	constructor(){
@@ -40,10 +43,12 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		</flow-input-->
 		<div class="error">${this.errorMessage}</div>
 		<div class="buttons">
-			<flow-btn class="primary" ?disabled=${!this.isValid}
-				@click="${this.sendBack}">CLOSE</flow-btn>
+			<flow-btn class="primary" 
+				@click="${this.sendBack}"> Close </flow-btn>
 		</div>
 		`;
+
+		// ?disabled=${!this.isValid}
 	}
 	stopQRScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
