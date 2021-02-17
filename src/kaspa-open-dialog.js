@@ -120,7 +120,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			</flow-input>
 			<div class="error">${this.errorMessage}</div>
 			<div class='buttons'>${this._renderOpenButtons()}</div>
-			<div class="bottom-spacer"></div>
+			<div class="bottom-spacer" ?hidden=${!isMobile}></div>
 		`
 	}
 	renderCreateUI(){
