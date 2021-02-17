@@ -19,6 +19,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			:host([mode="recover"]) .container{max-height:var(--kaspa-dialog-container-max-height, 450px)}
 			.buttons{justify-content:center}
 			:host([mode="init"]) .buttons{justify-content:center}
+			:host([mode="open"]) .inner-body{padding:0px 30px;}
 
 			.text-center, .heading{text-align:center;}
 			.words{margin:20px 0px;max-width:500px;margin:auto;}
@@ -116,7 +117,7 @@ class KaspaOpenDialog extends KaspaDialog{
 					@click="${this.changeInputType}"
 					icon="${icon}"></fa-icon>
 			</flow-input>
-			<div class="error">${this.errorMessage}</div>
+			<div class="error">${this.errorMessage}</div>	
 		`
 	}
 	renderCreateUI(){
