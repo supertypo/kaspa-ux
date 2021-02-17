@@ -13,12 +13,13 @@ class KaspaOpenDialog extends KaspaDialog{
 
 	static get styles(){
 		return [KaspaDialog.styles, css`
-			.container{max-height:var(--kaspa-dialog-container-max-height, 350px)}
+			.container{max-height:var(--kaspa-dialog-container-max-height, 600px)}
 			:host([mode="create"]) .container{max-height:var(--kaspa-dialog-container-max-height, 500px)}
 			:host([mode="init"]) .container{max-height:var(--kaspa-dialog-container-max-height, 200px)}
 			:host([mode="recover"]) .container{max-height:var(--kaspa-dialog-container-max-height, 450px)}
 			.buttons{justify-content:center}
 			:host([mode="init"]) .buttons{justify-content:center}
+			:host([mode="open"]) .inner-body{padding:0px 30px;}
 
 			.text-center, .heading{text-align:center;}
 			.words{margin:20px 0px;max-width:500px;margin:auto;}
@@ -30,6 +31,8 @@ class KaspaOpenDialog extends KaspaDialog{
 				text-align:center;width:100%;box-sizing:border-box;
 			}
 			:host[isFresh] .close-btn{display:none}
+			.big-logo{max-width:150px;margin:10px auto 20px;display:block;}
+			.bottom-spacer{height:200px}
 		`];
 	}
 	constructor() {
@@ -70,7 +73,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		return this[`render${modeName}UI`]();
 	}
 	renderButtons({modeName}){
-		return this[`render${modeName}Buttons`]();
+		return this[`render${modeName}Buttons`]?.()||'';
 	}
 	renderInitUI(){
 		return html`
@@ -106,7 +109,7 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderOpenUI(){
 		let icon = this.inputType=="password"?'eye':'eye-slash';
 		return html`
-			<div><img src="/resources/logo/kaspa.svg"></div>
+			<div><img class="big-logo" src="/resources/images/kaspa.png" /></div>
 			<div class="sub-heading">Unlock the wallet with your password:</div>
 			<flow-input class="password full-width" outer-border value="${pass}"
 				type="${this.inputType}" placeholder="Password"
@@ -116,6 +119,8 @@ class KaspaOpenDialog extends KaspaDialog{
 					icon="${icon}"></fa-icon>
 			</flow-input>
 			<div class="error">${this.errorMessage}</div>
+			<div class='buttons'>${this._renderOpenButtons()}</div>
+			<div class="bottom-spacer" ?hidden=${!isMobile}></div>
 		`
 	}
 	renderCreateUI(){
@@ -139,7 +144,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			<div class="error">${this.errorMessage}</div>
 		`
 	}
-	renderOpenButtons(){
+	_renderOpenButtons(){
 		return html`
 			<flow-btn @click="${e=>this.mode='create'}">NEW WALLET</flow-btn>
 			<flow-btn primary @click="${this.openWallet}">OPEN WALLET</flow-btn>`;
