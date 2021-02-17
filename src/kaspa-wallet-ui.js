@@ -319,7 +319,7 @@ export class KaspaWalletUI extends BaseElement{
 	connectedCallback(){
 		super.connectedCallback();
 		let mobileSuffix = isMobile?'-mobile':'';
-		let openDialog = document.createElement('kaspa-open-dialog'+mobileSuffix);
+		let openDialog = document.createElement('kaspa-open-dialog');
 		this.parentNode.insertBefore(openDialog, this.nextSibling)
 		this.sendDialog = document.createElement("kaspa-send-dialog"+mobileSuffix);
 		this.parentNode.appendChild(this.sendDialog);
