@@ -51,7 +51,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				display:flex;align-items:center;justify-content:center;
 				padding:10px;text-transform:uppercase;text-align:center;
 				border-bottom:2px solid transparent;min-height:30px;
-				margin:0px 5px;
+				margin:0px 5px;color:inherit;
+				text-decoration:none;
 			}
 			.tab.selected{
 				border-bottom-color:var(--kaspa-wallet-tab-active-border-color, var(--flow-primary-color));
@@ -197,11 +198,11 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>
 			<flow-menu class="tabs" selected="${selectedTab}"
 				selector=".tab" valueAttr="tab" @select="${this.onTabSelect}">
-				<div class="tab" tab="balance">Balance</div>
-				<div class="tab" tab="transactions">Transactions</div>
-				<div class="tab" tab="wallet">Wallet</div>
-				<div class="tab" tab="faucet">Faucet</div>
-				<div class="tab" tab="network">Network</div>
+				<a class="tab" tab="balance" href="javascript:void 0">Balance</a>
+				<a class="tab" tab="transactions" href="javascript:void 0">Transactions</a>
+				<a class="tab" tab="wallet" href="javascript:void 0">Wallet</a>
+				<a class="tab" tab="faucet" href="javascript:void 0">Faucet</a>
+				<a class="tab" tab="network" href="javascript:void 0">Network</a>
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
@@ -265,6 +266,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 		</div>
 		`
+	}
+	onTabClick(e){
+		//alert("onTabClick:"+e.target)
 	}
 	renderMenu(){
 		if(!this.wallet)
