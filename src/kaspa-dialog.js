@@ -93,7 +93,7 @@ export class KaspaDialog extends BaseElement{
 			[hidden]{display:none}
 			.buttons{margin:var(--kaspa-dialog-buttons-margin, 10px auto);display:flex;width:90%}
 			.buttons flow-btn{margin:5px;}
-			:host(.no-buttons) .buttons{display:none}
+			:host(.no-buttons) .body-inner>.buttons{display:none}
 			.buttons flow-btn:first-child{margin-left:0px;}
 			.buttons flow-btn:last-child{margin-right:0px;}
 			.back-btn{--fa-icon-size:30px;margin:0px 20px 0px 10px;cursor:pointer}

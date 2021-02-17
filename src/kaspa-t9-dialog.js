@@ -44,13 +44,16 @@ class KaspaT9Dialog extends KaspaDialog{
 		<flow-input class="full-width" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>
 		</flow-input>
-		<flow-t9 value="${value}" @changed="${this.onT9Change}"
-			@__btn-click=${this.onBtnClick}></flow-t9>
+		<flow-t9 value="${value}" @changed="${this.onT9Change}"></flow-t9>
+		<div class="error">${this.errorMessage}</div>
 		<div class="buttons">
-			<flow-btn @click="${this.setMaxValue}">Max</flow-btn>
-			<flow-btn class="primary" @click="${this.sendBack}">Next</flow-btn>
+			<flow-btn ?hidden=${!this.max} @click="${this.setMaxValue}">MAX</flow-btn>
+			<flow-btn class="primary" @click="${this.sendBack}">DONE</flow-btn>
 		</div>
 		`;
+	}
+	setMaxValue(){
+		this.value = this.max;
 	}
 	sendBack(e){
 		this.callback({value:this.value, dialog:this})
@@ -67,6 +70,7 @@ class KaspaT9Dialog extends KaspaDialog{
 		this.callback = callback;
 		this.args = args;
 		this.value = args.value||'';
+		this.max = args.max||'';
 		this.heading = args.title||args.heading||'Amount';
 		this.inputLabel = args.inputLabel||'Amount in KAS';
 		this.show();

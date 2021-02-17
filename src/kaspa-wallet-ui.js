@@ -4,7 +4,7 @@ import {
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
-	Deferred, GetTS, KAS, formatForMachine,
+	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
 	getLocalWallet, setLocalWallet, baseUrl, debug
 } from './wallet.js';
 export * from './wallet.js';
@@ -576,18 +576,35 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 
-	requestFaucetFunds() {
-		flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount : 123 })
-		.then((resp) => {
-			console.log(resp);
-			const { available, period } = resp;
-			this.faucetStatus = null;
-			this.faucetFundsAvailable = available;
-			this.faucetPeriod = period;
 
-		})
-		.catch(ex => {
-			console.log('faucet error:', ex);
+	requestFaucetFunds() {
+		let max = formatForHuman(this.faucetFundsAvailable)
+		showT9({
+			value:'',
+			max,
+			heading:'Request funds',
+			inputLabel:'Amount in KAS'
+		}, ({value:amount, dialog})=>{
+			console.log("t9 result", amount)
+			let sompis = formatForMachine(amount||0);
+			if(sompis > this.faucetFundsAvailable)
+				return dialog.setError(`You can't request more than ${KAS(this.faucetFundsAvailable||0)} KAS.`);//'
+			
+			dialog.hide();
+
+			flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount })
+			.then((resp) => {
+				console.log(resp);
+				const { available, period } = resp;
+				this.faucetStatus = null;
+				this.faucetFundsAvailable = available;
+				this.faucetPeriod = period;
+
+			})
+			.catch(ex => {
+				console.log('faucet error:', ex);
+			})
+
 		})
 	}
 
