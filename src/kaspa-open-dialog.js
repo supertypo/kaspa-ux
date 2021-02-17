@@ -32,7 +32,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			}
 			:host[isFresh] .close-btn{display:none}
 			.big-logo{max-width:150px;margin:10px auto 20px;display:block;}
-			.bottom-spacer{height:100px}
+			.bottom-spacer{height:200px}
 		`];
 	}
 	constructor() {
