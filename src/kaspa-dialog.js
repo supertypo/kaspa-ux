@@ -119,7 +119,7 @@ export class KaspaDialog extends BaseElement{
 						</div>
 						${hasButtons?html`
 						<div class="buttons">
-							${hasButtons}
+							${buttons}
 						</div>`:''}
 						<span class="close-btn" title="Close" 
 							@click="${this.onCloseClick}">&times;</span>
