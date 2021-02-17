@@ -59,12 +59,12 @@ class KaspaSendDialogMobile extends KaspaDialog{
 	renderBody({estimating, estimateFee}){
 		return html`
 			${this.renderAddress()}
-			<flow-input class="amount full-width" suffix-btn
+			<flow-input class="amount full-width" suffix-btn outer-border
 				label="Amount in KAS" @keyup=${this.onAmountChange}>
 				<flow-btn slot="suffix" class="primary"
 					@click="${this.showT9}"><fa-icon icon="keyboard"></fa-icon></flow-btn>
 			</flow-input>
-			<flow-input class="fee full-width" suffix-btn
+			<flow-input class="fee full-width" suffix-btn outer-border
 				label="Priority Fee in KAS"
 				@keyup="${this.onNetworkFeeChange}">
 				<flow-btn slot="suffix" class="primary"
