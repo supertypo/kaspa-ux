@@ -310,13 +310,22 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		// let pending = totalBalance - availableBalance;
 		return html`
   			<div class="balance-badge">
-                <div class="balance">
-                    <span class="value">${this.formatKAS(available)} KAS</span>
-                </div>
-                <div class="balance pending">
-                    <span class="label-pending">Pending</span>
-                    <span class="value-pending">${this.formatKAS(pending)} KAS</span>
-                </div>
+				${ this.isLoading ? html`
+					<div class="balance">
+						<span class="value">SCANNING...</span>
+					</div>
+					<div class="balance pending">
+						<span class="label-pending">PLEASE WAIT</span>
+					</div>
+				` : html`
+					<div class="balance">
+						<span class="value">${this.formatKAS(available)} KAS</span>
+					</div>
+					<div class="balance pending">
+						<span class="label-pending">Pending:</span>
+						<span class="value-pending">${this.formatKAS(pending)} KAS</span>
+					</div>
+				`}
             </div>
             <div class="send-scan-buttons">
 				<a class="send-btn" @click="${this.showSendDialog}">
