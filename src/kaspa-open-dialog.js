@@ -193,8 +193,8 @@ class KaspaOpenDialog extends KaspaDialog{
     }
     openWallet(){
     	let password = this.qS(".password").value;
-    	if(!this.checkPassword(password))
-    		return this.setError("At least 8 characters, one capital, one lower, one number, and one symbol")
+    	// if(!this.checkPassword(password))
+    	// 	return this.setError("At least 8 characters, one capital, one lower, one number, and one symbol")
 
     	this.callback(null, {password, dialog:this});
     }
