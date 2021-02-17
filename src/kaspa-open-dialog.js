@@ -215,7 +215,7 @@ class KaspaOpenDialog extends KaspaDialog{
     }
     onSeedInput(e){
     	let input = e.target.closest("input.seed");
-    	if(!input || !input.dataset.index != "0")
+    	if(!input || input.dataset.index != "0")
     		return
     	let words = (input.value+"").split(" ");
     	if(words.length<2)
