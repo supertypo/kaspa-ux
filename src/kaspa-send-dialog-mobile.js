@@ -23,7 +23,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 				justify-content:center; align-items:center;
 			}
 			label{font-size:0.9rem;margin:5px;display:block}
-			.address-option-btns flow-btn{flex:1;max-width:120px;min-width:120px;margin:5px}
+			.address-option-btns flow-btn{flex:1;max-width:180px;min-width:180px;margin:5px}
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}
 			.estimate-tx-error{color:red}
