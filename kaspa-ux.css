@@ -75,7 +75,7 @@ body{
 
 	--flow-iconbtn-padding:13px;
 	--flow-btn-icon-size:26px;
-	--flow-btn-text-transform:uppercase;
+/*	--flow-btn-text-transform:uppercase;*/
 }
 
 body.flow-theme-dark{
