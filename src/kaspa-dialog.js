@@ -77,6 +77,10 @@ export class KaspaDialog extends BaseElement{
 				display:flex;align-items:center;
 				border-bottom:2px solid var(--flow-primary-color, #F00);
 			}
+			.heading-init{
+				min-height:0px;
+				border-bottom:none;
+			}
 			.flex{flex:1}
 			.sub-heading{padding:5px;font-size:1.2rem;}
 			.body{flex:1;display:flex;justify-content:center;overflow:hidden auto;}
@@ -91,7 +95,7 @@ export class KaspaDialog extends BaseElement{
 			}
 			
 			[hidden]{display:none}
-			.buttons{margin:var(--kaspa-dialog-buttons-margin, 10px auto);display:flex;width:90%}
+			.buttons{margin:var(--kaspa-dialog-buttons-margin, 10px auto);display:flex;width:var(--kaspa-dialog-buttons-width,90%);}
 			.buttons flow-btn{margin:5px;}
 			:host(.no-buttons) .body-inner>.buttons{display:none}
 			.buttons flow-btn:first-child{margin-left:0px;}
@@ -103,13 +107,19 @@ export class KaspaDialog extends BaseElement{
 			.body-inner{overflow:hidden;max-height:100%;display:flex;flex-direction:column;}
 		`];
 	}
+	headingCls({modeName}){
+		if(modeName == 'Init')
+			return "heading-init";
+		return '';
+	}
+
 	render(){
 		const args = this.buildRenderArgs();
 		let buttons = this.renderButtons(args);
 		let hasButtons = !!buttons;
 		return html`
 			<div class="container">
-				<h2 class="heading">${this.renderHeading(args)}</h2>
+				<h2 class="heading ${this.headingCls(args)}">${this.renderHeading(args)}</h2>
 				<div class="flex body-box">
 					<div class="body-inner">
 						<div class="body">
