@@ -64,7 +64,7 @@ class KaspaTXDialog extends KaspaDialog{
 	}
 	renderHeading(){
 		return html`${this.renderBackBtn()} Transactions <div class="flex"></div>
-		${this.loading?html`<fa-icon class="spinner" icon="spinner"></fa-icon>`:''}`;
+		${this.loading?html`<fa-icon class="spinner" icon="sync"></fa-icon>`:''}`;
 	}
 	renderBody(args){
 		let {skip} = this;

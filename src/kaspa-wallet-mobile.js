@@ -205,7 +205,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 			<div class="flex"></div>
 			<fa-icon ?hidden=${!this.isLoading} 
-				class="spinner" icon="spinner"
+				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
 		</div>
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>

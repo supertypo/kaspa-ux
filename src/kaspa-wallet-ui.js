@@ -65,6 +65,8 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
 			.recent-transactions .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
+
+			.recent-transactions .heading { text-align:center; }
 		`];
 	}
 	constructor() {
@@ -165,7 +167,7 @@ export class KaspaWalletUI extends BaseElement{
 			<div class="heading">
 				${hideTxBtn?'':html`<fa-icon title="Show all transcations" class="tx-open-icon" 
 					icon="list" @click="${this.showTxDialog}"></fa-icon>`}
-				Recent transcations
+				Recent transactions
 			</div>
 			${items.map(tx=>{
 				cfmP = Math.min(100, blueScore - (tx.blueScore||0));
@@ -618,9 +620,12 @@ export class KaspaWalletUI extends BaseElement{
 			toAddr: address,
 			amount,
 			fee, calculateNetworkFee, inclusiveFee, note
-		}).catch(error=>{
+		}).catch(err=>{
+			let msg = err.error || err.message || err;
 			console.log("error", error)
-			error = (error+"").replace("Error:", '')
+			let error = (msg+"").replace("Error:", '')
+			if(/Invalid Argument/.test(error))
+				error = "Please provide correct address and amount";
 			FlowDialog.alert("Error", error);
 		})
 
@@ -640,8 +645,10 @@ export class KaspaWalletUI extends BaseElement{
 			amount,
 			fee, calculateNetworkFee, inclusiveFee, note
 		}).catch(err=>{
-			let msg = err.error || err;
+			let msg = err.error || err.message || err;
 			error = (msg+"").replace("Error:", '');
+			if(/Invalid Argument/.test(error))
+				error = "Please provide address and amount";
 			console.log("error", err);
 			//error = 'Unable to estimate transaction fees';//(err+"").replace("Error:", '')
 		})

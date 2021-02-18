@@ -86,7 +86,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		let seed = [];//(testSeed||'').split(" ");
 		return html`
 			<p class="sub-heading text-center">
-				Enter your 12-word seed phrase to recover your wallet
+				Enter your 12-word seed phrase to recover your wallet (words are not case sensitive)
 			</p>
 			<div class="words" @input=${this.onSeedInput}>
 				${rows.map((v, index)=>{
