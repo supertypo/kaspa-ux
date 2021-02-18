@@ -217,12 +217,15 @@ export class KaspaWalletUI extends BaseElement{
 		</div>`
 	}
 	_renderAllTX({skip, items}){
-		let {blueScore=0} = this, cfm, cfmP, p, color;
+		let {blueScore=0} = this, cfm, cfmP, p, color, bScore;
 		return html`
 			${items.length?'':html`<div class="no-record">No Transactions</div>`}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
-					cfm = blueScore - (tx.blueScore||0)
+					bScore = tx.blueScore||0;
+					cfm = blueScore - bScore;
+					if(blueScore < bScore)
+						cfm = 101;
 					cfmP = Math.min(100, cfm)
 					p = cfmP/100;
 					if(p>0.7)
