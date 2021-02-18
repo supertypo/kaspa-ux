@@ -18,12 +18,14 @@ class KaspaSendDialogMobile extends KaspaDialog{
 				padding:0px;max-height:none;
 			}
 			.address-option-btns{
-				width:90%;max-width:450px;margin:auto;
-				display:flex;flex-wrap:wrap;flex-direction:column;
+				width:100%;margin:auto;
+				display:flex;flex-wrap:nowrap;flex-direction:row;
 				justify-content:center; align-items:center;
 			}
 			label{font-size:0.9rem;margin:5px;display:block}
-			.address-option-btns flow-btn{flex:1;max-width:180px;min-width:180px;margin:5px}
+			.address-option-btns flow-btn{flex:1;max-width:140px;min-width:140px;margin:5px}
+			/*.address-option-btns flow-btn:nth-child(1) { margin-left:0px;}
+			.address-option-btns flow-btn:nth-child(2) { margin-right:0px;}*/
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}
 			.estimate-tx-error{color:red}
@@ -58,6 +60,17 @@ class KaspaSendDialogMobile extends KaspaDialog{
 	}
 	renderBody({estimating, estimateFee}){
 		return html`
+			<center>
+				<label>Enter recipient address</label>
+			</center>
+			<div class="address-option-btns">
+				<flow-btn @click="${this.scanQRCode}"
+					class="primary">Scan QR Code</flow-btn>
+				<flow-btn @click="${this.copyFromClipboard}"
+					class="primary">Clipboard</flow-btn>
+				<!-- flow-btn @click="${this.showAddressInputField}" 
+					class="primary">Manual Entry</flow-btn -->
+			</div>
 			${this.renderAddress()}
 			<flow-input class="amount full-width" suffix-btn outer-border
 				label="Amount in KAS" @keyup=${this.onAmountChange}>
@@ -85,30 +98,16 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			`;
 	}
 	renderAddress(){
-		if(this.address){
-			let address = this.address!="-"?this.address:'';
-			return html `
-				<flow-input class="address full-width" clear-btn outer-border
-					label="Address" _readonly placeholder=""
-					value="${address}"
-					@changed="${this.onAddressChange}">
-				</flow-input>
-			`
-		}
-		return html`
-			<center>
-				<label>Enter recipient address:</label>
-			</center>
-			<div class="address-option-btns">
-				<flow-btn @click="${this.scanQRCode}"
-					class="primary">Scan QR Code</flow-btn>
-				<flow-btn @click="${this.copyFromClipboard}"
-					class="primary">Clipboard</flow-btn>
-				<flow-btn @click="${this.showAddressInputField}" 
-					class="primary">Manual Entry</flow-btn>
-			</div>
+		let address = this.address;
+		return html `
+			<flow-input class="address full-width" clear-btn outer-border
+				label="Address" _readonly placeholder=""
+				value="${address}"
+				@changed="${this.onAddressChange}">
+			</flow-input>
 		`
 	}
+	
 	renderEstimate(){
 		if(this.estimateError)
 			return html`<div class="estimate-tx-error">${this.estimateError}</div>`;
@@ -153,9 +152,9 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			this.setAddress(address)
 		})
 	}
-	showAddressInputField(){
-		this.address = "-";
-	}
+	// showAddressInputField(){
+	// 	this.address = "-";
+	// }
 	async copyFromClipboard(){
 		const address = await navigator.clipboard.readText();
 		this.setAddress(address)
