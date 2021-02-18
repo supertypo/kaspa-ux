@@ -204,7 +204,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
     	let address = this.qS(".address").value;
     	let amount = this.qS(".amount").value;
     	let note = this.qS(".note").value;
-    	let fee = this.qS(".fee").value;
+    	let fee = this.qS(".fee").value || 0;
     	let calculateNetworkFee = !!this.qS(".calculate-network-fee").checked;
     	let inclusiveFee = !!this.qS(".inclusive-fee").checked;
     	/*
