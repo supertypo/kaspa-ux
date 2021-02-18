@@ -319,6 +319,12 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	refreshStats() {
+		if(!this.isOnline){
+			this.status = 'Offline';
+			this.requestUpdate('status', null);
+			return;
+		}
+
 		let status = 'Online';
 		if(this.blockCount == 1) {
 			status = `Syncing Headers`;
@@ -328,7 +334,7 @@ export class KaspaWalletUI extends BaseElement{
 				status = `Syncing DAG ${this.sync.toFixed(2)}% `;
 		}
 		this.status = status; //'Online';//TODO
-		this.requestUpdate();
+		this.requestUpdate('status', null);
 	}
 
 	async getWalletInfo(wallet){
@@ -339,7 +345,14 @@ export class KaspaWalletUI extends BaseElement{
 			wallet.restoreCache(cache);
 			this._isCache = true;
 	    }
-
+	    wallet.on('api-connect', ()=>{
+	    	this.isOnline = true;
+	    	this.refreshStats();
+	    })
+	    wallet.on('api-disconnect', ()=>{
+	    	this.isOnline = false;
+	    	this.refreshStats();
+	    })
 	    wallet.on("blue-score-changed", (e)=>{
 			this.blueScore = e.blueScore;
 
