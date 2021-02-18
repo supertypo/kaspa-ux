@@ -34,9 +34,9 @@ export const txListStyle = css`
 	
 	.tx-list .tx-amount{
 		white-space:nowrap;margin:0px 20px;
-		flex:1;text-align:right;color:#60b686;
+		flex:1;text-align:right;color:#029a45;
 	}
 	.tx-list .tx-num{min-width:60px}
 	.tx-list .br{min-width:100%;}
-	.tx-list [txout] .tx-amount{color:#F00}
+	.tx-list [txout] .tx-amount{color:#a00}
 `
