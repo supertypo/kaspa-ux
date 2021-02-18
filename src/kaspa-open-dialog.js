@@ -39,7 +39,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		super();
 
 		window.showWalletInitDialog = (args, callback)=>{
-
+			this.cleanUpForm();
 			//return callback(null, {password:"Asd123###", dialog:this, mode:"open"});
 			this.wallet = args.wallet;
 			this.hideable = !!args.hideable;
@@ -196,7 +196,7 @@ class KaspaOpenDialog extends KaspaDialog{
     	// if(!this.checkPassword(password))
     	// 	return this.setError("At least 8 characters, one capital, one lower, one number, and one symbol")
 
-    	this.callback(null, {password, dialog:this});
+		this.callback(null, {password, dialog:this});
     }
     onCreatePassKeyup(e){
     	if(e.which == 13)
@@ -214,25 +214,29 @@ class KaspaOpenDialog extends KaspaDialog{
     	this.callback(null, {mode:"create", password, dialog:this});
     }
     onSeedInput(e){
-    	let input = e.target.closest("input.seed");
+		let input = e.target.closest("input.seed");
     	if(!input || input.dataset.index != "0")
     		return
-    	let words = (input.value+"").split(" ");
-    	if(words.length<2)
+		let words = (input.value+"").trim().split(" ");
+		//console.log("WORDS", words);
+    	if(words.length<12)
     		return
 
     	this.qSAll("input.seed.word").forEach(input=>{
-    		let index = input.dataset.index;
-    		input.value = words[index];
-    	});
+			let index = input.dataset.index;
+			if(words[index] == undefined)
+				input.value = "";
+			else
+    			input.value = words[index];
+		});
 
     }
     recoverWallet(){
     	let wordsMap = {};
     	let isInvalid = false;
     	this.qSAll("input.seed.word").forEach(input=>{
-    		let index = input.dataset.index;
-    		wordsMap[index] = input.value;
+			let index = input.dataset.index;
+    		wordsMap[index] = (input.value+"").trim();
     		if(input.value.length<2)
     			isInvalid = true;
     	});
@@ -256,7 +260,13 @@ class KaspaOpenDialog extends KaspaDialog{
 
 	    	this.callback(null, {seedPhrase:words.join(" ").toLowerCase(), password, dialog:this});
 	    })
-    }
+	}
+	
+	cleanUpForm(){
+		this.qSAll("input.seed.word").forEach(input=>{
+    		input.value = "";
+		})
+	}
 }
 
 KaspaOpenDialog.define("kaspa-open-dialog");
