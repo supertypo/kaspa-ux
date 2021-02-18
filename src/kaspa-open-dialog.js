@@ -17,7 +17,7 @@ class KaspaOpenDialog extends KaspaDialog{
 			:host([mode="create"]) .container{max-height:var(--kaspa-dialog-container-max-height, 500px)}
 			:host([mode="init"]) .container{max-height:var(--kaspa-dialog-container-max-height, 200px)}
 			:host([mode="recover"]) .container{max-height:var(--kaspa-dialog-container-max-height, 450px)}
-			.buttons{justify-content:center}
+			.buttons{justify-content:center;--kaspa-dialog-buttons-width:100%;}
 			:host([mode="init"]) .buttons{justify-content:center}
 			:host([mode="open"]) .inner-body{padding:0px 30px;}
 
