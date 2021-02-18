@@ -628,8 +628,8 @@ export class KaspaWalletUI extends BaseElement{
 			fee, calculateNetworkFee, inclusiveFee, note
 		}).catch(err=>{
 			let msg = err.error || err.message || err;
-			console.log("error", error)
 			let error = (msg+"").replace("Error:", '')
+			console.log("error", error)
 			if(/Invalid Argument/.test(error))
 				error = "Please provide correct address and amount";
 			FlowDialog.alert("Error", error);
