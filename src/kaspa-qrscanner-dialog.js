@@ -64,6 +64,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.sendValueBack();
 	}
 	sendValueBack(){
+		this.stopQRScanning();
 		this.callback({value:this.value, dialog:this})
 	}
 	onInputChange(e){
