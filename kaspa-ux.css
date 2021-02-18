@@ -40,6 +40,7 @@ body{
     --flow-input-font-weight:normal;
 	--flow-input-line-height:80%;
 	--flow-input-box-shadow:10px 10px 30px  rgba(0,0,0,0.05), -10px -10px 30px rgba(0,0,0,0.05);
+	--flow-input-wrapper-box-shadow:var(--flow-input-box-shadow);
 	--flow-input-border: 0px;
 	--flow-input-max-width:100%;
 	--flow-input-width:400px;
