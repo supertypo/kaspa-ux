@@ -543,8 +543,10 @@ export class KaspaWalletUI extends BaseElement{
 			amount,
 			fee, calculateNetworkFee, inclusiveFee, note
 		}).catch(err=>{
+			let msg = err.error || err;
+			error = (msg+"").replace("Error:", '');
 			console.log("error", err);
-			error = 'Unable to estimate transaction fees';//(err+"").replace("Error:", '')
+			//error = 'Unable to estimate transaction fees';//(err+"").replace("Error:", '')
 		})
 
 		let result = {data, error}
