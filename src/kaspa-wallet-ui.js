@@ -332,8 +332,6 @@ export class KaspaWalletUI extends BaseElement{
 		this.isOfflineBadge = !this.isOnline;
 		if(!this.isOnline){
 			this.status = 'Offline';
-			//this.requestUpdate();
-			this.requestUpdate('status', null);
 			return;
 		}
 
@@ -345,12 +343,7 @@ export class KaspaWalletUI extends BaseElement{
 			if(this.sync && this.sync < 99.95)
 				status = `Syncing DAG ${this.sync.toFixed(2)}% `;
 		}
-		this.status = status; //'Online';//TODO
-		this.requestUpdate('status', null);
-		//this.requestUpdate();
-
-		// setInterval(()=>{
-		// }, 3000);
+		this.status = status;
 	}
 
 	async getWalletInfo(wallet){

@@ -22,7 +22,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				--k-pagination-border-color:var(--flow-primary-color);
 			}
 			.header{
-				display:flex;align-items:center;padding:5px;
+				display:flex;align-items:center;padding:5px 10px;
 			}
 
 			.pagination a{
@@ -141,43 +141,19 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.flow-swipeable{box-sizing:border-box;}
 			.no-record{padding:20px; text-align:center;}
 
-			.faucet-ux {
-				display: flex;
-				flex-direction:column;
-				align-items:center;
-			}
-
-			.faucet-ux > flow-btn {
-				margin: 8px;
-			}
-
-			.faucet-ux .margin {
-				margin: 24px;
-			}
-
-			.faucet-ux .margin-bottom {
-				margin-bottom: 24px;
-			}
-
-			.network-ux {
-				display:flex;
-				flex-direction:column;
-				align-items:center;
-			}
-
-			.network-ux .caption {
-				margin-bottom: 15px;
-				text-transform: uppercase;
-			}
-
+			.faucet-ux {display:flex;flex-direction:column;align-items:center;}
+			.faucet-ux > flow-btn {margin: 8px;}
+			.faucet-ux .margin {margin: 24px;}
+			.faucet-ux .margin-bottom {margin-bottom: 24px;}
+			.network-ux {display:flex;flex-direction:column;align-items:center;}
+			.network-ux .caption {margin-bottom: 15px;text-transform: uppercase;}
 			.network-ux table tr td { padding: 8px 4px; }
 			.network-ux table tr td:nth-child(2) { min-width:150px; }
 
-			.wallet-ux, .faucet-ux, .network-ux {
-				margin: 24px 15px;
-			}
+			.wallet-ux, .faucet-ux, .network-ux {margin: 24px 15px;}
 			.recent-transactions>.heading{text-align:center}
 			.tx-list{flex: 1 1 0%;height:100px;overflow-y:auto;}
+			.header .header{margin-left:10px;}
 		`];
 	}
 	constructor() {
@@ -204,7 +180,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<img class="logo-img" @click=${this.toggleFullScreen}
 					src="${baseUrl+'/resources/images/logo.png'}" />
 			</div>
-			<div class="flex"></div>${this.isOfflineBadge?html`<div class='header-status'>OFFLINE </div>`:''}
+			<div class="flex"></div>
+			${this.isOfflineBadge?html`<div class='header-status'>${this.isOnline?'ONLINE':'OFFLINE'}</div>`:''}
 			<fa-icon ?hidden=${!this.isLoading} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
