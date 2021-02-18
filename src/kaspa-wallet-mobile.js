@@ -133,19 +133,19 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			[not-ready] .tabs,
 			[not-ready] .tab-contents{display:none}
 			.tx-list{flex:1;height:100px;overflow:auto}
-			.tx-row{
+			.tx-list .tx-row{
 				margin:0px 5px;
 				display:flex;background-color:#ededed;
 				border-bottom:1px solid #DDD;
 				flex-wrap:wrap;padding:2px;
 			}
-			.tx-row:nth-child(2n){background-color:#f9f9f9}
-			.tx-row:hover{background-color:#DDD}
-			.tx-date{white-space:nowrap;}
-			.tx-id,.tx-address{flex:1;overflow:hidden;text-overflow:ellipsis}
-			.tx-row>div{padding:2px;}
-			.tx-amount{white-space:nowrap;margin:0px 20px}
-			.tx-num{min-width:60px}
+			.tx-list .tx-row:nth-child(2n){background-color:#f9f9f9}
+			.tx-list .tx-row:hover{background-color:#DDD}
+			.tx-list .tx-date{white-space:nowrap;}
+			.tx-list .tx-id, .tx-list .tx-address{flex:1;overflow:hidden;text-overflow:ellipsis}
+			.tx-list .tx-row>div{padding:2px;}
+			.tx-list .tx-amount{white-space:nowrap;margin:0px 20px}
+			.tx-list .tx-num{min-width:60px}
 			.br{min-width:100%;}
 			.pb-0{padding-bottom:0px}
 			.badge{margin:15px auto;width:calc(100% - 30px); font-size:1.1rem; text-align:center; }
@@ -238,9 +238,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						?hidden=${!this.errorMessage}>${this.errorMessage}</div>
 					${this.renderAddressAndQr()}
 					${this.renderBalanceAndButton()}
+					${this.renderTX({hideTxBtn:true})}
 				</div>
 				<div class="tab-content v-box pb-0 ${sCls('transactions')}" for="transactions">
-					${this.renderTX()}
+					${this.renderAllTX()}
 				</div>
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
 					<div class="wallet-ux">
@@ -382,7 +383,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 		`;
 	}
-	renderTX(){
+	renderAllTX(){
 		let {txLimit:limit=100, txs:totalItems=[], txSkip=0} = this;
 		let pagination = buildPagination(totalItems.length, txSkip, limit)
 		let items = totalItems.slice(txSkip, txSkip+limit);

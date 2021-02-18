@@ -53,6 +53,15 @@ export class KaspaWalletUI extends BaseElement{
 			.hide-scrollbar::-webkit-scrollbar-thumb{
 			    box-shadow:none;background:transparent;
 			}
+			.recent-transactions {padding:15px;max-width:555px;margin:auto;}
+			.recent-transactions .tx-body{overflow:hidden;text-overflow:ellipsis;}
+			.recent-transactions .tx-body .tx-id,
+			.recent-transactions .tx-body .tx-address{
+				font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+			}
+			.recent-transactions .tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
+			.recent-transactions .tx-row{position:relative}
+			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
 		`];
 	}
 	constructor() {
@@ -130,35 +139,58 @@ export class KaspaWalletUI extends BaseElement{
 		return html``
 	}
 
-	renderTX(){
+	renderTX({hideTxBtn=false, onlyNonConfirmed=false}={}){
 		if(!this.wallet)
 			return '';
 
+		let items;
+		let {blueScore=0} = this;
+		if(onlyNonConfirmed){
+			items = this.txs.slice(0, 100).filter(tx=>{
+				return (blueScore - (tx.blueScore||0) < 100)
+			})
+		}else{
+			items = this.txs.slice(0, 6);
+		}
+
+		let color, p;
+
 		return html`
-		<div class="heading">
-			<fa-icon title="Show all transcations" class="tx-open-icon" 
-				icon="list" @click="${this.showTxDialog}"></fa-icon>
-			Recent transcations
-		</div>
-		<div class="transcations">
-		${this.txs.slice(0, 6).map(tx=>{
-			return html`
-				<flow-expandable static-icon expand ?txin=${tx.in} ?txout=${!tx.in}
-					icon="${tx.in?'sign-in':'sign-out'}" no-info>
-					<div class="tx-title" slot="title">
-						<div class="tx-date flex">${tx.date}</div>
-						<div class="amount">
-							${tx.in?'':'-'}${this.formatKAS(tx.amount)} KAS
+		<div class="recent-transactions">
+			<div class="heading">
+				${hideTxBtn?'':html`<fa-icon title="Show all transcations" class="tx-open-icon" 
+					icon="list" @click="${this.showTxDialog}"></fa-icon>`}
+				Recent transcations
+			</div>
+			${items.map(tx=>{
+				p = Math.min(100, blueScore - (tx.blueScore||0))/100;
+				if(p>0.7)
+					color = '#00FF00';
+				else if(p>0.5)
+					color = 'orange'
+				else
+					color = 'red';
+
+				return html`
+					<flow-expandable class="tx-row" static-icon expand ?txin=${tx.in} ?txout=${!tx.in}
+						icon="${tx.in?'sign-in':'sign-out'}" no-info>
+						<div class="tx-title" slot="title">
+							<div class="tx-date flex">${tx.date}</div>
+							<div class="amount">
+								${tx.in?'':'-'}${this.formatKAS(tx.amount)} KAS
+							</div>
 						</div>
-					</div>
-					<div class="tx-body">
-						${tx.note}
-						<div class="tx-id">${tx.id}</div>
-						<div class="tx-address">${tx.address}</div>
-					</div>
-				</flow-expandable>
-			`
-		})}
+						<flow-progressbar class="tx-progressbar" 
+							style="--flow-progressbar-color:${color}"
+							value="${p}"></flow-progressbar>
+						<div class="tx-body">
+							${tx.note}
+							<div class="tx-id">${tx.id}</div>
+							<div class="tx-address">${tx.address}</div>
+						</div>
+					</flow-expandable>
+				`
+			})}
 		</div>`
 	}
 

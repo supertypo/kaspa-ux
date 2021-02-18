@@ -27,7 +27,6 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			}
 			.flex{flex:1}
 			.body{display:flex;align-items:top;flex-wrap:wrap}
-			.tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
 			.left-area{flex:4;margin-left:20px;max-width:600px;}
 			.right-area{flex:6;margin-right:20px;max-width:750px;}
 			.divider{flex:1}
@@ -56,10 +55,6 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 		 	} 
 			.label { font-family : "Open Sans"; font-size: 20px; }
 			.label-pending { font-family : "Open Sans"; font-size: 14px; }
-			.transactions {padding:15px;}
-			.transactions .tx-body{overflow:hidden;text-overflow:ellipsis;}
-			.tx-body .tx-id,
-			.tx-body .tx-address{font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
 			[row]{display:flex;flex-direction:row;justify-content:space-between;}
 			flow-qrcode{width:172px;margin-top:50px;box-shadow:var(--flow-box-shadow);}
 			.address-badge{padding:15px 0px;}
