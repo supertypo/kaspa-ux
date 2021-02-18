@@ -9,7 +9,6 @@ export const paginationStyle = [pCss, css`
 `]
 
 export const txListStyle = css`
-	.tx-list{}
 	.tx-list .tx-row{
 		margin:0px 5px;
 		display:flex;background-color:#FFF;

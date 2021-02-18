@@ -57,6 +57,7 @@ export class KaspaWalletUI extends BaseElement{
 			    box-shadow:none;background:transparent;
 			}
 			.recent-transactions {padding:15px;max-width:555px;margin:auto;}
+			.recent-transactions .tx-rows{max-height:90vh;overflow-y:auto;margin:10px 0px;padding:0px 10px;}
 			.recent-transactions .tx-body{overflow:hidden;text-overflow:ellipsis;}
 			.recent-transactions .tx-body .tx-id,
 			.recent-transactions .tx-body .tx-address{
@@ -67,8 +68,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
 			.recent-transactions .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
-
-			.recent-transactions .heading { text-align:center; }
+			.recent-transactions .heading { text-align:center;}
 		`];
 	}
 	constructor() {
@@ -153,16 +153,24 @@ export class KaspaWalletUI extends BaseElement{
 		if(!this.wallet)
 			return '';
 
-		let items = [];
+		let items = [], bScore;
 		let {blueScore=0} = this;
 		if(onlyNonConfirmed){
 			if(blueScore){
 				items = this.txs.slice(0, 100).filter(tx=>{
-					return (blueScore - (tx.blueScore||0) < 100)
+					bScore = tx.blueScore||0;
+					if(blueScore<bScore || !bScore)
+						return false
+					return (blueScore - bScore < 100)
 				})
 			}
 		}else{
-			items = this.txs.slice(0, 6);
+			items = this.txs.slice(0, 6).filter(tx=>{
+				bScore = tx.blueScore||0;
+				if(blueScore<bScore || !bScore)
+					return false
+				return true;
+			})
 		}
 		if(hideTxBtn && !items.length)
 			return '';
@@ -176,6 +184,7 @@ export class KaspaWalletUI extends BaseElement{
 					icon="list" @click="${this.showTxDialog}"></fa-icon>`}
 				Recent transactions
 			</div>
+			<div class="tx-rows">
 			${items.map(tx=>{
 				cfmP = Math.min(100, blueScore - (tx.blueScore||0));
 				p = cfmP/100;
@@ -206,15 +215,19 @@ export class KaspaWalletUI extends BaseElement{
 					</flow-expandable>
 				`
 			})}
+			</div>
 		</div>`
 	}
 	_renderAllTX({skip, items}){
-		let {blueScore=0} = this, cfm, cfmP, p, color;
+		let {blueScore=0} = this, cfm, cfmP, p, color, bScore;
 		return html`
 			${items.length?'':html`<div class="no-record">No Transactions</div>`}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
-					cfm = blueScore - (tx.blueScore||0)
+					bScore = tx.blueScore||0;
+					cfm = blueScore - bScore;
+					if(blueScore < bScore)
+						cfm = 101;
 					cfmP = Math.min(100, cfm)
 					p = cfmP/100;
 					if(p>0.7)
@@ -266,7 +279,6 @@ export class KaspaWalletUI extends BaseElement{
 
 	async showSeeds(){
 		askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
-    		console.log("btn, password", btn, password)
     		if(btn!="confirm")
     			return
     		let encryptedMnemonic = getLocalWallet().mnemonic;
@@ -277,6 +289,18 @@ export class KaspaWalletUI extends BaseElement{
 			this.openSeedsDialog({mnemonic, hideable:true, showOnlySeed:true}, ()=>{
 				//
 			})
+		})
+	}
+	async exportWalletFile(){
+		askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
+    		if(btn!="confirm")
+    			return
+    		let wallet = getLocalWallet();
+    		let encryptedMnemonic = wallet.mnemonic;
+    		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
+    		if(!valid)
+    			return FlowDialog.alert("Error", "Invalid password");
+			
 		})
 	}
 
