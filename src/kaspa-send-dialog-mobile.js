@@ -128,7 +128,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		this.wallet = args.wallet;
 		this.estimateError = "";
 		this.estimate = {};
-		this.alertFeeAmount = 3000;
+		this.alertFeeAmount = 1e8;
 		this.address = args.address||"";
 		if(args.amount){
 			let amountField = this.qS(".amount");

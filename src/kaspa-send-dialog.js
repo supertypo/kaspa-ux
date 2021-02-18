@@ -100,7 +100,7 @@ class KaspaSendDialog extends KaspaDialog{
 		this.estimate = {};
 		this.address = args.address||'';
 		this.amount = args.amount||''
-		this.alertFeeAmount = 3000;
+		this.alertFeeAmount = 1e8;
 		this.show();
 	}
 	cleanUpForm(){
