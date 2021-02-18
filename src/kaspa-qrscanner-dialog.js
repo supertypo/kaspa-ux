@@ -58,7 +58,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	startScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
 		scanner.start();
-		scanner.updated();
+		// scanner.updated();
 		this.stoped = false;
 	}
 	sendBack(e){
