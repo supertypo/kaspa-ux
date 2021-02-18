@@ -193,8 +193,11 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			dialog.hide();
 		})
 	}
+	hide(skipHistory=false){
+		this.cleanUpForm();
+		super.hide(skipHistory)
+	}
     cancel(){
-    	this.cleanUpForm();
     	this.hide();
     }
     getFormData(){

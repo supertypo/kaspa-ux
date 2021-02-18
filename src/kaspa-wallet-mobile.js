@@ -176,6 +176,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.wallet-ux, .faucet-ux, .network-ux {
 				margin: 24px 15px;
 			}
+			.recent-transactions>.heading{text-align:center}
 		`];
 	}
 	constructor() {
@@ -377,6 +378,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			return
 		this.txSkip = +skip;
 	}
+	/*
 	renderStatus(){
 		if(!this.wallet)
 			return '';
@@ -391,6 +393,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 		`
 	}
+	*/
 	firstUpdated(){
 		super.firstUpdated();
 		let swipeableContainer = this.renderRoot.querySelector(".flow-swipeable-container");

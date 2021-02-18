@@ -63,6 +63,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
 			.recent-transactions .tx-row{position:relative}
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
+			.recent-transactions [txout] .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
 
 			.recent-transactions .heading { text-align:center; }
@@ -148,7 +149,7 @@ export class KaspaWalletUI extends BaseElement{
 			return '';
 
 		let items;
-		let {blueScore=0} = this;
+		let {blueScore=1000} = this;
 		if(onlyNonConfirmed){
 			items = this.txs.slice(0, 100).filter(tx=>{
 				return (blueScore - (tx.blueScore||0) < 100)
@@ -226,7 +227,7 @@ export class KaspaWalletUI extends BaseElement{
 							`:''
 						}
 						<div class="tx-date" title="#${skip+i+1} Transaction">${tx.date}</div>
-						<div class="tx-amount">${KAS(tx.amount)} KAS</div>
+						<div class="tx-amount">${tx.in?'':'-'}${KAS(tx.amount)} KAS</div>
 						<div class="br tx-note">${tx.note}</div>
 						<div class="br tx-id">${tx.id.split(":")[0]}</div>
 						<div class="tx-address">${tx.address}</div>
@@ -321,6 +322,12 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	refreshStats() {
+		if(!this.isOnline){
+			this.status = 'Offline';
+			this.requestUpdate('status', null);
+			return;
+		}
+
 		let status = 'Online';
 		if(this.blockCount == 1) {
 			status = `Syncing Headers`;
@@ -330,7 +337,7 @@ export class KaspaWalletUI extends BaseElement{
 				status = `Syncing DAG ${this.sync.toFixed(2)}% `;
 		}
 		this.status = status; //'Online';//TODO
-		this.requestUpdate();
+		this.requestUpdate('status', null);
 	}
 
 	async getWalletInfo(wallet){
@@ -341,7 +348,14 @@ export class KaspaWalletUI extends BaseElement{
 			wallet.restoreCache(cache);
 			this._isCache = true;
 	    }
-
+	    wallet.on('api-connect', ()=>{
+	    	this.isOnline = true;
+	    	this.refreshStats();
+	    })
+	    wallet.on('api-disconnect', ()=>{
+	    	this.isOnline = false;
+	    	this.refreshStats();
+	    })
 	    wallet.on("blue-score-changed", (e)=>{
 			this.blueScore = e.blueScore;
 
