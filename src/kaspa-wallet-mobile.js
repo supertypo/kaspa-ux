@@ -177,6 +177,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				margin: 24px 15px;
 			}
 			.recent-transactions>.heading{text-align:center}
+			.tx-list{flex: 1 1 0%;height:100px;overflow-y:auto;}
 		`];
 	}
 	constructor() {
