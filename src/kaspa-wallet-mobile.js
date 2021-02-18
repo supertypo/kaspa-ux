@@ -113,8 +113,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.send-scan-buttons a{display:block}
 			.send-scan-buttons a fa-icon{
 				--fa-icon-size:26px;border-radius:50%;padding:22px;
-				background-color:var(--kaspa-wallet-send-button-bg, #3d4e58);
-				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
+				background-color:var(--kaspa-wallet-scan-button-bg, #3d4e58);
+				--fa-icon-color:var(--kaspa-wallet-scan-button-color, #FFF);
 				box-shadow:var(--flow-box-shadow);
 			}
 			.send-scan-buttons .send-btn fa-icon{
@@ -122,8 +122,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
 			}
 			.send-scan-buttons .receive-btn fa-icon{
-				background-color:var(--kaspa-wallet-send-button-bg, #60b686);
-				--fa-icon-color:var(--kaspa-wallet-send-button-color, #FFF);
+				background-color:var(--kaspa-wallet-receive-button-bg, #60b686);
+				--fa-icon-color:var(--kaspa-wallet-receive-button-color, #FFF);
 			}
 			.send-scan-buttons a span{
 				display:block;text-align:center;font-size:0.75rem;margin:8px 0px 5px;
@@ -132,20 +132,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			[hidden]{display:none}
 			[not-ready] .tabs,
 			[not-ready] .tab-contents{display:none}
-			.tx-list{flex:1;height:100px;overflow:auto}
-			.tx-list .tx-row{
-				margin:0px 5px;
-				display:flex;background-color:#ededed;
-				border-bottom:1px solid #DDD;
-				flex-wrap:wrap;padding:2px;
-			}
-			.tx-list .tx-row:nth-child(2n){background-color:#f9f9f9}
-			.tx-list .tx-row:hover{background-color:#DDD}
-			.tx-list .tx-date{white-space:nowrap;}
-			.tx-list .tx-id, .tx-list .tx-address{flex:1;overflow:hidden;text-overflow:ellipsis}
-			.tx-list .tx-row>div{padding:2px;}
-			.tx-list .tx-amount{white-space:nowrap;margin:0px 20px}
-			.tx-list .tx-num{min-width:60px}
 			.br{min-width:100%;}
 			.pb-0{padding-bottom:0px}
 			.badge{margin:15px auto;width:calc(100% - 30px); font-size:1.1rem; text-align:center; }
@@ -383,29 +369,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 		`;
 	}
-	renderAllTX(){
-		let {txLimit:limit=100, txs:totalItems=[], txSkip=0} = this;
-		let pagination = buildPagination(totalItems.length, txSkip, limit)
-		let items = totalItems.slice(txSkip, txSkip+limit);
-		//console.log("renderTX:items", items)
-		return html`
-			${items.length?'':html`<div class="no-record">No Transactions</div>`}
-			<div class="tx-list">
-				${items.map((tx, i)=>{
-					return html`
-					<div class="tx-row">
-						<div class="tx-num">#${txSkip+i+1}</div>
-						<div class="tx-date">${tx.date}</div>
-						<div class="tx-amount">${KAS(tx.amount)} KAS</div>
-						<div class="tx-id">${tx.id.split(":")[0]}</div>
-						<div class="br tx-note">${tx.note}</div>
-						<div class="tx-address">${tx.address}</div>
-					</div>`
-				})}
-			</div>
-			${renderPagination(pagination, this._onTXPaginationClick)}
-		`
-	}
+
 	onTXPaginationClick(e){
 		let skip = e.target.closest("[data-skip]").dataset.skip;
 		console.log("skip", skip, e.target)
