@@ -63,7 +63,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
 			.recent-transactions .tx-row{position:relative}
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
-			.recent-transactions [txout] .amount{color:#60b686}
+			.recent-transactions .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
 		`];
 	}
