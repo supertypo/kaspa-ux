@@ -108,8 +108,11 @@ class KaspaSendDialog extends KaspaDialog{
     		input.value = "";
     	})
 	}
+	hide(skipHistory=false){
+		this.cleanUpForm();
+		super.hide(skipHistory)
+	}
     cancel(){
-    	this.cleanUpForm();
     	this.hide();
     }
     getFormData(){
