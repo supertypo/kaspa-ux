@@ -154,6 +154,8 @@ export class KaspaWalletUI extends BaseElement{
 		}else{
 			items = this.txs.slice(0, 6);
 		}
+		if(hideTxBtn && !items.length)
+			return '';
 
 		let color, p, cfmP;
 
