@@ -19,6 +19,8 @@ export class KaspaWalletUI extends BaseElement{
 		return {
 			wallet:{type:Object},
 			isLoading:{type:Boolean},
+			isOnline:{type:Boolean},
+			isOfflineBadge:{type:Boolean},
 			errorMessage:{type:String},
 			receiveAddress:{type:String},
 			changeAddress:{type:String},
@@ -74,6 +76,9 @@ export class KaspaWalletUI extends BaseElement{
 		this.txs = [];
 		this.walletSignal = Deferred();
 		this.walletMeta = {};
+		this.isOnline = false;
+
+		this.isOfflineBadge = false;
 	}
 
 	setRPCBuilder(rpcBuilder){
@@ -322,8 +327,10 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	refreshStats() {
+		this.isOfflineBadge = !this.isOnline;
 		if(!this.isOnline){
 			this.status = 'Offline';
+			//this.requestUpdate();
 			this.requestUpdate('status', null);
 			return;
 		}
@@ -338,6 +345,10 @@ export class KaspaWalletUI extends BaseElement{
 		}
 		this.status = status; //'Online';//TODO
 		this.requestUpdate('status', null);
+		//this.requestUpdate();
+
+		// setInterval(()=>{
+		// }, 3000);
 	}
 
 	async getWalletInfo(wallet){

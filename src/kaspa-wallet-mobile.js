@@ -204,7 +204,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<img class="logo-img" @click=${this.toggleFullScreen}
 					src="${baseUrl+'/resources/images/logo.png'}" />
 			</div>
-			<div class="flex"></div>
+			<div class="flex"></div>${this.isOfflineBadge?html`<div class='header-status'>OFFLINE </div>`:''}
 			<fa-icon ?hidden=${!this.isLoading} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
