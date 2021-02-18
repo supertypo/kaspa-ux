@@ -218,9 +218,8 @@ class KaspaOpenDialog extends KaspaDialog{
     	if(!input || input.dataset.index != "0")
     		return
 		let words = (input.value+"").trim().split(" ");
-		//console.log("WORDS", words);
     	if(words.length<12)
-    		return
+    		return;
 
     	this.qSAll("input.seed.word").forEach(input=>{
 			let index = input.dataset.index;
@@ -244,7 +243,7 @@ class KaspaOpenDialog extends KaspaDialog{
     	let words = [];
     	for(let i=0; i<12; i++){
     		words.push(wordsMap[i])
-    	}
+		}
 
     	if(isInvalid || !words.join("").length)
     		return this.setError("Please provide valid words");
