@@ -77,6 +77,9 @@ body{
 	--flow-btn-icon-size:26px;
 	--flow-progressbar-font-size:0.8rem;
 	--flow-progressbar-font-family:"Exo 2";
+	--flow-add2home-icon-bg:#FFF;
+	--flow-add2home-icon-size:30px;
+	--flow-add2home-padding:5px 5px;
 	/*	--flow-btn-text-transform:uppercase;*/
 }
 
@@ -104,6 +107,9 @@ body.flow-theme-dark{
 	--flow-input-box-shadow:0 0px 4px 0 rgba(1, 150, 136),
 	0 0px 0px -3px rgba(121, 255, 235, 0.2),
 	0 0px 1px 0 rgba(65, 255, 212, 0.12);
+}
+flow-add-to-home{
+	position:absolute;bottom:5px;left:5px;right:5px;
 }
 
 body.is-mobile{
