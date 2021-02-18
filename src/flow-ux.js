@@ -9,7 +9,7 @@ export const paginationStyle = [pCss, css`
 `]
 
 export const txListStyle = css`
-	.tx-list{flex:1;height:100px;overflow:auto}
+	.tx-list{}
 	.tx-list .tx-row{
 		margin:0px 5px;
 		display:flex;background-color:#FFF;
@@ -24,12 +24,14 @@ export const txListStyle = css`
 	.tx-list .tx-date{white-space:nowrap;margin-left:16px;}
 	.tx-list .tx-id,
 	.tx-list .tx-address{
-		flex:1;overflow:hidden;text-overflow:ellipsis;
+		flex:1;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;
 	}
-	.tx-list .tx-id,
-	.tx-list .tx-address,
-	.tx-list .tx-note{margin-left:35px;}
+	.tx-list .tx-note{box-sizing:border-box;}
 	.tx-list .tx-row>div{padding:2px;}
+	.tx-list .tx-row>.tx-id,
+	.tx-list .tx-row>.tx-address,
+	.tx-list .tx-row>.tx-note{padding-left:37px;}
+	
 	.tx-list .tx-amount{
 		white-space:nowrap;margin:0px 20px;
 		flex:1;text-align:right;
