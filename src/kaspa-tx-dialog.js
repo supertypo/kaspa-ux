@@ -1,5 +1,5 @@
 import {
-	html, css, KaspaDialog, askForPassword, KAS,
+	html, css, KaspaDialog, askForPassword, KAS, txListStyle,
 	formatForMachine, formatForHuman, paginationStyle, buildPagination, renderPagination
 } from './kaspa-dialog.js';
 
@@ -10,7 +10,7 @@ class KaspaTXDialog extends KaspaDialog{
 		}
 	}
 	static get styles(){
-		return [KaspaDialog.styles, paginationStyle,
+		return [KaspaDialog.styles, paginationStyle, txListStyle,
 		css`
 			:host{
 				position:fixed;
@@ -33,20 +33,8 @@ class KaspaTXDialog extends KaspaDialog{
 				max-width:var(--kaspa-dialog-container-max-width, 90%)
 			}
 			.buttons{justify-content:flex-end;align-items:center}
-			.spinner{margin-right:20px}	
-			.tx-row{
-				display:flex;background-color:#ededed;
-				border-bottom:1px solid #DDD;
-				flex-wrap:wrap;padding:2px;
-			}
-			.tx-row:nth-child(2n){background-color:#f9f9f9}
-			.tx-row:hover{background-color:#DDD}
-			.tx-date{white-space:nowrap;}
-			.tx-id,.tx-address{flex:1;overflow:hidden;text-overflow:ellipsis}
-			.tx-row>div{padding:2px;}
-			.tx-amount{white-space:nowrap;margin:0px 20px}
-			.tx-num{min-width:60px}
-			.br{min-width:100%;}
+			.spinner{margin-right:20px}
+			.tx-list{height:initial}
 		`]
 	}
 	render(){
@@ -82,19 +70,7 @@ class KaspaTXDialog extends KaspaDialog{
 		let {skip} = this;
 		let {items} = args
 		return html`
-			<div class="tx-list">
-				${items.map((tx, i)=>{
-					return html`
-					<div class="tx-row">
-						<div class="tx-num">#${skip+i+1}</div>
-						<div class="tx-date">${tx.date}</div>
-						<div class="tx-amount">${KAS(tx.amount)} KAS</div>
-						<div class="tx-id">${tx.id.split(":")[0]}</div>
-						<div class="br tx-note">${tx.note}</div>
-						<div class="tx-address">${tx.address}</div>
-					</div>`
-				})}
-			</div>
+			${this.wallet._renderAllTX({skip, items})}
 			<div class="error">${this.errorMessage}</div>`;
 	}
 	open(args, callback){

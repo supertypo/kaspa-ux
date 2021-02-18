@@ -1,6 +1,6 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
-	dpc, FlowFormat
+	dpc, FlowFormat, buildPagination, renderPagination, txListStyle
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
@@ -10,6 +10,7 @@ import {
 export * from './wallet.js';
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
 Wallet.setWorkerLogLevel('none')
+
 export {html, css, FlowFormat, dpc, baseUrl, debug};
 
 export class KaspaWalletUI extends BaseElement{
@@ -41,7 +42,7 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	static get styles(){
-		return [ScrollbarStyle, SpinnerStyle, css`
+		return [ScrollbarStyle, SpinnerStyle, txListStyle, css`
 			.v-box{display:flex;flex-direction:column}
 			.hide-scrollbar::-webkit-scrollbar-track{
 			    box-shadow:none;background:transparent;
@@ -62,6 +63,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
 			.recent-transactions .tx-row{position:relative}
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
+			.recent-transactions [txout] .amount{color:#F00}
 		`];
 	}
 	constructor() {
@@ -139,7 +141,7 @@ export class KaspaWalletUI extends BaseElement{
 		return html``
 	}
 
-	renderTX({hideTxBtn=false, onlyNonConfirmed=false}={}){
+	renderTX({hideTxBtn=false, onlyNonConfirmed=true}={}){
 		if(!this.wallet)
 			return '';
 
@@ -153,7 +155,7 @@ export class KaspaWalletUI extends BaseElement{
 			items = this.txs.slice(0, 6);
 		}
 
-		let color, p;
+		let color, p, cfmP;
 
 		return html`
 		<div class="recent-transactions">
@@ -163,9 +165,10 @@ export class KaspaWalletUI extends BaseElement{
 				Recent transcations
 			</div>
 			${items.map(tx=>{
-				p = Math.min(100, blueScore - (tx.blueScore||0))/100;
+				cfmP = Math.min(100, blueScore - (tx.blueScore||0));
+				p = cfmP/100;
 				if(p>0.7)
-					color = '#00FF00';
+					color = '#60b686';
 				else if(p>0.5)
 					color = 'orange'
 				else
@@ -182,7 +185,7 @@ export class KaspaWalletUI extends BaseElement{
 						</div>
 						<flow-progressbar class="tx-progressbar" 
 							style="--flow-progressbar-color:${color}"
-							value="${p}"></flow-progressbar>
+							value="${p}" text="${cfmP||''}"></flow-progressbar>
 						<div class="tx-body">
 							${tx.note}
 							<div class="tx-id">${tx.id}</div>
@@ -192,6 +195,51 @@ export class KaspaWalletUI extends BaseElement{
 				`
 			})}
 		</div>`
+	}
+	_renderAllTX({skip, items}){
+		let {blueScore=0} = this, cfm, cfmP, p, color;
+		return html`
+			${items.length?'':html`<div class="no-record">No Transactions</div>`}
+			<div class="tx-list">
+				${items.map((tx, i)=>{
+					cfm = blueScore - (tx.blueScore||0)
+					cfmP = Math.min(100, cfm)
+					p = cfmP/100;
+					if(p>0.7)
+						color = '#60b686';
+					else if(p>0.5)
+						color = 'orange'
+					else
+						color = 'red';
+					return html`
+					<div class="tx-row" ?txin=${tx.in} ?txout=${!tx.in}>
+						<fa-icon class="tx-icon" icon="${tx.in?'sign-in':'sign-out'}"></fa-icon>
+						${
+							cfm<101? html`
+							<flow-progressbar class="tx-progressbar" 
+								style="--flow-progressbar-color:${color}"
+								value="${p}" text="${cfmP||''}"></flow-progressbar>
+							`:''
+						}
+						<div class="tx-date" title="#${skip+i+1} Transaction">${tx.date}</div>
+						<div class="tx-amount">${KAS(tx.amount)} KAS</div>
+						<div class="br tx-note">${tx.note}</div>
+						<div class="br tx-id">${tx.id.split(":")[0]}</div>
+						<div class="tx-address">${tx.address}</div>
+					</div>`
+				})}
+			</div>
+		`
+	}
+	renderAllTX(){
+		let {txLimit:limit=100, txs:totalItems=[], txSkip=0} = this;
+		let pagination = buildPagination(totalItems.length, txSkip, limit)
+		let items = totalItems.slice(txSkip, txSkip+limit);
+		//console.log("renderTX:items", items)
+		return html`
+			${this._renderAllTX({skip:txSkip, items})}
+			${renderPagination(pagination, this._onTXPaginationClick)}
+		`
 	}
 
 	onMenuClick(e){
@@ -294,6 +342,7 @@ export class KaspaWalletUI extends BaseElement{
 			this.blueScore = e.blueScore;
 
 			this.refreshStats();
+			this.txDialog?.requestUpdate()
 
 			/*
 			if(this.sync && this.sync < 99.75) {
