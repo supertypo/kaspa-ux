@@ -84,7 +84,7 @@ class KaspaSendDialog extends KaspaDialog{
 		console.log("renderButtons", this.estimate)
 		return html`
 			${estimating?html`<fa-icon 
-				class="spinner" icon="spinner"
+				class="spinner" icon="sync"
 				style__="position:absolute"></fa-icon>`:''}
 			<flow-btn @click="${this.cancel}">Cancel</flow-btn>
 			<flow-btn primary 

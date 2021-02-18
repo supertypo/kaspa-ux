@@ -28,7 +28,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			.address-option-btns flow-btn:nth-child(2) { margin-right:0px;}*/
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}
-			.estimate-tx-error{color:red}
+			.estimate-tx-error{color:red; margin-top:6px;}
 			.estimate-tx span{display:block}	
 			flow-checkbox{width:100%;margin:15px 0px;}
 			[col] { display:flex; flex-direction: row;flex-wrap:wrap }
@@ -55,7 +55,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 	renderHeading({estimating}){
 		return html`${this.renderBackBtn()} SEND 
 			<div class="flex"></div>
-			${estimating?html`<fa-icon class="spinner" icon="spinner"
+			${estimating?html`<fa-icon class="spinner" icon="sync"
 				></fa-icon>`:''}`;
 	}
 	renderBody({estimating, estimateFee}){
