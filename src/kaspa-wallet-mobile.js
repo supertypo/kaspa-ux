@@ -244,6 +244,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
 					<div class="wallet-ux">
+						<div class="badge">KASPA WALLET</div>
+						<div class="badge">Version 1.0.0 "Rabbit"</div>
 						<div class="badge"><span>Status:</span> ${this.status}</div>
 						<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
