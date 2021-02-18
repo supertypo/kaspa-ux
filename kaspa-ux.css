@@ -40,6 +40,7 @@ body{
     --flow-input-font-weight:normal;
 	--flow-input-line-height:80%;
 	--flow-input-box-shadow:10px 10px 30px  rgba(0,0,0,0.05), -10px -10px 30px rgba(0,0,0,0.05);
+	--flow-input-wrapper-box-shadow:var(--flow-input-box-shadow);
 	--flow-input-border: 0px;
 	--flow-input-max-width:100%;
 	--flow-input-width:400px;
@@ -77,6 +78,9 @@ body{
 	--flow-btn-icon-size:26px;
 	--flow-progressbar-font-size:0.8rem;
 	--flow-progressbar-font-family:"Exo 2";
+	--flow-add2home-icon-bg:#FFF;
+	--flow-add2home-icon-size:30px;
+	--flow-add2home-padding:5px 5px;
 	/*	--flow-btn-text-transform:uppercase;*/
 }
 
@@ -104,6 +108,9 @@ body.flow-theme-dark{
 	--flow-input-box-shadow:0 0px 4px 0 rgba(1, 150, 136),
 	0 0px 0px -3px rgba(121, 255, 235, 0.2),
 	0 0px 1px 0 rgba(65, 255, 212, 0.12);
+}
+flow-add-to-home{
+	position:absolute;bottom:5px;left:5px;right:5px;
 }
 
 body.is-mobile{
