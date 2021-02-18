@@ -153,16 +153,24 @@ export class KaspaWalletUI extends BaseElement{
 		if(!this.wallet)
 			return '';
 
-		let items = [];
+		let items = [], bScore;
 		let {blueScore=0} = this;
 		if(onlyNonConfirmed){
 			if(blueScore){
 				items = this.txs.slice(0, 100).filter(tx=>{
-					return (blueScore - (tx.blueScore||0) < 100)
+					bScore = tx.blueScore||0;
+					if(blueScore<bScore || !bScore)
+						return false
+					return (blueScore - bScore < 100)
 				})
 			}
 		}else{
-			items = this.txs.slice(0, 6);
+			items = this.txs.slice(0, 6).filter(tx=>{
+				bScore = tx.blueScore||0;
+				if(blueScore<bScore || !bScore)
+					return false
+				return true;
+			})
 		}
 		if(hideTxBtn && !items.length)
 			return '';
@@ -266,7 +274,6 @@ export class KaspaWalletUI extends BaseElement{
 
 	async showSeeds(){
 		askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
-    		console.log("btn, password", btn, password)
     		if(btn!="confirm")
     			return
     		let encryptedMnemonic = getLocalWallet().mnemonic;
@@ -277,6 +284,18 @@ export class KaspaWalletUI extends BaseElement{
 			this.openSeedsDialog({mnemonic, hideable:true, showOnlySeed:true}, ()=>{
 				//
 			})
+		})
+	}
+	async exportWalletFile(){
+		askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
+    		if(btn!="confirm")
+    			return
+    		let wallet = getLocalWallet();
+    		let encryptedMnemonic = wallet.mnemonic;
+    		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
+    		if(!valid)
+    			return FlowDialog.alert("Error", "Invalid password");
+			
 		})
 	}
 
