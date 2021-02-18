@@ -63,6 +63,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-title{width:100%;display:flex;align-items:center;margin-bottom:10px;}
 			.recent-transactions .tx-row{position:relative}
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
+			.recent-transactions [txout] .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
 		`];
 	}
@@ -224,7 +225,7 @@ export class KaspaWalletUI extends BaseElement{
 							`:''
 						}
 						<div class="tx-date" title="#${skip+i+1} Transaction">${tx.date}</div>
-						<div class="tx-amount">${KAS(tx.amount)} KAS</div>
+						<div class="tx-amount">${tx.in?'':'-'}${KAS(tx.amount)} KAS</div>
 						<div class="br tx-note">${tx.note}</div>
 						<div class="br tx-id">${tx.id.split(":")[0]}</div>
 						<div class="tx-address">${tx.address}</div>
