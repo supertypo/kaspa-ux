@@ -181,7 +181,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					src="${baseUrl+'/resources/images/logo.png'}" />
 			</div>
 			<div class="flex"></div>
-			${this.isOfflineBadge?html`<div class='header-status'>${this.isOnline?'ONLINE':'OFFLINE'} <fa-icon icon="exclamation-triangle"></fa-icon></div>`:''}
+			<div class='header-status' ?hidden=${!this.isOfflineBadge}>
+				<span>${this.isOnline?'ONLINE':'OFFLINE'}</span>
+				<fa-icon icon="exclamation-triangle"></fa-icon>
+			</div>
 			<fa-icon ?hidden=${!this.isLoading} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
