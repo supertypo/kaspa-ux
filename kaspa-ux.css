@@ -76,6 +76,7 @@ body{
 	--flow-iconbtn-padding:13px;
 	--flow-btn-icon-size:26px;
 	--flow-progressbar-font-size:0.8rem;
+	--flow-progressbar-font-family:"Exo 2";
 /*	--flow-btn-text-transform:uppercase;*/
 }
 
