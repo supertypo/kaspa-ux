@@ -24,7 +24,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	}
 	constructor(){
 		super();
-		this.stoped = true;
+		this.stopped = true;
 		window.showQRScanner = (args, callback)=>{
 			this.open(args, callback)
 		}
@@ -32,11 +32,13 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	renderHeading({estimating}){
 		return html`${this.renderBackBtn()} ${this.heading}`
 	}
+
+	// ?stopped=${this.stopped}
 	renderBody(){
 		let value = this.value || '';
 		let {inputLabel='Scan result'} = this;
 		return html`
-		<flow-qrcode-scanner qrcode="${this.value||''}" _hidecode ?stoped=${this.stoped}
+		<flow-qrcode-scanner qrcode="${this.value||''}" _hidecode 
 			@changed="${this.onQRChange}"></flow-qrcode-scanner>
 		<!--flow-input class="full-width_" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>
@@ -53,13 +55,13 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	stopQRScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
 		scanner.stop();
-		this.stoped = true;
+		this.stopped = true;
 	}
 	startScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
 		scanner.start();
-		scanner.updated();
-		this.stoped = false;
+		// scanner.updated();
+		this.stopped = false;
 	}
 	sendBack(e){
 		this.sendValueBack();
