@@ -57,6 +57,7 @@ export class KaspaWalletUI extends BaseElement{
 			    box-shadow:none;background:transparent;
 			}
 			.recent-transactions {padding:15px;max-width:555px;margin:auto;}
+			.recent-transactions .tx-rows{max-height:90vh;overflow-y:auto;margin:10px 0px;padding:0px 10px;}
 			.recent-transactions .tx-body{overflow:hidden;text-overflow:ellipsis;}
 			.recent-transactions .tx-body .tx-id,
 			.recent-transactions .tx-body .tx-address{
@@ -67,8 +68,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .tx-progressbar{position:absolute;left:0px;}
 			.recent-transactions .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
-
-			.recent-transactions .heading { text-align:center; }
+			.recent-transactions .heading { text-align:center;}
 		`];
 	}
 	constructor() {
@@ -184,6 +184,7 @@ export class KaspaWalletUI extends BaseElement{
 					icon="list" @click="${this.showTxDialog}"></fa-icon>`}
 				Recent transactions
 			</div>
+			<div class="tx-rows">
 			${items.map(tx=>{
 				cfmP = Math.min(100, blueScore - (tx.blueScore||0));
 				p = cfmP/100;
@@ -214,6 +215,7 @@ export class KaspaWalletUI extends BaseElement{
 					</flow-expandable>
 				`
 			})}
+			</div>
 		</div>`
 	}
 	_renderAllTX({skip, items}){
