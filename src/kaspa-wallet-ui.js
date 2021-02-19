@@ -301,7 +301,29 @@ export class KaspaWalletUI extends BaseElement{
     		if(!valid)
     			return FlowDialog.alert("Error", "Invalid password");
 			
+			this.sendDataToDownload(JSON.stringify(wallet), 'wallet.kpk')
 		})
+	}
+
+	sendDataToDownload(data, name="wallet.txt"){
+		let file = new File([data], name, {
+			type: "text/plain",
+		});
+		const objectURL = URL.createObjectURL(file);
+		console.log("objectURL1:", name)
+		console.log("objectURL", file, objectURL)
+		this.requestFileDownload(objectURL, name)
+	}
+
+	requestFileDownload(file, name){
+		let link = document.createElement("a")
+		link.setAttribute("href", file);
+		link.setAttribute("download", name || file);
+		document.body.appendChild(link);
+		link.click();
+		setTimeout(()=>{
+			link.remove();
+		}, 3000);
 	}
 
 	async showRecoverWallet(){
@@ -471,6 +493,8 @@ export class KaspaWalletUI extends BaseElement{
 		this.parentNode.appendChild(t9Dialog);
 		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
 		this.parentNode.appendChild(qrscannerDialog);
+
+		//this.sendDataToDownload(JSON.stringify({wallet:1}), 'xxxxx.kpk')
 		
 		console.log("connectedCallback1", openDialog)
 		initKaspaFramework({
