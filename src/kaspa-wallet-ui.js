@@ -180,8 +180,6 @@ export class KaspaWalletUI extends BaseElement{
 		<div class="recent-transactions">
 			<div class="heading">
 				Recent transactions
-				${hideTxBtn?'':html`<fa-icon title="Show all transcations" class="tx-open-icon" 
-					icon="list" @click="${this.showTxDialog}"></fa-icon>`}
 			</div>
 			<div class="tx-rows">
 			${items.map(tx=>{

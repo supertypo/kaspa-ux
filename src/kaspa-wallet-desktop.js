@@ -79,13 +79,22 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 				display:flex;
 				margin-top:10px;
 			}
-			.tx-open-icon{cursor:pointer;margin-left:10px;}
+			.tx-open-btn{
+				margin:0px 10px;padding:5px;
+				border-radius:var(--flow-dropdown-trigger-border-radius, 3px);
+				cursor:pointer;
+			}
+			.tx-open-btn:hover{
+				background-color:var(--flow-primary-color);
+
+			}
 			flow-dropdown.icon-trigger{
 				--flow-dropdown-trigger-bg:transparent;
 				--flow-dropdown-trigger-padding:5px;
 				--flow-dropdown-trigger-width:auto;
 			}
 			.top-menu{
+				display:flex;align-items:center;
 				position:var(--kaspa-wallet-top-menu-position, absolute);
 				right:var(--kaspa-wallet-top-menu-right, 20px);
 				top:var(--kaspa-wallet-top-menu-top, -4px);
@@ -127,14 +136,19 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			return '';
 
 		return html`
-		<flow-dropdown class="icon-trigger top-menu right-align">
-			<fa-icon class="md" icon="cog" slot="trigger"></fa-icon>
-			<flow-menu @click="${this.onMenuClick}" selector="_">
-	 			<flow-menu-item data-action="showSeeds">Get Recovery Seed</flow-menu-item>
-				<flow-menu-item data-action="showRecoverWallet">Recover Wallet From Seed</flow-menu-item>
-				<!--flow-menu-item data-action="backupWallet">Backup This Wallet</flow-menu-item-->
-			</flow-menu>
-		</flow-dropdown>`
+		<div class="top-menu">
+			<fa-icon class="md tx-open-btn" title="Show all transcations" icon="list"
+				@click="${this.showTxDialog}">
+			</fa-icon>
+			<flow-dropdown class="icon-trigger right-align">
+				<fa-icon class="md" icon="cog" slot="trigger"></fa-icon>
+				<flow-menu @click="${this.onMenuClick}" selector="_">
+		 			<flow-menu-item data-action="showSeeds">Get Recovery Seed</flow-menu-item>
+					<flow-menu-item data-action="showRecoverWallet">Recover Wallet From Seed</flow-menu-item>
+					<!--flow-menu-item data-action="backupWallet">Backup This Wallet</flow-menu-item-->
+				</flow-menu>
+			</flow-dropdown>
+		</div>`
 	}
 	renderAddress(){
 		if(!this.wallet)
