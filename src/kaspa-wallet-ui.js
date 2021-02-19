@@ -498,7 +498,7 @@ export class KaspaWalletUI extends BaseElement{
 		
 		console.log("connectedCallback1", openDialog)
 		initKaspaFramework({
-			workerPath: "/kaspa-wallet-worker/worker.js"
+			workerPath: "/kaspa-wallet-worker/worker.js?ident="+(window.kaspaConfig?.ident||"")
 		}).then(()=>{
 			console.log("connectedCallback2")
 			let encryptedMnemonic = getLocalWallet()?.mnemonic
