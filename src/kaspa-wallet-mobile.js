@@ -156,6 +156,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.header .header{margin-left:10px;}
 			.header-row { display: flex; flex-direction:row; align-items: center; }
 			fa-icon.offline-icon { --fa-icon-size: 24px; --fa-icon-color:#aa0000; margin: 0px 4px 0px 8px; }
+			.dots { width: 16px; display:inline-block; text-align:left;}
 		`];
 	}
 	constructor() {
@@ -317,6 +318,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			return html``;
 
 		const { balance : { available, pending } } = this.wallet;
+		const total = available+pending;
 		// let availableBalance = 67580000000000;
 		// let totalBalance = 100000000000000.40;
 		// let pending = totalBalance - availableBalance;
@@ -327,7 +329,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<span class="value">SCANNING...</span>
 					</div>
 					<div class="balance pending">
-						<span class="label-pending">PLEASE WAIT</span>
+						<span class="label-pending">PLEASE WAIT <span class="dots">${this.dots}</span> ${total ? this.formatKAS(total)+' KAS':''}</span>
 					</div>
 				` : html`
 					<div class="balance">
