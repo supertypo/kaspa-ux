@@ -36,9 +36,10 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	// ?stopped=${this.stopped}
 	renderBody(){
 		let value = this.value || '';
+		let debug = this.debug;
 		let {inputLabel='Scan result'} = this;
 		return html`
-		<flow-qrcode-scanner qrcode="${this.value||''}" _hidecode 
+		<flow-qrcode-scanner qrcode="${this.value||''}" _hidecode ?debug=${debug}
 			@changed="${this.onQRChange}"></flow-qrcode-scanner>
 		<!--flow-input class="full-width_" clear-btn value="${value}"
 			label="${inputLabel}" readonly @changed=${this.onInputChange}>

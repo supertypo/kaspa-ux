@@ -81,6 +81,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.isOnline = false;
 
 		this.isOfflineBadge = false;
+		this.debugscanner = window.location.href.includes("debugscanner")
 
 		this.dots = '';
 	}
@@ -570,6 +571,7 @@ export class KaspaWalletUI extends BaseElement{
 		let t9Dialog = document.createElement("kaspa-t9-dialog");
 		this.parentNode.appendChild(t9Dialog);
 		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
+		qrscannerDialog.debug = this.debugscanner
 		this.parentNode.appendChild(qrscannerDialog);
 		let uploadFileDialog = document.createElement("kaspa-upload-file-dialog");
 		this.parentNode.appendChild(uploadFileDialog);
