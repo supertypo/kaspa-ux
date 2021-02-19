@@ -22,14 +22,18 @@ class KaspaSendDialogMobile extends KaspaDialog{
 				display:flex;flex-wrap:nowrap;flex-direction:row;
 				justify-content:center; align-items:center;
 			}
-			label{font-size:0.9rem;margin:5px;display:block}
+			label{font-size:1.0rem;margin:5px;display:block}
 			.address-option-btns flow-btn{flex:1;max-width:140px;min-width:140px;margin:5px}
 			/*.address-option-btns flow-btn:nth-child(1) { margin-left:0px;}
 			.address-option-btns flow-btn:nth-child(2) { margin-right:0px;}*/
 			.buttons{justify-content:flex-end;align-items:center}
 			.spinner{margin-right:20px}
 			.estimate-tx-error{color:red; margin-top:6px;}
-			.estimate-tx span{display:block}	
+			/*.estimate-tx span{display:block}*/
+			.estimate-tx table { font-size: 1.02rem;margin-top:8px}
+			.estimate-tx table tr td { padding:3px; }
+			.estimate-tx table tr td:nth-child(2) { min-width:150px; }
+	
 			flow-checkbox{width:100%;margin:15px 0px;}
 			[col] { display:flex; flex-direction: row;flex-wrap:wrap }
 			[spacer] { min-width: 32px; }
@@ -112,12 +116,23 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		if(this.estimateError)
 			return html`<div class="estimate-tx-error">${this.estimateError}</div>`;
 		let {dataFee, fee, totalAmount, txSize} = this.estimate||{}
-		return html`<div class="estimate-tx">
-			${txSize?html`<span class="tx-size">Transaction size: ${txSize.toFileSize()}<span>`:''}
-			${dataFee?html`<span class="tx-data-fee">Data fee: ${KAS(dataFee)} KAS<span>`:''}
-			${fee?html`<span class="tx-fee">Total fee: ${KAS(fee)} KAS<span>`:''}
-			${totalAmount?html`<span class="tx-total">Total: ${KAS(totalAmount)} KAS<span>`:''}
-		</div>`
+		// return html`<div class="estimate-tx">
+		// 	${txSize?html`<span class="tx-size">Transaction size: ${txSize.toFileSize()}<span>`:''}
+		// 	${dataFee?html`<span class="tx-data-fee">Data fee: ${KAS(dataFee)} KAS<span>`:''}
+		// 	${fee?html`<span class="tx-fee">Total fee: ${KAS(fee)} KAS<span>`:''}
+		// 	${totalAmount?html`<span class="tx-total">Total: ${KAS(totalAmount)} KAS<span>`:''}
+		// </div>`
+
+		return html`
+		<div class="estimate-tx">
+			<table>
+				${txSize?html`<tr><td>Transaction Size</td><td>${txSize.toFileSize()}</td></tr>`:''}
+				${dataFee?html`<tr><td>Data Fee</td><td>${KAS(dataFee)} KAS</td></tr>`:''}
+				${fee?html`<tr><td>Total Fee</td><td>${KAS(fee)} KAS</td></tr>`:''}
+				${totalAmount?html`<tr><td>Total Amount</td><td> ${KAS(totalAmount)} KAS</td></tr>`:''}
+			</table>
+		</div>
+		`
 	}
 	renderButtons(){
 		return ''

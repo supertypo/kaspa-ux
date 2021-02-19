@@ -154,6 +154,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.recent-transactions>.heading{text-align:center}
 			.tx-list{flex: 1 1 0%;height:100px;overflow-y:auto;}
 			.header .header{margin-left:10px;}
+			.header-row { display: flex; flex-direction:row; align-items: center; }
+			fa-icon.offline-icon { --fa-icon-size: 24px; --fa-icon-color:#aa0000; margin: 0px 4px 0px 8px; }
 		`];
 	}
 	constructor() {
@@ -182,8 +184,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 			<div class="flex"></div>
 			<div class='header-status' ?hidden=${!this.isOfflineBadge}>
-				<span>${this.isOnline?'ONLINE':'OFFLINE'}</span>
-				<fa-icon icon="exclamation-triangle"></fa-icon>
+				<div class="header-row">
+					<div>${this.isOnline?'ONLINE':'OFFLINE'}</div>
+					<div><fa-icon class="offline-icon" icon="exclamation-triangle"></fa-icon></div>
+				</div>
 			</div>
 			<fa-icon ?hidden=${!this.isLoading} 
 				class="spinner" icon="sync"
