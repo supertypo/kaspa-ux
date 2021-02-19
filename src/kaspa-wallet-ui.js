@@ -152,7 +152,7 @@ export class KaspaWalletUI extends BaseElement{
 		return html``
 	}
 
-	renderTX({hideTxBtn=false, onlyNonConfirmed=true}={}){
+	renderTX({hideTxBtn=false, onlyNonConfirmed=false}={}){
 		if(!this.wallet)
 			return '';
 
@@ -160,6 +160,7 @@ export class KaspaWalletUI extends BaseElement{
 		let {blueScore=0} = this;
 		if(onlyNonConfirmed){
 			if(blueScore){
+				let 
 				items = this.txs.slice(0, 100).filter(tx=>{
 					bScore = tx.blueScore||0;
 					if(blueScore<bScore || !bScore)
@@ -168,28 +169,22 @@ export class KaspaWalletUI extends BaseElement{
 				})
 			}
 		}else{
-			items = this.txs.slice(0, 6).filter(tx=>{
-				bScore = tx.blueScore||0;
-				if(blueScore<bScore || !bScore)
-					return false
-				return true;
-			})
+			items = this.txs.slice(0, 20)
 		}
 		if(hideTxBtn && !items.length)
 			return '';
 
-		let color, p, cfmP;
+		let color, p, cfmP, cfm;
 
 		return html`
 		<div class="recent-transactions">
 			<div class="heading">
-				${hideTxBtn?'':html`<fa-icon title="Show all transcations" class="tx-open-icon" 
-					icon="list" @click="${this.showTxDialog}"></fa-icon>`}
 				Recent transactions
 			</div>
 			<div class="tx-rows">
 			${items.map(tx=>{
-				cfmP = Math.min(100, blueScore - (tx.blueScore||0));
+				cfm = blueScore - (tx.blueScore||0);
+				cfmP = Math.min(100, cfm);
 				p = cfmP/100;
 				if(p>0.7)
 					color = '#60b686';
@@ -207,9 +202,10 @@ export class KaspaWalletUI extends BaseElement{
 								${tx.in?'':'-'}${this.formatKAS(tx.amount)} KAS
 							</div>
 						</div>
-						<flow-progressbar class="tx-progressbar" 
+						${cfm<101? html`<flow-progressbar class="tx-progressbar" 
 							style="--flow-progressbar-color:${color}"
-							value="${p}" text="${cfmP||''}"></flow-progressbar>
+							value="${p}" text="${cfmP||''}"></flow-progressbar>`:''
+						}
 						<div class="tx-body">
 							${tx.note}
 							<div class="tx-id">${tx.id}</div>
@@ -501,8 +497,13 @@ export class KaspaWalletUI extends BaseElement{
 		this.parentNode.appendChild(t9Dialog);
 		let qrscannerDialog = document.createElement("kaspa-qrscanner-dialog");
 		this.parentNode.appendChild(qrscannerDialog);
+		let uploadFileDialog = document.createElement("kaspa-upload-file-dialog");
+		this.parentNode.appendChild(uploadFileDialog);
 
 		//this.sendDataToDownload(JSON.stringify({wallet:1}), 'xxxxx.kpk')
+		/*uploadFileDialog.open({}, (args)=>{
+			console.log("uploadFileDialog:args", args)
+		})*/
 		
 		console.log("connectedCallback1", openDialog)
 		initKaspaFramework({
