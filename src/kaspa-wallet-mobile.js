@@ -263,7 +263,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 									<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
 									<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
 									<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
-									<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty)}</td></tr>
+									<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty,2)}</td></tr>
 									<tr><td>Median Offset</td><td>${this.getTimeDelta(this.pastMedianTimeDiff)}</td></tr>
 									<tr><td>Median Time UTC</td><td>${this.pastMedianTime?(new Date(this.pastMedianTime)).toJSON().replace(/T/,' ').replace(/\..+$/,''):''}</td></tr>
 								</table>
