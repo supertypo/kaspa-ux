@@ -157,6 +157,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.header-row { display: flex; flex-direction:row; align-items: center; }
 			fa-icon.offline-icon { --fa-icon-size: 24px; --fa-icon-color:#aa0000; margin: 0px 4px 0px 8px; }
 			.dots { width: 16px; display:inline-block; text-align:left;}
+			.recent-transactions .tx-rows{max-height:none;}
 		`];
 	}
 	constructor() {

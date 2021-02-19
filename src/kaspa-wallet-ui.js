@@ -167,7 +167,7 @@ export class KaspaWalletUI extends BaseElement{
 		let {blueScore=0} = this;
 		if(onlyNonConfirmed){
 			if(blueScore){
-				items = this.txs.slice(0, 100).filter(tx=>{
+				items = this.txs.slice(0, 6).filter(tx=>{
 					bScore = tx.blueScore||0;
 					if(blueScore<bScore || !bScore)
 						return false
@@ -175,7 +175,7 @@ export class KaspaWalletUI extends BaseElement{
 				})
 			}
 		}else{
-			items = this.txs.slice(0, 20)
+			items = this.txs.slice(0, 10)
 		}
 		if(hideTxBtn && !items.length)
 			return '';
