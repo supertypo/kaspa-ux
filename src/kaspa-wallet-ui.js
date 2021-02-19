@@ -167,9 +167,9 @@ export class KaspaWalletUI extends BaseElement{
 		let {blueScore=0} = this;
 		if(onlyNonConfirmed){
 			if(blueScore){
-				let 
 				items = this.txs.slice(0, 100).filter(tx=>{
 					bScore = tx.blueScore||0;
+					console.log("bScore", bScore)
 					if(blueScore<bScore || !bScore)
 						return false
 					return (blueScore - bScore < 100)
