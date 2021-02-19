@@ -210,7 +210,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						?hidden=${!this.errorMessage}>${this.errorMessage}</div>
 					${this.renderAddressAndQr()}
 					${this.renderBalanceAndButton()}
-					${this.renderTX({hideTxBtn:true})}
+					${this.renderTX({hideTxBtn:true, onlyNonConfirmed:true})}
 				</div>
 				<div class="tab-content v-box pb-0 ${sCls('transactions')}" for="transactions">
 					${this.renderAllTX()}

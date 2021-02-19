@@ -79,7 +79,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 				display:flex;
 				margin-top:10px;
 			}
-			.tx-open-icon{cursor:pointer;margin-right:10px;}
+			.tx-open-icon{cursor:pointer;margin-left:10px;}
 			flow-dropdown.icon-trigger{
 				--flow-dropdown-trigger-bg:transparent;
 				--flow-dropdown-trigger-padding:5px;
@@ -93,6 +93,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 				background-color:var(--flow-background-color, #FFF);
 			}
 			fa-icon.md{--fa-icon-size:24px}
+			.recent-transactions .heading { text-align:left;}
 		`];
 	}
 	constructor() {
