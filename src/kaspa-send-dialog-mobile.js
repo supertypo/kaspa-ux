@@ -152,6 +152,9 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		this.show();
 	}
 	cleanUpForm(){
+		this.estimateError = "";
+		this.estimate = {};
+		this.requestUpdate("estimate", null)
 		this.qSAll("flow-input").forEach(input=>{
     		input.value = "";
     	})
