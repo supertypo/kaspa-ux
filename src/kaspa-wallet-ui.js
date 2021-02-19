@@ -70,6 +70,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
 			.recent-transactions .heading { text-align:center;}
+			.hidden-file-input{position:absolute;top:-100%;}
 		`];
 	}
 	constructor() {
@@ -116,6 +117,8 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	initDaemonRPC() {
+		if(this.networkStatusUpdates)
+			return
 		const { rpc } = flow.app;
 		this.networkStatusUpdates = rpc.subscribe(`network-status`);
 		(async()=>{
@@ -141,7 +144,10 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	initHelpers() {
-		setInterval(()=>{
+		if(this._initHelpersInterval)
+			return;
+
+		this._initHelpersInterval = setInterval(()=>{
 			if(this.faucetPeriod > 0) {
 				this.faucetPeriod = Math.max(0,this.faucetPeriod-1000);
 			}
@@ -302,6 +308,74 @@ export class KaspaWalletUI extends BaseElement{
 			
 			this.sendDataToDownload(JSON.stringify(wallet), 'wallet.kpk')
 		})
+	}
+	getFileInput(){
+		return this.renderRoot.querySelector("input.hidden-file-input")
+	}
+	importWalletFile(){
+		let input = this.getFileInput();
+		let a = Date.now();
+		let invalidFileAlert = ()=>{
+			FlowDialog.alert("Error", "Invalid File");
+		}
+		let importWallet = (walletMeta)=>{
+			let {mnemonic} = walletMeta.wallet;
+
+			askForPassword({confirmBtnText:"Import"}, async({btn, password})=>{
+	    		if(btn!="confirm")
+	    			return
+				let valid = await Wallet.checkPasswordValidity(password, mnemonic)
+				if(!valid)
+					return FlowDialog.alert("Error", "Invalid password");
+
+				let walletInitArgs = {
+					password,
+					walletMeta,
+					encryptedMnemonic:mnemonic,
+					dialog:{
+						mode:"import",
+						setError:(error)=>{
+							FlowDialog.alert("Error", error);
+						}
+					}
+				}
+				//console.log("walletInitArgs", walletInitArgs)
+				this.handleInitDialogCallback(walletInitArgs)
+			})
+		}
+		input.onchange = (e)=>{
+			let [file] = input.files||[]
+			if(!file)
+				return
+			let {name=''} = file;
+			let ext = name.toLowerCase().split(".").pop();
+			if(ext!='kpk')
+				return invalidFileAlert();
+
+			let reader = new FileReader();
+			let error = false;
+			reader.onload = async (evt)=>{
+				input.value = "";
+				let json = evt.target.result;
+				try{
+					let walletInfo = JSON.parse(json);
+					if(!walletInfo?.wallet?.mnemonic)
+						return invalidFileAlert();
+					importWallet(walletInfo);
+				}catch(e){
+					invalidFile()
+				}
+				console.log("reader result", json);
+			};
+			reader.onerror = ()=>{
+				FlowDialog.alert("Error", "Unable to read file");
+				error = true;
+				input.value = "";
+			}
+			reader.readAsText(file);
+			console.log("input:onChange", a, e)
+		}
+		input.click();
 	}
 
 	sendDataToDownload(data, name="wallet.txt"){
@@ -571,6 +645,23 @@ export class KaspaWalletUI extends BaseElement{
 				return
 
 			dialog.hide();
+			this.setWallet(wallet);
+			return
+		}
+		if(mode == "import"){
+			const wallet = await Wallet.import(password, encryptedMnemonic, {network, rpc})
+			.catch(error=>{
+				console.log("import wallet error:", error)
+				dialog.setError("Incorrect passsword.");
+			});
+
+			//console.log("Wallet imported", encryptedMnemonic)
+
+			if(!wallet)
+				return
+
+			encryptedMnemonic = await wallet.export(password);
+			setLocalWallet(encryptedMnemonic, this.walletMeta);
 			this.setWallet(wallet);
 			return
 		}

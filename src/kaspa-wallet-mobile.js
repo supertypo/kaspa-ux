@@ -231,7 +231,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
-
+						<input class="hidden-file-input" type="file" />
 						<div class="badge">
 							<hr style="margin:32px;"/>
 						</div>
