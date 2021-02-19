@@ -1,6 +1,6 @@
 import {html, css, KaspaDialog} from './kaspa-dialog.js';
 
-class KDXWalletReceiveDialog extends KaspaDialog{
+class KaspaWalletReceiveDialog extends KaspaDialog{
 	static get properties(){
 		return {
 			qrdata:{type:String},
@@ -25,7 +25,7 @@ class KDXWalletReceiveDialog extends KaspaDialog{
 	}
 	renderBody(){
 		return html`
-			<flow-qrcode data="${this.qrdata}"></flow-qrcode>
+			<flow-qrcode data="${this.qrdata}" ntype="6"></flow-qrcode>
 			<flow-input label="Address" class="full-width" readonly 
 				value="${this.address}" sufix-btn>
 				<flow-btn slot="sufix" @click="${this.copyAddress}"
@@ -53,4 +53,4 @@ class KDXWalletReceiveDialog extends KaspaDialog{
 	}
 }
 
-KDXWalletReceiveDialog.define("kdx-wallet-receive-dialog");
+KaspaWalletReceiveDialog.define("kaspa-wallet-receive-dialog");

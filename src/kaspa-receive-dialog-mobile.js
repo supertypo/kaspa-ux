@@ -53,7 +53,7 @@ class KaspaReceiveDialogMobile extends KaspaDialog{
 		let {amount='', address=''} = this;
 		let amountStr = amount?'?amount='+amount:'';
 		return html`
-			<flow-qrcode data="${address+amountStr}"></flow-qrcode>
+			<flow-qrcode data="${address+amountStr}" ntype="6"></flow-qrcode>
 			<flow-input class="address full-width" suffix-btn
 				label="Request URL" readonly value="${address+amountStr}">
 				<flow-btn slot="suffix" class="primary"
