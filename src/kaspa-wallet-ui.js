@@ -380,7 +380,7 @@ export class KaspaWalletUI extends BaseElement{
 
 	sendDataToDownload(data, name="wallet.txt"){
 		let file = new File([data], name, {
-			type: "text/plain",
+			type: "attachment/kpk",
 		});
 		const objectURL = URL.createObjectURL(file);
 		console.log("objectURL1:", name)
