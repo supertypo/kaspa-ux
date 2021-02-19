@@ -154,7 +154,9 @@ class KaspaSendDialogMobile extends KaspaDialog{
 	cleanUpForm(){
 		this.qSAll("flow-input").forEach(input=>{
     		input.value = "";
-    	})
+		})
+		this.qS(".inclusive-fee").checked = false;
+		
 	}
 	scanQRCode(){
 		this.wallet.showQRScanner({isAddressQuery:true}, ({amount, address})=>{

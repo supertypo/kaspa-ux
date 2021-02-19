@@ -119,7 +119,8 @@ class KaspaSendDialog extends KaspaDialog{
 	cleanUpForm(){
 		this.qSAll("flow-input").forEach(input=>{
     		input.value = "";
-    	})
+		})
+		this.qS(".inclusive-fee").checked = false;
 	}
 	hide(skipHistory=false){
 		this.cleanUpForm();
