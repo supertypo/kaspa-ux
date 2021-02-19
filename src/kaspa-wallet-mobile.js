@@ -219,7 +219,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
 					<div class="wallet-ux">
 						<div class="badge">KASPA WALLET</div>
-						${ window.PWA ? html`<div class="badge">Version ${window.PWA.version} "${window.PWA.codename}"</div>` : '' }
+						${ window.PWA ? html`<div class="badge">Version ${window.PWA.version} ${window.PWA.codename?`"${window.PWA.codename}"`:''}</div>` : '' }
 						<div class="badge"><span>Status:</span> ${this.status}</div>
 						<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
@@ -231,6 +231,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
+
+						<div class="badge">
+							<hr style="margin:32px;"/>
+						</div>
+						<div class="badge"><span>DEVELOPER INFO</span></div>
+						<div class="badge"><span>Kaspa UX:</span>${window.PWA_MODULES['@kaspa/ux']}</div>
+						<div class="badge"><span>Flow UX:</span>${window.PWA_MODULES['@aspectron/flow-ux']}</div>
+
 					</div>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
