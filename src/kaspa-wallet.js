@@ -1,5 +1,7 @@
 export * from './flow-ux.js';
 
+import {dpc} from './flow-ux.js';
+
 import {KaspaWalletDesktop} from './kaspa-wallet-desktop';
 import {KaspaWalletMobile, isMobile} from './kaspa-wallet-mobile';
 
@@ -20,3 +22,10 @@ class KaspaWallet extends BaseClass{
 */
 
 BaseClass.define("kaspa-wallet");
+/*
+dpc(1000, ()=>{
+	askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
+
+	})
+})
+*/
