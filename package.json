@@ -1,6 +1,6 @@
 {
   "name": "@kaspa/ux",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Kaspa Wallet User Interface Framework",
   "main": "kaspa-ux.js",
   "private": true,
