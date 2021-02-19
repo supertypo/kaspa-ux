@@ -386,6 +386,7 @@ export class KaspaWalletUI extends BaseElement{
 		console.log("objectURL1:", name)
 		console.log("objectURL", file, objectURL)
 		this.requestFileDownload(objectURL, name)
+		//URL.revokeObjectURL(objectURL);
 	}
 
 	requestFileDownload(file, name){
