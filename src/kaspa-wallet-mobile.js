@@ -156,6 +156,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.header .header{margin-left:10px;}
 			.header-row { display: flex; flex-direction:row; align-items: center; }
 			fa-icon.offline-icon { --fa-icon-size: 24px; --fa-icon-color:#aa0000; margin: 0px 4px 0px 8px; }
+			.dots { width: 16px; display:inline-block; text-align:left;}
 		`];
 	}
 	constructor() {
@@ -218,7 +219,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
 					<div class="wallet-ux">
 						<div class="badge">KASPA WALLET</div>
-						${ window.PWA ? html`<div class="badge">Version ${window.PWA.version} "${window.PWA.codename}"</div>` : '' }
+						${ window.PWA ? html`<div class="badge">Version ${window.PWA.version} ${window.PWA.codename?`"${window.PWA.codename}"`:''}</div>` : '' }
 						<div class="badge"><span>Status:</span> ${this.status}</div>
 						<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
@@ -230,6 +231,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
+
+						<div class="badge">
+							<hr style="margin:32px;"/>
+						</div>
+						<div class="badge"><span>DEVELOPER INFO</span></div>
+						<div class="badge"><span>Kaspa UX:</span>${window.PWA_MODULES['@kaspa/ux']}</div>
+						<div class="badge"><span>Flow UX:</span>${window.PWA_MODULES['@aspectron/flow-ux']}</div>
+
 					</div>
 				</div>
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
@@ -317,6 +326,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			return html``;
 
 		const { balance : { available, pending } } = this.wallet;
+		const total = available+pending;
 		// let availableBalance = 67580000000000;
 		// let totalBalance = 100000000000000.40;
 		// let pending = totalBalance - availableBalance;
@@ -327,7 +337,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<span class="value">SCANNING...</span>
 					</div>
 					<div class="balance pending">
-						<span class="label-pending">PLEASE WAIT</span>
+						<span class="label-pending">PLEASE WAIT <span class="dots">${this.dots}</span> ${total ? this.formatKAS(total)+' KAS':''}</span>
 					</div>
 				` : html`
 					<div class="balance">

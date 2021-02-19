@@ -39,7 +39,8 @@ export class KaspaWalletUI extends BaseElement{
 			difficulty:{type:Number},
 			networkName:{type:String},
 			pastMedianTime:{type:Number},
-			pastMediaTimeDiff:{type:Number}
+			pastMediaTimeDiff:{type:Number},
+			dots:{type:String}
 		};
 	}
 
@@ -79,6 +80,8 @@ export class KaspaWalletUI extends BaseElement{
 		this.isOnline = false;
 
 		this.isOfflineBadge = false;
+
+		this.dots = '';
 	}
 
 	setRPCBuilder(rpcBuilder){
@@ -457,6 +460,11 @@ export class KaspaWalletUI extends BaseElement{
 	    this.wallet = wallet;
 	}
 	async loadData() {
+		let dots = setInterval(()=>{
+			this.dots += '.';
+			if(this.dots.length > 5)
+				this.dots = '.';
+		}, 333);
 		try {
 			this.isLoading = true;
 			/*if (this._isCache) {
@@ -473,7 +481,7 @@ export class KaspaWalletUI extends BaseElement{
 			this.isLoading = false;
 			this.showError(err);
 		}
-
+		clearInterval(dots);
 		this.updateFaucetBalance();
 	}
 	connectedCallback(){
