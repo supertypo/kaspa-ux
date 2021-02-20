@@ -237,7 +237,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 
     	return {
     		amount:formatForMachine(amount),
-    		fee:formatForMachine(formatForHuman(fee)),
+    		fee:formatForMachine(fee),
     		address, note, 
     		calculateNetworkFee,
     		inclusiveFee
