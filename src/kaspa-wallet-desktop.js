@@ -191,7 +191,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			return '';
 		return html`
 			<div class="qr-code-holder">
-				<flow-qrcode text="${this.receiveAddress||""}"></flow-qrcode>
+				<flow-qrcode data="${this.receiveAddress||""}" ntype="6"></flow-qrcode>
 				<div class="buttons-holder">
 					<flow-btn primary @click="${this.showSendDialog}">SEND</flow-btn>
 					<div style="flex:1;width:20px;"></div>
