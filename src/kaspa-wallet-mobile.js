@@ -178,6 +178,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let isReady = !!wallet?.balance;
 
 		const sCls = tab=>tab==selectedTab?'selected flow-swipeable':'flow-swipeable';
+		let loadingIndicator = this.isLoading || !!this.preparingTxNotifications.size
 		return html`
 		<div class="header" ?not-ready=${!isReady}>
 			<div class="logo">
@@ -191,7 +192,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					<div><fa-icon class="offline-icon" icon="exclamation-triangle"></fa-icon></div>
 				</div>
 			</div>
-			<fa-icon ?hidden=${!this.isLoading} 
+			<fa-icon ?hidden=${!loadingIndicator} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
 		</div>

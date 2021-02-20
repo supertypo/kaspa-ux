@@ -70,6 +70,7 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .amount{color:#60b686}
 			.recent-transactions [txout] .amount{color:#F00}
 			.recent-transactions .heading { text-align:center;}
+			.tx-notification{padding:5px;text-align:center}
 			.hidden-file-input{position:absolute;top:-100%;}
 		`];
 	}
@@ -83,7 +84,7 @@ export class KaspaWalletUI extends BaseElement{
 
 		this.isOfflineBadge = false;
 		this.debugscanner = window.location.href.includes("debugscanner")
-
+		this.preparingTxNotifications = new Map();
 		this.dots = '';
 	}
 
@@ -178,15 +179,25 @@ export class KaspaWalletUI extends BaseElement{
 		}else{
 			items = this.txs.slice(0, 10)
 		}
-		if(hideTxBtn && !items.length)
+		if(hideTxBtn && !items.length && !this.preparingTxNotifications.size)
 			return '';
 
 		let color, p, cfmP, cfm;
+
+		let notifications = [...this.preparingTxNotifications.values()];
 
 		return html`
 		<div class="recent-transactions">
 			<div class="heading">
 				Recent transactions
+			</div>
+			<div class="tx-notifications">
+				${notifications.map(n=>{
+					return html`<div class="tx-notification">
+						Preparing transaction for ${this.formatKAS(n.amount)} KAS ....
+					</div>`
+				})}
+				
 			</div>
 			<div class="tx-rows">
 			${items.map(tx=>{
@@ -785,12 +796,35 @@ export class KaspaWalletUI extends BaseElement{
 		return this.wallet.receiveAddress;
 	}
 
+	addPreparingTransactionNotification({uid, amount, address, note}){
+		this.preparingTxNotifications.set(uid, {
+			amount, address, note
+		});
+	}
+
+	removePreparingTransactionNotification({uid}){
+		this.preparingTxNotifications.delete(uid);
+	}
+
+	/*
+	updatePreparingTransactionNotification({uid, txid}){
+		let info = this.preparingTxNotifications.get(uid)
+		if(!info)
+			info.txid = txid;
+	}
+	*/
+
 	async sendTx(args){
 		const {
 			address, amount, note, fee,
 			calculateNetworkFee, inclusiveFee
 		} = args;
 		console.log("sendTx:args", args)
+		let uid;
+		if(amount > 10){
+			uid = UID();
+			this.addPreparingTransactionNotification({uid, amount, address, note})
+		}
 
 		const response = await this.wallet.submitTransaction({
 			toAddr: address,
@@ -802,8 +836,16 @@ export class KaspaWalletUI extends BaseElement{
 			console.log("error", error)
 			if(/Invalid Argument/.test(error))
 				error = "Please provide correct address and amount";
+			uid && this.removePreparingTransactionNotification({uid});
 			FlowDialog.alert("Error", error);
 		})
+
+		if(uid){
+			//if(response?.txid)
+			//	this.updatePreparingTransactionNotification({uid, txid:response.txid});
+			//else
+				this.removePreparingTransactionNotification({uid});
+		}
 
 		console.log("sendTx: response", response)
 	}
