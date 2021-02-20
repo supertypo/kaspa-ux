@@ -1,6 +1,6 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
-	dpc, FlowFormat, buildPagination, renderPagination, txListStyle
+	dpc, FlowFormat, buildPagination, renderPagination, txListStyle, UID
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
@@ -79,6 +79,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.walletSignal = Deferred();
 		this.walletMeta = {};
 		this.isOnline = false;
+		this.txLimit = Math.floor( (window.innerHeight - 165) / 72);
 
 		this.isOfflineBadge = false;
 		this.debugscanner = window.location.href.includes("debugscanner")
@@ -262,7 +263,7 @@ export class KaspaWalletUI extends BaseElement{
 		`
 	}
 	renderAllTX(){
-		let {txLimit:limit=100, txs:totalItems=[], txSkip=0} = this;
+		let {txLimit:limit=20, txs:totalItems=[], txSkip=0} = this;
 		let pagination = buildPagination(totalItems.length, txSkip, limit)
 		let items = totalItems.slice(txSkip, txSkip+limit);
 		//console.log("renderTX:items", items)
@@ -517,12 +518,21 @@ export class KaspaWalletUI extends BaseElement{
 	    	this.requestUpdate("balance", null);
 	    })
 	    wallet.on("new-transaction", (tx)=>{
+	    	//console.log("############ new-transaction", tx)
 	    	tx.date = GetTS(new Date(tx.ts));
 	    	this.txs.unshift(tx);
 	    	this.txs = this.txs.slice(0, 10000);
 	    	this.requestUpdate("balance", null);
 	    	if(this.txDialog)
 	    		this.txDialog.onNewTx(tx)
+	    })
+	    wallet.on("transactions", (list)=>{
+	    	//console.log("############ transactions", list.length)
+	    	list.forEach(tx=>{
+		    	tx.date = GetTS(new Date(tx.ts));
+		    	let index = this.findTxIndex(tx);
+		    	this.txs.splice(index, 0, tx);
+		    })
 	    })
 	    wallet.on("new-address", (detail)=>{
 	    	let {receive, change} = detail;
@@ -531,6 +541,14 @@ export class KaspaWalletUI extends BaseElement{
 	    })
 
 	    this.wallet = wallet;
+	}
+
+	findTxIndex(transaction){
+		let index = this.txs.findIndex(tx=>tx.ts<transaction.ts);
+		if(index<0){
+			return this.txs.length+100;
+		}
+		return index
 	}
 	async loadData() {
 		let dots = setInterval(()=>{
