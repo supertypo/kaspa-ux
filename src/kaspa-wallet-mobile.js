@@ -240,6 +240,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<div class="badge"><span>DEVELOPER INFO</span></div>
 						<div class="badge"><span>Kaspa Core:</span> ${window.PWA_MODULES['@kaspa/core-lib']}</div>
 						<div class="badge"><span>Kaspa Wallet Framework:</span> ${window.PWA_MODULES['@kaspa/wallet']}</div>
+						<div class="badge"><span>Kaspa gRPC:</span> ${window.PWA_MODULES['@kaspa/grpc']}</div>
 						<div class="badge"><span>Kaspa gRPC Relay:</span> ${window.PWA_MODULES['@kaspa/grpc-web']}</div>
 						<div class="badge"><span>Kaspa UX:</span> ${window.PWA_MODULES['@kaspa/ux']}</div>
 						<div class="badge"><span>Flow UX:</span> ${window.PWA_MODULES['@aspectron/flow-ux']}</div>
