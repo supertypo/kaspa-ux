@@ -358,6 +358,11 @@ flow-selector .menu-item{padding:2px 4px;}
 .is-mobile dialog .body,
 .is-mobile dialog .buttons{width:100%;max-width:400px;}
 .is-mobile dialog .buttons{justify-content:center;}
+.is-mobile flow-dialog.big dialog .heading,
+.is-mobile flow-dialog.big dialog .body,
+.is-mobile flow-dialog.big dialog .buttons{
+	max-width:500px;
+}
 
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(359deg)}}
 .spin{

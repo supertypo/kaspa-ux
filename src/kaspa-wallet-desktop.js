@@ -1,6 +1,7 @@
-import {html, css, FlowFormat, KaspaWalletUI} from './kaspa-wallet-ui.js';
+import {html, css, FlowFormat} from './kaspa-wallet-ui.js';
+import {KaspaWalletMobile} from './kaspa-wallet-mobile.js';
 
-export class KaspaWalletDesktop extends KaspaWalletUI{
+export class KaspaWalletDesktop extends KaspaWalletMobile{
 
 	static get properties() {
 		return {
@@ -8,9 +9,9 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 	}
 
 	static get styles(){
-		return [KaspaWalletUI.styles, css`
-			:host{overflow:auto}
-			.container{padding:15px;position:relative}
+		return [KaspaWalletMobile.styles, css`
+			:host{overflow:hidden}
+			.container{padding:15px;position:relative;flex:1;overflow:auto}
 			.wallet-warning{
 				max-width:640px;margin:5px auto;padding:10px;text-align:center;
 				background-color:var(--kdx-wallet-warning-bg, #fdf8e4);
@@ -26,12 +27,19 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 				padding-top:5px;margin-top:10px
 			}
 			.flex{flex:1}
-			.body{display:flex;align-items:top;flex-wrap:wrap}
-			.left-area{flex:4;margin-left:20px;max-width:600px;}
-			.right-area{flex:6;margin-right:20px;max-width:750px;}
-			.divider{flex:1}
+			.body{display:flex;align-items:top;flex-wrap:wrap;justify-content:center}
+			.left-area{
+				flex:4;margin:0px 20px 40px;max-width:600px;
+			}
+			.right-area{
+				flex:6;margin-left:20px;margin-right:20px;max-width:750px;
+				height:615px;display:flex;flex-direction:column;
+				min-width:600px;
+			}
+			.divider{flex:1;}
 			@media (max-width:950px){
-				.left-area,.right-area{margin:auto;min-width:none}
+				.left-area,
+				.right-area{margin:auto;min-width:100%}
 				.divider{min-width:100%;height:100px}
 			}
 			[txout] .amount{color:red}
@@ -58,16 +66,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			[row]{display:flex;flex-direction:row;justify-content:space-between;}
 			flow-qrcode{width:172px;margin-top:50px;box-shadow:var(--flow-box-shadow);}
 			.address-badge{padding:15px 0px;}
-			.address-holder{display:flex}
-			.address-holder .copy-address{cursor:pointer}
-			.address-input{
-				border:0px;-webkit-appearance:none;outline:none;margin:5px 10px 0px 0px;
-				flex:1;overflow: hidden;text-overflow:ellipsis;font-size:16px;
-				max-width:500px;
-				min-width:var(--kaspa-wallet-address-input-min-width, 460px);
-				background-color:transparent;color:var(--flow-primary-color);
-				font-family:"Exo 2";
-			}
+			.address-input{height:40px;max-width:460px}
 			.qr-code-holder{
 				display:flex;align-items:flex-end;justify-content:space-between;
 				max-height:200px;margin-bottom:32px;
@@ -84,10 +83,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 				border-radius:var(--flow-dropdown-trigger-border-radius, 3px);
 				cursor:pointer;
 			}
-			.tx-open-btn:hover{
-				background-color:var(--flow-primary-color);
-
-			}
+			.tx-open-btn:hover{background-color:var(--flow-primary-color);}
 			flow-dropdown.icon-trigger{
 				--flow-dropdown-trigger-bg:transparent;
 				--flow-dropdown-trigger-padding:5px;
@@ -103,17 +99,25 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 			}
 			fa-icon.md{--fa-icon-size:24px}
 			.recent-transactions .heading { text-align:left;}
+			.tabs-container{
+				border-top:0px;
+			}
+			.header{
+				border-bottom:2px solid var(--kaspa-wallet-tab-border-top-color, var(--flow-primary-color));
+			}
 		`];
 	}
 	constructor() {
 		super();
+		this.selectedTab = "transactions";
+		this.showBalanceTab = false;
+		let tabContentsHeight = 562;
+		this.txLimit = Math.floor( (tabContentsHeight - 70) / 72);
 	}
 	render(){
 		return html`
+			${this.renderHeaderBar(true)}
 			<div class="container">
-				<fa-icon ?hidden=${!this.isLoading} 
-					class="spinner" icon="sync" style="position:absolute"></fa-icon>
-				
 				<div class="body">
 					<div class="left-area">
 						<div class="error-message" 
@@ -122,33 +126,17 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 						${this.renderAddress()}
 						${this.renderQRAndSendBtn()}
 					</div>
-					<div class="divider"></div>
 					<div class="right-area">
-						${this.renderMenu()}
-						${this.renderTX()}
+						${super.render()}
 					</div>
 				</div>
 			</div>
 		`
 	}
-	renderMenu(){
-		if(!this.wallet)
-			return '';
-
-		return html`
-		<div class="top-menu">
-			<fa-icon class="md tx-open-btn" title="Show all transcations" icon="list"
-				@click="${this.showTxDialog}">
-			</fa-icon>
-			<flow-dropdown class="icon-trigger right-align">
-				<fa-icon class="md" icon="cog" slot="trigger"></fa-icon>
-				<flow-menu @click="${this.onMenuClick}" selector="_">
-		 			<flow-menu-item data-action="showSeeds">Get Recovery Seed</flow-menu-item>
-					<flow-menu-item data-action="showRecoverWallet">Recover Wallet From Seed</flow-menu-item>
-					<!--flow-menu-item data-action="backupWallet">Backup This Wallet</flow-menu-item-->
-				</flow-menu>
-			</flow-dropdown>
-		</div>`
+	renderHeaderBar(isDesktop=false){
+		if(isDesktop)
+			return super.renderHeaderBar();
+		return '';
 	}
 	renderAddress(){
 		if(!this.wallet)
@@ -158,7 +146,7 @@ export class KaspaWalletDesktop extends KaspaWalletUI{
 		<div class="address-badge">
 			<div>Receive Address:</div>
 			<div class="address-holder">
-				<input class="address-input" readonly value="${this.receiveAddress||''}">
+				<textarea class="address-input" readonly>${this.receiveAddress||''}</textarea>
 				<fa-icon ?hidden=${!this.receiveAddress} class="copy-address"
 					@click="${this.copyAddress}"
 					title="Copy to clipboard" icon="copy"></fa-icon>

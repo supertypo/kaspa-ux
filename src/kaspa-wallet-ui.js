@@ -277,6 +277,8 @@ export class KaspaWalletUI extends BaseElement{
 		`
 	}
 	renderAllTX(){
+		if(!this.wallet)
+			return '';
 		let {txLimit:limit=20, txs:totalItems=[], txSkip=0} = this;
 		let pagination = buildPagination(totalItems.length, txSkip, limit)
 		let items = totalItems.slice(txSkip, txSkip+limit);

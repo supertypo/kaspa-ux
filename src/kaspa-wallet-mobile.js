@@ -130,6 +130,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				text-transform:uppercase;
 			}
 			[hidden]{display:none}
+			[not-ready].tabs-container,
 			[not-ready] .tabs,
 			[not-ready] .tab-contents{display:none}
 			.br{min-width:100%;}
@@ -158,11 +159,27 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			fa-icon.offline-icon { --fa-icon-size: 24px; --fa-icon-color:#aa0000; margin: 0px 4px 0px 8px; }
 			.dots { width: 16px; display:inline-block; text-align:left;}
 			.recent-transactions .tx-rows{max-height:none;}
+			flow-expandable [slot="title"] fa-icon{
+				--fa-icon-size: var(--flow-expandable-icon-box-svg-width,24px);
+				--fa-icon-color:var(--flow-primary-color, rgba(0,151,115,1));
+			    margin-right: var(--flow-expandable-icon-box-svg-margin-right,8px);
+			}
+			flow-expandable [slot="title"].center-icon{
+				display:flex;align-items:center;justify-content:center;
+			}
+			flow-expandable[expand]:not([static-icon]) fa-icon{
+				transform:rotate(90deg);
+			}
+			flow-expandable[no-icon]{
+				--flow-expandable-icon-box-max-width:0px;
+			}
+			.developer-info{margin-top:26px;}
 		`];
 	}
 	constructor() {
 		super();
 		this.selectedTab = "balance";
+		this.showBalanceTab = true;
 		this._onTXPaginationClick = this.onTXPaginationClick.bind(this);
 	}
 	toggleFullScreen(){
@@ -176,30 +193,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	render(){
 		let {selectedTab, wallet} = this;
 		let isReady = !!wallet?.balance;
-
 		const sCls = tab=>tab==selectedTab?'selected flow-swipeable':'flow-swipeable';
-		let loadingIndicator = this.isLoading || !!this.preparingTxNotifications.size
 		return html`
-		<div class="header" ?not-ready=${!isReady}>
-			<div class="logo">
-				<img class="logo-img" @click=${this.toggleFullScreen}
-					src="${baseUrl+'/resources/images/logo.png'}" />
-			</div>
-			<div class="flex"></div>
-			<div class='header-status' ?hidden=${!this.isOfflineBadge}>
-				<div class="header-row">
-					<div>${this.isOnline?'ONLINE':'OFFLINE'}</div>
-					<div><fa-icon class="offline-icon" icon="exclamation-triangle"></fa-icon></div>
-				</div>
-			</div>
-			<fa-icon ?hidden=${!loadingIndicator} 
-				class="spinner" icon="sync"
-				style="position:absolute"></fa-icon>
-		</div>
+		${this.renderHeaderBar()}
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>
 			<flow-menu class="tabs" selected="${selectedTab}"
 				selector=".tab" valueAttr="tab" @select="${this.onTabSelect}">
-				<a class="tab" tab="balance" href="javascript:void 0">Balance</a>
+				${this.showBalanceTab? html`<a class="tab" 
+					tab="balance" href="javascript:void 0">Balance</a>`:''}
 				<a class="tab" tab="transactions" href="javascript:void 0">Transactions</a>
 				<a class="tab" tab="wallet" href="javascript:void 0">Wallet</a>
 				<a class="tab" tab="faucet" href="javascript:void 0">Faucet</a>
@@ -208,13 +209,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
 			<div class="flow-swipeable-row">
-				<div class="tab-content ${sCls('balance')}" for="balance">
+				${this.showBalanceTab? html`<div 
+					class="tab-content ${sCls('balance')}" for="balance">
 					<div class="error-message" 
 						?hidden=${!this.errorMessage}>${this.errorMessage}</div>
 					${this.renderAddressAndQr()}
 					${this.renderBalanceAndButton()}
 					${this.renderTX({hideTxBtn:true, onlyNonConfirmed:true})}
-				</div>
+				</div>`:''}
 				<div class="tab-content v-box pb-0 ${sCls('transactions')}" for="transactions">
 					${this.renderAllTX()}
 				</div>
@@ -234,16 +236,21 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
 						<input class="hidden-file-input" type="file" />
-						<div class="badge">
+						<!--div class="badge">
 							<hr style="margin:32px;"/>
-						</div>
-						<div class="badge"><span>DEVELOPER INFO</span></div>
-						<div class="badge"><span>Kaspa Core:</span> ${window.PWA_MODULES['@kaspa/core-lib']}</div>
-						<div class="badge"><span>Kaspa Wallet Framework:</span> ${window.PWA_MODULES['@kaspa/wallet']}</div>
-						<div class="badge"><span>Kaspa gRPC:</span> ${window.PWA_MODULES['@kaspa/grpc']}</div>
-						<div class="badge"><span>Kaspa gRPC Relay:</span> ${window.PWA_MODULES['@kaspa/grpc-web']}</div>
-						<div class="badge"><span>Kaspa UX:</span> ${window.PWA_MODULES['@kaspa/ux']}</div>
-						<div class="badge"><span>Flow UX:</span> ${window.PWA_MODULES['@aspectron/flow-ux']}</div>
+						</div-->
+						<flow-expandable class="developer-info" _expand no-info no-icon icon="-">
+							<div class="badge center-icon" slot="title">
+								<fa-icon icon="caret-right"></fa-icon>
+								<span>DEVELOPER INFO</span>
+							</div>
+							<div class="badge"><span>Kaspa Core:</span> ${window.PWA_MODULES['@kaspa/core-lib']}</div>
+							<div class="badge"><span>Kaspa Wallet Framework:</span> ${window.PWA_MODULES['@kaspa/wallet']}</div>
+							<div class="badge"><span>Kaspa gRPC:</span> ${window.PWA_MODULES['@kaspa/grpc']}</div>
+							<div class="badge"><span>Kaspa gRPC Relay:</span> ${window.PWA_MODULES['@kaspa/grpc-web']}</div>
+							<div class="badge"><span>Kaspa UX:</span> ${window.PWA_MODULES['@kaspa/ux']}</div>
+							<div class="badge"><span>Flow UX:</span> ${window.PWA_MODULES['@aspectron/flow-ux']}</div>
+						</flow-expandable>
 
 					</div>
 				</div>
@@ -287,6 +294,29 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						</div>
 				</div>
 			</div>
+		</div>
+		`
+	}
+	renderHeaderBar(){
+		let {wallet} = this;
+		let isReady = !!wallet?.balance;
+		let loadingIndicator = this.isLoading || !!this.preparingTxNotifications.size
+		return html`
+		<div class="header" ?not-ready=${!isReady}>
+			<div class="logo">
+				<img class="logo-img" @click=${this.toggleFullScreen}
+					src="${baseUrl+'/resources/images/logo.png'}" />
+			</div>
+			<div class="flex"></div>
+			<div class='header-status' ?hidden=${!this.isOfflineBadge}>
+				<div class="header-row">
+					<div>${this.isOnline?'ONLINE':'OFFLINE'}</div>
+					<div><fa-icon class="offline-icon" icon="exclamation-triangle"></fa-icon></div>
+				</div>
+			</div>
+			<fa-icon ?hidden=${!loadingIndicator} 
+				class="spinner" icon="sync"
+				style="position:absolute"></fa-icon>
 		</div>
 		`
 	}
