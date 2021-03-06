@@ -40,7 +40,8 @@ export class KaspaWalletUI extends BaseElement{
 			networkName:{type:String},
 			pastMedianTime:{type:Number},
 			pastMediaTimeDiff:{type:Number},
-			dots:{type:String}
+			dots:{type:String}//,
+			//UTXOIndexSupport:{type:Boolean}
 		};
 	}
 
@@ -86,6 +87,8 @@ export class KaspaWalletUI extends BaseElement{
 		this.debugscanner = window.location.href.includes("debugscanner")
 		this.preparingTxNotifications = new Map();
 		this.dots = '';
+		this.UTXOIndexSupport = true;
+		window.__walletCmp = this;
 	}
 
 	setRPCBuilder(rpcBuilder){
@@ -480,78 +483,106 @@ export class KaspaWalletUI extends BaseElement{
 		this.status = status;
 	}
 
-	async getWalletInfo(wallet){
-    	//this.uid = getUniqueId(await wallet.mnemonic);
-    	const cache = false//getLocalSetting(`cache-${this.uid}`);
-    	const {addresses} = cache||{};
-    	if (cache && (addresses?.receiveCounter !== 0 || addresses?.changeCounter !== 0)) {
-			wallet.restoreCache(cache);
-			this._isCache = true;
-	    }
-	    wallet.on('api-connect', ()=>{
-	    	this.isOnline = true;
-	    	this.refreshStats();
-	    })
-	    wallet.on('api-disconnect', ()=>{
-	    	this.isOnline = false;
-	    	this.refreshStats();
-	    })
-	    wallet.on("blue-score-changed", (e)=>{
-			this.blueScore = e.blueScore;
-
-			this.refreshStats();
-			this.txDialog?.requestUpdate()
-
-			/*
-			if(this.sync && this.sync < 99.75) {
-				status = `Syncing ${this.sync.toFixed(2)}% `;
-				if(this.eta && !isNaN(this.eta) && isFinite(this.eta)) {
-					let eta = this.eta;
-					eta = eta / 1000;
-					let sec = Math.round(eta % 60);
-					let min = Math.round(eta / 60);
-					eta = '';
-					if(sec < 10)
-						sec = '0'+sec;
-					if(min < 10) {
-						min = '0'+min;
-					}
-					this.status_eta = `${min}:${sec}`;
-					//status += eta;
-				} else 
-					this.status_eta = null;
-			}
-			else this.status_eta = null;
-			*/
-
-	    });
-	    wallet.on("balance-update", ()=>{
-	    	this.requestUpdate("balance", null);
-	    })
-	    wallet.on("new-transaction", (tx)=>{
-	    	//console.log("############ new-transaction", tx)
-	    	tx.date = GetTS(new Date(tx.ts));
-	    	this.txs.unshift(tx);
-	    	this.txs = this.txs.slice(0, 10000);
-	    	this.requestUpdate("balance", null);
-	    	if(this.txDialog)
-	    		this.txDialog.onNewTx(tx)
-	    })
-	    wallet.on("transactions", (list)=>{
-	    	//console.log("############ transactions", list.length)
-	    	list.forEach(tx=>{
-		    	tx.date = GetTS(new Date(tx.ts));
-		    	let index = this.findTxIndex(tx);
-		    	this.txs.splice(index, 0, tx);
+	getWalletInfo(wallet){
+		this.wallet = wallet;
+		return new Promise((resolve, reject)=>{
+	    	//this.uid = getUniqueId(await wallet.mnemonic);
+	    	const cache = false//getLocalSetting(`cache-${this.uid}`);
+	    	const {addresses} = cache||{};
+	    	if (cache && (addresses?.receiveCounter !== 0 || addresses?.changeCounter !== 0)) {
+				wallet.restoreCache(cache);
+				this._isCache = true;
+		    }
+		    wallet.on('api-connect', ()=>{
+		    	this.isOnline = true;
+		    	this.refreshStats();
 		    })
-	    })
-	    wallet.on("new-address", (detail)=>{
-	    	let {receive, change} = detail;
-	    	this.receiveAddress = receive;
-	    	this.changeAddress = change;
-	    })
+		    wallet.on('api-disconnect', ()=>{
+		    	this.isOnline = false;
+		    	this.refreshStats();
+		    })
+		    wallet.on("blue-score-changed", (e)=>{
+				this.blueScore = e.blueScore;
 
-	    this.wallet = wallet;
+				this.refreshStats();
+				this.txDialog?.requestUpdate()
+
+				/*
+				if(this.sync && this.sync < 99.75) {
+					status = `Syncing ${this.sync.toFixed(2)}% `;
+					if(this.eta && !isNaN(this.eta) && isFinite(this.eta)) {
+						let eta = this.eta;
+						eta = eta / 1000;
+						let sec = Math.round(eta % 60);
+						let min = Math.round(eta / 60);
+						eta = '';
+						if(sec < 10)
+							sec = '0'+sec;
+						if(min < 10) {
+							min = '0'+min;
+						}
+						this.status_eta = `${min}:${sec}`;
+						//status += eta;
+					} else 
+						this.status_eta = null;
+				}
+				else this.status_eta = null;
+				*/
+
+		    });
+		    wallet.on("balance-update", ()=>{
+		    	this.requestUpdate("balance", null);
+		    })
+		    wallet.on("new-transaction", (tx)=>{
+		    	//console.log("############ new-transaction", tx)
+		    	tx.date = GetTS(new Date(tx.ts));
+		    	this.txs.unshift(tx);
+		    	this.txs = this.txs.slice(0, 10000);
+		    	this.requestUpdate("balance", null);
+		    	if(this.txDialog)
+		    		this.txDialog.onNewTx(tx)
+		    })
+		    wallet.on("transactions", (list)=>{
+		    	//console.log("############ transactions", list.length)
+		    	list.forEach(tx=>{
+			    	tx.date = GetTS(new Date(tx.ts));
+			    	let index = this.findTxIndex(tx);
+			    	this.txs.splice(index, 0, tx);
+			    })
+		    })
+		    wallet.on("new-address", (detail)=>{
+		    	let {receive, change} = detail;
+		    	this.receiveAddress = receive;
+		    	this.changeAddress = change;
+		    })
+
+		    wallet.on("grpc-flags", (flags)=>{
+		    	console.log("grpc-flags", flags)
+		    	this.grpcFlags = flags;
+		    	this.UTXOIndexSupport = !!flags.utxoIndex;
+		    	if(!this.UTXOIndexSupport){
+		    		this.alertUTXOIndexSupportIssue()
+		    	}
+		    	resolve();
+		    })
+
+		    wallet.checkGRPCFlags();
+		})
+	}
+
+	async alertUTXOIndexSupportIssue(){
+		let title = html`<fa-icon class="big warning" 
+			icon="exclamation-triangle"></fa-icon> Attention !`;
+
+		let body = html`
+			'utxoindex' flag is missing from KAPSAD config. <br />
+			Please contact administrator <br />
+		`
+		let {btn} = await FlowDialog.alert({
+			title, body, cls:'with-icon big warning'
+		})
+		//if(btn != 'next')
+		//	return
 	}
 
 	findTxIndex(transaction){
@@ -575,7 +606,8 @@ export class KaspaWalletUI extends BaseElement{
 				this.isLoading = false;
 			}else{*/
 				this.log("calling loadData-> wallet.addressDiscovery")
-				await this.wallet.sync();
+				//if(this.grpcFlags.utxoIndex)
+					await this.wallet.sync();
 				//this.saveCache();
 				this.isLoading = false;
 			/*}*/
