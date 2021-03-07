@@ -403,7 +403,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	}
 
 	onTXPaginationClick(e){
-		let skip = e.target.closest("[data-skip]").dataset.skip;
+		let skip = e.target.closest("[data-skip]")?.dataset.skip;
 		//console.log("skip", skip, e.target)
 		if(skip === undefined)
 			return
