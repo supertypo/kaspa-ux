@@ -577,8 +577,8 @@ export class KaspaWalletUI extends BaseElement{
 			icon="exclamation-triangle"></fa-icon> Attention !`;
 
 		let body = html`
-			'utxoindex' flag is missing from KASPAD config. <br />
-			Please contact administrator <br />
+			'utxoindex' flag is missing from KASPAD config.<br />
+			Please inform the wallet administrator.<br />
 		`
 		let {btn} = await FlowDialog.alert({
 			title, body, cls:'with-icon big warning'
