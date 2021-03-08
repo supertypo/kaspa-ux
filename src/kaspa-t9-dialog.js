@@ -15,8 +15,8 @@ class KaspaT9Dialog extends KaspaDialog{
 	static get styles(){
 		return [KaspaDialog.styles, css`
 			.container{
-				border-radius:0px;width:100%;height:100%;border:0px;
-				padding:0px;max-height:none;
+				width:100%;height:100%;padding:0px;
+				max-height:var(--kaspa-dialog-container-max-height, 600px);
 			}
 			flow-t9{width:215px;margin:auto;display:block;}
 			.buttons{

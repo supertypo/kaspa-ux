@@ -52,7 +52,7 @@ export class KaspaDialog extends BaseElement{
 				background-color:var(--flow-background-color, #F00);
 				z-index:1;
 				border:var(--kaspa-dialog-container-border, 2px solid var(--flow-primary-color));
-				border-radius:3px;
+				border-radius:var(--kaspa-dialog-container-border-radius, 3px);
 				max-width:var(--kaspa-dialog-container-max-width, 700px);
 				max-height:var(--kaspa-dialog-container-max-height, 300px);
 				margin:var(--kaspa-dialog-container-margin, 5px auto);
