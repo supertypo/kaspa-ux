@@ -94,7 +94,7 @@ class KaspaSendDialog extends KaspaDialog{
 	renderButtons(){
 		const estimating = this.estimateTxSignal && !this.estimateTxSignal.isResolved;
 		const estimateFee = this.estimate?.fee;
-		console.log("renderButtons", this.estimate)
+		//console.log("renderButtons:estimate", this.estimate)
 		return html`
 			${estimating?html`<fa-icon 
 				class="spinner" icon="sync"
@@ -188,7 +188,7 @@ class KaspaSendDialog extends KaspaDialog{
 
     	console.log("formData:", formData)
     	let {error, data:estimate} = await this.wallet.estimateTx(formData);
-    	console.log("estimateTx:error:", error, "estimate:", estimate)
+    	//console.log("estimateTx:error:", error, "estimate:", estimate)
     	this.estimateError = error;
     	if(estimate){
     		this.estimate = estimate;
@@ -214,7 +214,7 @@ class KaspaSendDialog extends KaspaDialog{
     		return
     	console.log("formData", formData)
     	askForPassword({confirmBtnText:"CONFIRM SEND", pass}, ({btn, password})=>{
-    		console.log("btn, password", btn, password)
+    		//console.log("btn, password", btn, password)
     		if(btn!="confirm")
     			return
 			formData.password = password;
