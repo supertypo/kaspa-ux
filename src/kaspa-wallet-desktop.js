@@ -57,7 +57,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				*/
 			}
 			.balance{display:flex;flex-direction:column;padding:5px;}
-       		.value{font-family : "Exo 2"; font-size: 36px; margin-top: 4px;}
+       		.value{font-family: "Exo 2"; font-size: 36px; margin-top: 4px;}
 		 	.value-pending{
 		 		font-family : "Exo 2"; font-size: 20px; margin-top: 4px;
 		 	} 
@@ -71,13 +71,8 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				display:flex;align-items:flex-end;justify-content:space-between;
 				max-height:200px;margin-bottom:32px;
 			}
-			.buttons-holder {
-				display:flex;
-			}
-			.status{
-				display:flex;
-				margin-top:10px;
-			}
+			.buttons-holder {display:flex;}
+			.status{display:flex;margin-top:10px;}
 			.tx-open-btn{
 				margin:0px 10px;padding:5px;
 				border-radius:var(--flow-dropdown-trigger-border-radius, 3px);
@@ -98,10 +93,12 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				background-color:var(--flow-background-color, #FFF);
 			}
 			fa-icon.md{--fa-icon-size:24px}
-			.recent-transactions .heading { text-align:left;}
-			.tabs-container{
-				border-top:0px;
+			.recent-transactions .heading{
+				text-align:left;
+				font-size:initial;
+				margin:5px 0px 10px;
 			}
+			.tabs-container{border-top:0px;}
 			.header{
 				border-bottom:2px solid var(--kaspa-wallet-tab-border-top-color, var(--flow-primary-color));
 			}
@@ -138,6 +135,13 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 			return super.renderHeaderBar();
 		return '';
 	}
+	/*
+	renderAllTX(){
+		return html`
+		${this.renderTX({hideTxBtn:true, onlyNonConfirmed:true})}
+		${super.renderTX()}`
+	}
+	*/
 	renderAddress(){
 		if(!this.wallet)
 			return '';
@@ -186,6 +190,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 					<flow-btn primary @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
 				</div>
 			</div>
+			${this.renderTX({hideTxBtn:true, onlyNonConfirmed:true})}
 			<div class="status">
 				Wallet Status: ${this.status||'Offline'}<br/>
 				${

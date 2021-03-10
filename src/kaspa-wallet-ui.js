@@ -5,7 +5,7 @@ import {
 export * from './flow-ux.js'
 import {
 	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
-	getLocalWallet, setLocalWallet, baseUrl, debug
+	getLocalWallet, setLocalWallet, baseUrl, debug, MAX_UTXOS_THRESHOLD_COMPOUND
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
@@ -197,7 +197,9 @@ export class KaspaWalletUI extends BaseElement{
 			<div class="tx-notifications">
 				${notifications.map(n=>{
 					return html`<div class="tx-notification">
-						Preparing transaction for ${this.formatKAS(n.amount)} KAS ....
+						${n.compoundUTXOs?
+							`Compounding UTXOs...`:
+							`Preparing transaction for ${this.formatKAS(n.amount)} KAS ....`}
 					</div>`
 				})}
 				
@@ -485,6 +487,42 @@ export class KaspaWalletUI extends BaseElement{
 		this.status = status;
 	}
 
+	async onWalletReady({confirmedUtxosCount}){
+		if(confirmedUtxosCount > MAX_UTXOS_THRESHOLD_COMPOUND){
+			let body = html`
+				This wallet has too many transactions<br >
+				would you like to compound by re-sending funds to yourself?
+			`;
+			let {btn} = await FlowDialog.alert({
+				title:"Too many transactions", body, cls:'',
+				btns:['Close', 'Yes Compound:primary:compound']
+			})
+
+			if(btn=='compound'){
+				this.compoundUTXOs();
+			}
+    	}
+			
+	}
+
+	async compoundUTXOs(){
+		const uid = UID();
+		this.addPreparingTransactionNotification({uid, compoundUTXOs:true})
+
+		let response = await this.wallet.compoundUTXOs()
+		.catch(err=>{
+			console.log("compoundUTXOs error", err)
+			let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
+			FlowDialog.alert('Error', error)
+		})
+		if(response)
+			console.log("compoundUTXOs response", response)
+
+		this.removePreparingTransactionNotification({uid});
+	}
+
+
+
 	getWalletInfo(wallet){
 		this.wallet = wallet;
 		return new Promise((resolve, reject)=>{
@@ -495,6 +533,9 @@ export class KaspaWalletUI extends BaseElement{
 				wallet.restoreCache(cache);
 				this._isCache = true;
 		    }
+		    wallet.on("ready", (args)=>{
+		    	this.onWalletReady(args)
+		    })
 		    wallet.on('api-connect', ()=>{
 		    	this.isOnline = true;
 		    	this.refreshStats();
@@ -830,10 +871,8 @@ export class KaspaWalletUI extends BaseElement{
 		return this.wallet.receiveAddress;
 	}
 
-	addPreparingTransactionNotification({uid, amount, address, note}){
-		this.preparingTxNotifications.set(uid, {
-			amount, address, note
-		});
+	addPreparingTransactionNotification(args){
+		this.preparingTxNotifications.set(args.uid, args);
 	}
 
 	removePreparingTransactionNotification({uid}){

@@ -6,12 +6,14 @@ window.isMobile = isMobile;
 import {helper, Storage} from '@kaspa/wallet-worker';
 export const {Deferred, KAS, Decimal} = helper;
 const storage = new Storage({logLevel:'debug'});
-let {baseUrl, debug} = window.KaspaConfig || {};
+let {baseUrl, debug, MAX_UTXOS_THRESHOLD=1000} = window.KaspaConfig || {};
 if(!baseUrl){
 	baseUrl = (new URL("../", import.meta.url)).href;
 	debug && console.log("KaspaUX: baseUrl", baseUrl)
 }
 export {baseUrl, debug, isMobile}
+
+export const MAX_UTXOS_THRESHOLD_COMPOUND = MAX_UTXOS_THRESHOLD;
 
 /*
 const {Wallet, initKaspaFramework, Storage} = require("kaspa-wallet-worker");
