@@ -88,6 +88,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.preparingTxNotifications = new Map();
 		this.dots = '';
 		this.UTXOIndexSupport = true;
+		this.recentTransactionsHeading = "Recent Transactions";
 		window.__walletCmp = this;
 	}
 
@@ -192,7 +193,7 @@ export class KaspaWalletUI extends BaseElement{
 		return html`
 		<div class="recent-transactions">
 			<div class="heading">
-				Recent transactions
+				${this.recentTransactionsHeading}
 			</div>
 			<div class="tx-notifications">
 				${notifications.map(n=>{

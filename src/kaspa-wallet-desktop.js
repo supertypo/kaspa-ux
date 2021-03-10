@@ -109,6 +109,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		this.selectedTab = "transactions";
 		this.showBalanceTab = false;
 		let tabContentsHeight = 562;
+		this.recentTransactionsHeading = "Transactions under process";
 		this.txLimit = Math.floor( (tabContentsHeight - 70) / 72);
 	}
 	render(){
@@ -135,13 +136,25 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 			return super.renderHeaderBar();
 		return '';
 	}
-	/*
 	renderAllTX(){
 		return html`
-		${this.renderTX({hideTxBtn:true, onlyNonConfirmed:true})}
-		${super.renderTX()}`
+		${this.renderTxNotifications()}
+		${super.renderAllTX()}`
 	}
-	*/
+	renderTxNotifications(){
+		let notifications = [...this.preparingTxNotifications.values()];
+		if(!notifications.length)
+			return '';
+		return html`<div class="tx-notifications">
+				${notifications.map(n=>{
+					return html`<div class="tx-notification">
+						${n.compoundUTXOs?
+							`Compounding UTXOs...`:
+							`Preparing transaction for ${this.formatKAS(n.amount)} KAS ....`}
+					</div>`
+				})}
+			</div>`;
+	}
 	renderAddress(){
 		if(!this.wallet)
 			return '';
@@ -190,7 +203,6 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 					<flow-btn primary @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
 				</div>
 			</div>
-			${this.renderTX({hideTxBtn:true, onlyNonConfirmed:true})}
 			<div class="status">
 				Wallet Status: ${this.status||'Offline'}<br/>
 				${

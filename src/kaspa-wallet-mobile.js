@@ -228,6 +228,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
 						<flow-btn class="center-btn primary v-margin"
+							@click="${this.compoundUTXOs}">Compound Transactions</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
 							@click="${this.showSeeds}">Backup Seed</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
