@@ -233,7 +233,7 @@ export class KaspaWalletUI extends BaseElement{
 						<div class="tx-body">
 							${tx.note}
 							<div class="tx-id">${tx.id}</div>
-							<div class="tx-address">${tx.address}</div>
+							<div class="tx-address">${(tx.myAddress?'THIS WALLET => ':'')+tx.address}</div>
 						</div>
 					</flow-expandable>
 				`
@@ -273,7 +273,7 @@ export class KaspaWalletUI extends BaseElement{
 						<div class="tx-amount">${tx.in?'':'-'}${KAS(tx.amount)} KAS</div>
 						<div class="br tx-note">${tx.note}</div>
 						<div class="br tx-id">${tx.id.split(":")[0]}</div>
-						<div class="tx-address">${tx.address}</div>
+						<div class="tx-address">${(tx.myAddress?'THIS WALLET => ':'')+tx.address}</div>
 					</div>`
 				})}
 			</div>
