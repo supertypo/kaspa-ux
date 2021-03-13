@@ -434,7 +434,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			drag:false,
 			onSwipe:({index, element})=>{
 				let tab = element?.getAttribute("for");
-				console.log("onSwipe:", {index, element, tab})
+				//console.log("onSwipe:", {index, element, tab})
 				if(!tab)
 					return
 				this.selectTab(tab);
@@ -448,11 +448,11 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	selectTab(tab){
 		if(this.selectedTab == tab)
 			return
-		console.log("selectTab", tab)
+		//console.log("selectTab", tab)
 		this.selectedTab = tab;
 		this.requestUpdate("selectedTab", null)
 		let tabEl = this.renderRoot.querySelector(`.tab[tab='${tab}']`);
-		console.log("selectTab", tab, tabEl)
+		//console.log("selectTab", tab, tabEl)
 		if(!tabEl)
 			return
 		tabEl.scrollIntoView();

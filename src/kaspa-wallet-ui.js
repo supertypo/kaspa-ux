@@ -124,7 +124,7 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	initDaemonRPC() {
-		if(this.networkStatusUpdates)
+		if(this.networkStatusUpdates || !window.flow?.app?.rpc?.subscribe)
 			return
 		const { rpc } = flow.app;
 		this.networkStatusUpdates = rpc.subscribe(`network-status`);
@@ -687,11 +687,13 @@ export class KaspaWalletUI extends BaseElement{
 		})*/
 		
 		console.log("connectedCallback1", openDialog)
+		const {workerCorePath} = window.KaspaConfig||{}
+		console.log("workerCorePath", workerCorePath)
 		initKaspaFramework({
-			workerPath: "/kaspa-wallet-worker/worker.js?ident="+(window.kaspaConfig?.ident||"")
+			workerPath: workerCorePath||"/kaspa-wallet-worker/worker.js?ident="+(window.KaspaConfig?.ident||"")
 		}).then(()=>{
-			console.log("connectedCallback2")
 			let encryptedMnemonic = getLocalWallet()?.mnemonic
+			console.log("connectedCallback2")
 			this.initWallet(encryptedMnemonic)
 		})
 	}
@@ -740,7 +742,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.initHelpers();
 
 		let {mode} = dialog;
-		console.log("$$$$$$$ mode", mode)
+		console.log("$$$$$$$ mode", mode, encryptedMnemonic)
 		if(mode =="open"){
 			const wallet = await Wallet.import(password, encryptedMnemonic, {network, rpc})
 			.catch(error=>{
@@ -954,7 +956,8 @@ export class KaspaWalletUI extends BaseElement{
 
 
 	async updateFaucetBalance() {
-
+		if(!window.flow?.app?.rpc?.request)
+			return
 		flow.app.rpc.request('faucet-available', { address : this.receiveAddress })
 		.then((resp) => {
 			console.log(resp);
@@ -971,6 +974,8 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async getKaspaFromFaucet(amount) {
+		if(!window.flow?.app?.rpc?.request)
+			return
 		flow.app.rpc.request('faucet-available', { address : this.receiveAddress, amount })
 		.then((resp) => {
 			console.log(resp);

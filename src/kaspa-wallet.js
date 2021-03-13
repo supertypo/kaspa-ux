@@ -2,8 +2,8 @@ export * from './flow-ux.js';
 
 import {dpc} from './flow-ux.js';
 
-import {KaspaWalletDesktop} from './kaspa-wallet-desktop';
-import {KaspaWalletMobile, isMobile} from './kaspa-wallet-mobile';
+import {KaspaWalletDesktop} from './kaspa-wallet-desktop.js';
+import {KaspaWalletMobile, isMobile} from './kaspa-wallet-mobile.js';
 
 if(isMobile)
 	document.body.classList.add('is-mobile');
