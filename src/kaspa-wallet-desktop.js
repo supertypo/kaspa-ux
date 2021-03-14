@@ -220,7 +220,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				<div class="buttons-holder">
 					<flow-btn primary @click="${this.showSendDialog}">SEND</flow-btn>
 					<div style="flex:1;width:20px;"></div>
-					<flow-btn primary @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
+					<flow-btn primary ?hidden=${this.hideQRScanner} @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
 				</div>
 			</div>
 			<div class="status">

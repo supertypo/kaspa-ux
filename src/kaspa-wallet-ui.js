@@ -42,7 +42,8 @@ export class KaspaWalletUI extends BaseElement{
 			pastMediaTimeDiff:{type:Number},
 			dots:{type:String},
 			hideFaucet:{type:Boolean},
-			hideNetwork:{type:Boolean}
+			hideNetwork:{type:Boolean},
+			hideQRScanner:{type:Boolean}
 			//UTXOIndexSupport:{type:Boolean}
 		};
 	}
