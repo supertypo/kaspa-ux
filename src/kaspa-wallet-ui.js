@@ -229,7 +229,7 @@ export class KaspaWalletUI extends BaseElement{
 								${tx.in?'':'-'}${this.formatKAS(tx.amount)} KAS
 							</div>
 						</div>
-						${cfm<101? html`<flow-progressbar class="tx-progressbar" 
+						${ 0<=cfm&cfm<101? html`<flow-progressbar class="tx-progressbar" 
 							style="--flow-progressbar-color:${color}"
 							value="${p}" text="${cfmP||''}"></flow-progressbar>`:''
 						}
@@ -266,7 +266,7 @@ export class KaspaWalletUI extends BaseElement{
 					<div class="tx-row" ?txin=${tx.in} ?txout=${!tx.in}>
 						<fa-icon class="tx-icon" icon="${tx.in?'sign-in':'sign-out'}"></fa-icon>
 						${
-							cfm<101? html`
+							0<=cfm&cfm<101? html`
 							<flow-progressbar class="tx-progressbar" 
 								style="--flow-progressbar-color:${color}"
 								value="${p}" text="${cfmP||''}"></flow-progressbar>
