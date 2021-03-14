@@ -43,7 +43,8 @@ export class KaspaWalletUI extends BaseElement{
 			dots:{type:String},
 			hideFaucet:{type:Boolean},
 			hideNetwork:{type:Boolean},
-			hideQRScanner:{type:Boolean}
+			hideQRScanner:{type:Boolean},
+			hideOpenWalletLogo:{type:Boolean}
 			//UTXOIndexSupport:{type:Boolean}
 		};
 	}
@@ -669,6 +670,7 @@ export class KaspaWalletUI extends BaseElement{
 		super.connectedCallback();
 		let mobileSuffix = isMobile?'-mobile':'';
 		let openDialog = document.createElement('kaspa-open-dialog');
+		openDialog.hideLogo = !!this.hideOpenWalletLogo;
 		this.parentNode.insertBefore(openDialog, this.nextSibling)
 		this.sendDialog = document.createElement("kaspa-send-dialog"+mobileSuffix);
 		this.parentNode.appendChild(this.sendDialog);

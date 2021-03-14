@@ -114,6 +114,10 @@ flow-add-to-home{
 	position:fixed;bottom:5px;left:5px;right:5px;z-index:1000;
 }
 
+kaspa-open-dialog[mode="open"][hidelogo]{
+	--kaspa-dialog-container-max-height:350px;
+}
+
 body.is-mobile{
 	--kaspa-dialog-position:fixed;
 	--kaspa-dialog-container-height:100%;

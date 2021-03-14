@@ -7,7 +7,8 @@ class KaspaOpenDialog extends KaspaDialog{
 		return {
 			mode:{type:String, reflect:true},
 			inputType:{type:String},
-			isFresh:{type:Boolean, reflect:true}
+			isFresh:{type:Boolean, reflect:true},
+			hideLogo:{type:Boolean, reflect:true}
 		};
 	}
 
@@ -109,7 +110,10 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderOpenUI(){
 		let icon = this.inputType=="password"?'eye':'eye-slash';
 		return html`
-			<div><img class="big-logo" src="/resources/images/kaspa.png" /></div>
+			${this.hideLogo?'': html`
+			<div>
+				<img class="big-logo" src="/resources/images/kaspa.png" />
+			</div>`}
 			<div class="sub-heading">Unlock the wallet with your password:</div>
 			<flow-input class="password full-width" outer-border value="${pass}"
 				type="${this.inputType}" placeholder="Password"
