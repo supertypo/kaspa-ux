@@ -1,9 +1,9 @@
 import {
 	html, css, FlowFormat, KaspaWalletUI, dpc,
 	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
-	swipeableStyle, FlowSwipeable, isMobile
+	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent
 } from './kaspa-wallet-ui.js';
-export {isMobile};
+export {isMobile, dontInitiatedComponent};
 export class KaspaWalletMobile extends KaspaWalletUI{
 
 	static get properties() {

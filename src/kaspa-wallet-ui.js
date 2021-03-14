@@ -289,7 +289,6 @@ export class KaspaWalletUI extends BaseElement{
 		let {txLimit:limit=20, txs:totalItems=[], txSkip=0} = this;
 		let pagination = buildPagination(totalItems.length, txSkip, limit)
 		let items = totalItems.slice(txSkip, txSkip+limit);
-		console.log("renderAllTX:items", limit)
 		return html`
 			${this._renderAllTX({skip:txSkip, items})}
 			${renderPagination(pagination, this._onTXPaginationClick)}
@@ -959,11 +958,14 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 
+	makeFaucetRequest(subject, args){
+		if(!window.flow?.app?.rpc?.request)
+			return Promise.reject("flow.app.rpc issue")
+		return flow.app.rpc.request(subject, args)
+	}
 
 	async updateFaucetBalance() {
-		if(!window.flow?.app?.rpc?.request)
-			return
-		flow.app.rpc.request('faucet-available', { address : this.receiveAddress })
+		this.makeFaucetRequest('faucet-available', {address : this.receiveAddress})
 		.then((resp) => {
 			console.log(resp);
 			const { available, period, ip } = resp;
@@ -979,9 +981,10 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async getKaspaFromFaucet(amount) {
-		if(!window.flow?.app?.rpc?.request)
-			return
-		flow.app.rpc.request('faucet-available', { address : this.receiveAddress, amount })
+		this.makeFaucetRequest('faucet-request', {
+			address : this.receiveAddress,
+			amount: formatForMachine(amount)
+		})
 		.then((resp) => {
 			console.log(resp);
 			const { available, period, ip } = resp;
@@ -1012,19 +1015,7 @@ export class KaspaWalletUI extends BaseElement{
 			
 			dialog.hide();
 
-			flow.app.rpc.request('faucet-request', { address : this.receiveAddress, amount })
-			.then((resp) => {
-				console.log(resp);
-				const { available, period, ip } = resp;
-				this.faucetStatus = null;
-				this.faucetFundsAvailable = available;
-				this.faucetPeriod = period;
-				this.ip = ip;
-
-			})
-			.catch(ex => {
-				console.log('faucet error:', ex);
-			})
+			this.getKaspaFromFaucet(amount)
 
 		})
 	}
