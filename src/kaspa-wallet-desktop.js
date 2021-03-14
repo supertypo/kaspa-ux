@@ -100,7 +100,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 			}
 			.tabs-container{border-top:0px;}
 			.header{
-				border-bottom:2px solid var(--kaspa-wallet-tab-border-top-color, var(--flow-primary-color));
+				border-bottom:var(--kaspa-wallet-header-border-bottom, --2px solid var(--kaspa-wallet-tab-border-top-color, var(--flow-primary-color)));
 			}
 		`];
 	}

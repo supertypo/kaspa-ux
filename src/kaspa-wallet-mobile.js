@@ -22,19 +22,25 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				--k-pagination-border-color:var(--flow-primary-color);
 			}
 			.header{
-				display:flex;align-items:center;padding:5px 10px;
+				display:flex;align-items:center;min-height:28px;
+				padding:var(--kaspa-wallet-header-padding, 5px 10px);
+				margin:var(--kaspa-wallet-header-margin, 0px);
 			}
 
 			.pagination a{
 				border: var(--flow-btn-border, 2px solid var(--flow-border-color, var(--flow-primary-color, rgba(0,151,115,1))));
 				border-radius:var(--flow-btn-radius, 8px);
 				border-width:var(--flow-btn-border-width, 2px);
+				padding:var(--flow-page-btn-padding, var(--flow-btn-padding, 5px))
 			}
 			.pagination-box{
 				padding:var(--kaspa-pagination-box-padding, 10px 5px;);
 			}
 
-			.logo{width:30px;height:30px;/*background-color:#DDD*/}
+			.logo{
+				width:30px;height:30px;/*background-color:#DDD*/
+				display:var(--kaspa-wallet-header-logo-diaplay, initial);
+			}
 			.logo-img{max-width:100%;max-height:100%;}
 			fa-icon.spinner{position:relative !important;margin: 0px 10px;}
 			.error-message{color:#F00;margin:10px 0px;}
@@ -45,7 +51,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			}
 			.tabs{
 				display:flex;align-items:stretch;padding:0px;
-				width:fit-content;
+				width:fit-content;margin:0px auto;
 			}
 			.tabs .tab{
 				display:flex;align-items:center;justify-content:center;
