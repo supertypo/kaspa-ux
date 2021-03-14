@@ -11,10 +11,13 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 	static get styles(){
 		return [KaspaWalletMobile.styles, css`
 			:host{overflow:hidden}
-			.container{padding:15px;position:relative;flex:1;overflow:auto}
+			.container{
+				padding:var(--kaspa-wallet-container-padding, 15px);
+				position:relative;flex:1;overflow:auto
+			}
 			.wallet-warning{
 				max-width:640px;margin:5px auto;padding:10px;text-align:center;
-				background-color:var(--kdx-wallet-warning-bg, #fdf8e4);
+				background-color:var(--kaspa-wallet-warning-bg, #fdf8e4);
 			}
 			.heading{margin:5px 15px 25px;font-size:1.5rem;}
 			flow-btn{vertical-align:bottom;margin:5px;}
@@ -33,7 +36,8 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 			}
 			.right-area{
 				flex:6;margin-left:20px;margin-right:20px;max-width:750px;
-				height:615px;display:flex;flex-direction:column;
+				height:var(--kaspa-wallet-right-area-height, calc(100vh - 122px));
+				display:flex;flex-direction:column;
 				min-width:600px;
 			}
 			.divider{flex:1;}
@@ -108,9 +112,25 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		super();
 		this.selectedTab = "transactions";
 		this.showBalanceTab = false;
-		let tabContentsHeight = 562;
 		this.recentTransactionsHeading = "Transactions under process";
-		this.txLimit = Math.floor( (tabContentsHeight - 70) / 72);
+		this.updateTXLimit();
+		this.addEventListener("new-wallet", ()=>{
+			console.log("new-wallet")
+			this.updateTXLimit();
+		})
+	}
+	updateTXLimit(){
+		let height = this.getBoundingClientRect().height - 10;
+		let h = Math.max(500, height);
+		if(this.parentNode && this.parentNode.getBoundingClientRect){
+			height = this.parentNode.getBoundingClientRect().height - 10;
+			h = Math.max(h, height);
+		}
+		this.txLimit = Math.floor( h / 72);
+	}
+	connectedCallback(){
+		super.connectedCallback();
+		this.updateTXLimit();
 	}
 	render(){
 		return html`

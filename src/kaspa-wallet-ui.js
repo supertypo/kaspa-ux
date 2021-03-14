@@ -40,7 +40,9 @@ export class KaspaWalletUI extends BaseElement{
 			networkName:{type:String},
 			pastMedianTime:{type:Number},
 			pastMediaTimeDiff:{type:Number},
-			dots:{type:String}//,
+			dots:{type:String},
+			hideFaucet:{type:Boolean},
+			hideNetwork:{type:Boolean}
 			//UTXOIndexSupport:{type:Boolean}
 		};
 	}
@@ -285,7 +287,7 @@ export class KaspaWalletUI extends BaseElement{
 		let {txLimit:limit=20, txs:totalItems=[], txSkip=0} = this;
 		let pagination = buildPagination(totalItems.length, txSkip, limit)
 		let items = totalItems.slice(txSkip, txSkip+limit);
-		//console.log("renderTX:items", items)
+		console.log("renderAllTX:items", limit)
 		return html`
 			${this._renderAllTX({skip:txSkip, items})}
 			${renderPagination(pagination, this._onTXPaginationClick)}

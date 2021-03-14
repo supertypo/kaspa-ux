@@ -209,8 +209,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					tab="balance" href="javascript:void 0">Balance</a>`:''}
 				<a class="tab" tab="transactions" href="javascript:void 0">Transactions</a>
 				<a class="tab" tab="wallet" href="javascript:void 0">Wallet</a>
-				<a class="tab" tab="faucet" href="javascript:void 0">Faucet</a>
-				<a class="tab" tab="network" href="javascript:void 0">Network</a>
+				${this.hideFaucet? '': html`<a class="tab"
+					tab="faucet" href="javascript:void 0">Faucet</a>`}
+				${this.hideNetwork? '': html`<a class="tab"
+					tab="network" href="javascript:void 0">Network</a>`}
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
@@ -262,6 +264,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 
 					</div>
 				</div>
+				${this.hideFaucet? '': html`
 				<div class="tab-content ${sCls('faucet')}" for="faucet">
 					${this.faucetStatus ? this.faucetStatus : html`
 
@@ -279,11 +282,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						</div>
 
 					`}
-
-
-				</div>
+				</div>`}
+				${this.hideNetwork? '': html`
 				<div class="tab-content ${sCls('network')}" for="network">
-
 					<div class='network-ux'>
 						<div class='caption'>Network Status</div>
 						${!this.networkName ? html`<div>OFFLINE</div>` : html`
@@ -300,7 +301,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							</div>
 						`}
 						</div>
-				</div>
+				</div>`}
 			</div>
 		</div>
 		`
