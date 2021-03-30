@@ -43,6 +43,7 @@ export class KaspaWalletUI extends BaseElement{
 			dots:{type:String},
 			hideFaucet:{type:Boolean},
 			hideNetwork:{type:Boolean},
+			hideDebug:{type:Boolean},
 			hideQRScanner:{type:Boolean},
 			hideOpenWalletLogo:{type:Boolean}
 			//UTXOIndexSupport:{type:Boolean}
@@ -93,6 +94,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.dots = '';
 		this.UTXOIndexSupport = true;
 		this.recentTransactionsHeading = "Recent Transactions";
+		this.walletDebugInfo = {};
 		window.__walletCmp = this;
 	}
 
@@ -579,6 +581,10 @@ export class KaspaWalletUI extends BaseElement{
 		    });
 		    wallet.on("balance-update", ()=>{
 		    	this.requestUpdate("balance", null);
+		    })
+		    wallet.on("debug-info", ({debugInfo})=>{
+		    	this.walletDebugInfo = {...this.walletDebugInfo, ...debugInfo}
+		    	this.requestUpdate("walletDebugInfo", null);
 		    })
 		    wallet.on("new-transaction", (tx)=>{
 		    	//console.log("############ new-transaction", tx)
