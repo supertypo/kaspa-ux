@@ -514,17 +514,19 @@ export class KaspaWalletUI extends BaseElement{
 	async compoundUTXOs(){
 		const uid = UID();
 		this.addPreparingTransactionNotification({uid, compoundUTXOs:true})
+		this.requestUpdate("preparingTxNotifications")
+		dpc(500, async()=>{
+			let response = await this.wallet.compoundUTXOs()
+			.catch(err=>{
+				console.log("compoundUTXOs error", err)
+				let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
+				FlowDialog.alert('Error', error)
+			})
+			if(response)
+				console.log("compoundUTXOs response", response)
 
-		let response = await this.wallet.compoundUTXOs()
-		.catch(err=>{
-			console.log("compoundUTXOs error", err)
-			let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
-			FlowDialog.alert('Error', error)
+			this.removePreparingTransactionNotification({uid});
 		})
-		if(response)
-			console.log("compoundUTXOs response", response)
-
-		this.removePreparingTransactionNotification({uid});
 	}
 
 
