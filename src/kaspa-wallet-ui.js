@@ -521,7 +521,8 @@ export class KaspaWalletUI extends BaseElement{
 			.catch(err=>{
 				console.log("compoundUTXOs error", err)
 				let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
-				FlowDialog.alert('Error', error)
+				if(!error.includes("Amount is expected"))
+					FlowDialog.alert('Error', error)
 			})
 			if(response)
 				console.log("compoundUTXOs response", response)
