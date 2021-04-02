@@ -43,6 +43,7 @@ export class KaspaWalletUI extends BaseElement{
 			dots:{type:String},
 			hideFaucet:{type:Boolean},
 			hideNetwork:{type:Boolean},
+			hideDebug:{type:Boolean},
 			hideQRScanner:{type:Boolean},
 			hideOpenWalletLogo:{type:Boolean}
 			//UTXOIndexSupport:{type:Boolean}
@@ -93,6 +94,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.dots = '';
 		this.UTXOIndexSupport = true;
 		this.recentTransactionsHeading = "Recent Transactions";
+		this.walletDebugInfo = {};
 		window.__walletCmp = this;
 	}
 
@@ -512,17 +514,19 @@ export class KaspaWalletUI extends BaseElement{
 	async compoundUTXOs(){
 		const uid = UID();
 		this.addPreparingTransactionNotification({uid, compoundUTXOs:true})
+		this.requestUpdate("preparingTxNotifications")
+		dpc(500, async()=>{
+			let response = await this.wallet.compoundUTXOs()
+			.catch(err=>{
+				console.log("compoundUTXOs error", err)
+				let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
+				FlowDialog.alert('Error', error)
+			})
+			if(response)
+				console.log("compoundUTXOs response", response)
 
-		let response = await this.wallet.compoundUTXOs()
-		.catch(err=>{
-			console.log("compoundUTXOs error", err)
-			let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
-			FlowDialog.alert('Error', error)
+			this.removePreparingTransactionNotification({uid});
 		})
-		if(response)
-			console.log("compoundUTXOs response", response)
-
-		this.removePreparingTransactionNotification({uid});
 	}
 
 
@@ -579,6 +583,10 @@ export class KaspaWalletUI extends BaseElement{
 		    });
 		    wallet.on("balance-update", ()=>{
 		    	this.requestUpdate("balance", null);
+		    })
+		    wallet.on("debug-info", ({debugInfo})=>{
+		    	this.walletDebugInfo = {...this.walletDebugInfo, ...debugInfo}
+		    	this.requestUpdate("walletDebugInfo", null);
 		    })
 		    wallet.on("new-transaction", (tx)=>{
 		    	//console.log("############ new-transaction", tx)

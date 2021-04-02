@@ -152,12 +152,16 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			.faucet-ux > flow-btn {margin: 8px;}
 			.faucet-ux .margin {margin: 24px;}
 			.faucet-ux .margin-bottom {margin-bottom: 24px;}
-			.network-ux {display:flex;flex-direction:column;align-items:center;}
-			.network-ux .caption {margin-bottom: 15px;text-transform: uppercase;}
-			.network-ux table tr td { padding: 8px 4px; }
-			.network-ux table tr td:nth-child(2) { min-width:150px; }
+			.network-ux,
+			.info-ux{display:flex;flex-direction:column;align-items:center;}
+			.network-ux .caption,
+			.info-ux .caption{margin-bottom: 15px;text-transform: uppercase;}
+			.network-ux table tr td,
+			.info-ux table tr td{ padding: 8px 4px; }
+			.network-ux table tr td:nth-child(2),
+			.info-ux table tr td:nth-child(2){ min-width:150px; }
 
-			.wallet-ux, .faucet-ux, .network-ux {margin: 24px 15px;}
+			.wallet-ux, .faucet-ux, .network-ux,.info-ux{margin: 24px 15px;}
 			.recent-transactions>.heading{text-align:center}
 			.tx-list{flex: 1 1 0%;height:100px;overflow-y:auto;}
 			.header .header{margin-left:10px;}
@@ -200,6 +204,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let {selectedTab, wallet} = this;
 		let isReady = !!wallet?.balance;
 		const sCls = tab=>tab==selectedTab?'selected flow-swipeable':'flow-swipeable';
+		const {inUseUTXOs={satoshis:0, count:0}} = this.walletDebugInfo;
 		return html`
 		${this.renderHeaderBar()}
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>
@@ -213,6 +218,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					tab="faucet" href="javascript:void 0">Faucet</a>`}
 				${this.hideNetwork? '': html`<a class="tab"
 					tab="network" href="javascript:void 0">Network</a>`}
+				${this.hideDebug? '': html`<a class="tab"
+					tab="debuginfo" href="javascript:void 0">Debug</a>`}
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
@@ -301,6 +308,16 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							</div>
 						`}
 						</div>
+				</div>`}
+				${this.hideDebug? '': html`
+				<div class="tab-content ${sCls('debuginfo')}" for="debuginfo">
+					<div class="info-ux">
+						<div class='caption'>IN USE UTXOS</div>
+						<table>
+							<tr><td>COUNT</td><td>${inUseUTXOs.count}</td></tr>
+							<tr><td>AMOUNT</td><td>${KAS(inUseUTXOs.satoshis||0)} KAS</td></tr>
+						</table>
+					</div>
 				</div>`}
 			</div>
 		</div>
