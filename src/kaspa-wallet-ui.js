@@ -5,7 +5,9 @@ import {
 export * from './flow-ux.js'
 import {
 	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
-	getLocalWallet, setLocalWallet, baseUrl, debug, MAX_UTXOS_THRESHOLD_COMPOUND
+	getLocalWallet, setLocalWallet, baseUrl, debug, MAX_UTXOS_THRESHOLD_COMPOUND,
+	getCacheFromStorage,
+	saveCacheToStorage
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
@@ -514,7 +516,6 @@ export class KaspaWalletUI extends BaseElement{
 	async compoundUTXOs(){
 		const uid = UID();
 		this.addPreparingTransactionNotification({uid, compoundUTXOs:true})
-		this.requestUpdate("preparingTxNotifications")
 		dpc(500, async()=>{
 			let response = await this.wallet.compoundUTXOs()
 			.catch(err=>{
@@ -535,12 +536,6 @@ export class KaspaWalletUI extends BaseElement{
 		this.wallet = wallet;
 		return new Promise((resolve, reject)=>{
 	    	//this.uid = getUniqueId(await wallet.mnemonic);
-	    	const cache = false//getLocalSetting(`cache-${this.uid}`);
-	    	const {addresses} = cache||{};
-	    	if (cache && (addresses?.receiveCounter !== 0 || addresses?.changeCounter !== 0)) {
-				wallet.restoreCache(cache);
-				this._isCache = true;
-		    }
 		    wallet.on("ready", (args)=>{
 		    	this.onWalletReady(args)
 		    })
@@ -588,6 +583,10 @@ export class KaspaWalletUI extends BaseElement{
 		    	this.walletDebugInfo = {...this.walletDebugInfo, ...debugInfo}
 		    	this.requestUpdate("walletDebugInfo", null);
 		    })
+			wallet.on("state-update", ({cache})=>{
+				console.log("state-update", cache)
+				saveCacheToStorage(cache);
+			})
 		    wallet.on("new-transaction", (tx)=>{
 		    	//console.log("############ new-transaction", tx)
 		    	tx.date = GetTS(new Date(tx.ts));
@@ -655,6 +654,10 @@ export class KaspaWalletUI extends BaseElement{
 		}, 333);
 		try {
 			this.isLoading = true;
+			let cache = await getCacheFromStorage()
+			if(cache){
+				this.wallet.restoreCache(cache);
+			}
 			/*if (this._isCache) {
 				this.log("calling loadData-> refreshState")
 				await this.refreshState();
@@ -888,10 +891,12 @@ export class KaspaWalletUI extends BaseElement{
 
 	addPreparingTransactionNotification(args){
 		this.preparingTxNotifications.set(args.uid, args);
+		this.requestUpdate("preparingTxNotifications")
 	}
 
 	removePreparingTransactionNotification({uid}){
 		this.preparingTxNotifications.delete(uid);
+		this.requestUpdate("preparingTxNotifications")
 	}
 
 	/*
@@ -1005,6 +1010,10 @@ export class KaspaWalletUI extends BaseElement{
 		.catch(ex => {
 			console.log('faucet error:', ex);
 		})
+	}
+
+	clearUsedUTXOs(){
+		this.wallet.clearUsedUTXOs();
 	}
 
 

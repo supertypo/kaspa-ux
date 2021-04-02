@@ -184,6 +184,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				--flow-expandable-icon-box-max-width:0px;
 			}
 			.developer-info{margin-top:26px;}
+			.clear-used-utxos{margin:0px 10px;cursor:pointer}
 		`];
 	}
 	constructor() {
@@ -312,7 +313,12 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				${this.hideDebug? '': html`
 				<div class="tab-content ${sCls('debuginfo')}" for="debuginfo">
 					<div class="info-ux">
-						<div class='caption'>IN USE UTXOS</div>
+						<div class='caption'>
+							IN USE UTXOS
+							<fa-icon class="clear-used-utxos"
+								title="Clear used UTXOs" icon="broom"
+								@click="${this.clearUsedUTXOs}"></fa-icon>
+						</div>
 						<table>
 							<tr><td>COUNT</td><td>${inUseUTXOs.count}</td></tr>
 							<tr><td>AMOUNT</td><td>${KAS(inUseUTXOs.satoshis||0)} KAS</td></tr>
