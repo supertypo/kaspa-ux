@@ -76,6 +76,14 @@ export const setLocalWallet = async (wallet, meta={})=>{
 	return storage.saveWallet(wallet, meta);
 }
 
+export const getCacheFromStorage = ()=>{
+	return storage.getCache();
+}
+
+export const saveCacheToStorage = (cache)=>{
+	storage.saveCache(cache);
+}
+
 
 export const getUniqueId = (mnemonic)=>{
 	const secret = 'c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e';

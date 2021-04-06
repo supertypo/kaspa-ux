@@ -54,7 +54,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 
 			.balance-badge{
 				display:flex;flex-direction:column;padding:10px 0px;
-				border-radius:10px;max-width:fit-content;
+				border-radius:10px;max-width:100%;
 				/*
 				box-shadow:var(--flow-box-shadow);
 				border:2px solid var(--flow-primary-color);
