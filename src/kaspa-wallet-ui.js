@@ -11,7 +11,7 @@ import {
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
-Wallet.setWorkerLogLevel('none')
+Wallet.setWorkerLogLevel(localStorage.walletWorkerLogLevel || 'none')
 
 export {html, css, FlowFormat, dpc, baseUrl, debug};
 
