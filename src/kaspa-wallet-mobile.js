@@ -299,7 +299,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							<div>
 								<table>
 									<tr><td>Network</td><td>${this.networkName}</td></tr>
-									<tr><td>DAG Blue Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
+									<tr><td>DAA Score</td><td>${FlowFormat.commas(this.blueScore)}</td></tr>
 									<tr><td>DAG Header</td><td>${FlowFormat.commas(this.headerCount)}</td></tr>
 									<tr><td>DAG Blocks</td><td>${FlowFormat.commas(this.blockCount)}</td></tr>
 									<tr><td>Difficulty</td><td>${FlowFormat.commas(this.difficulty,2)}</td></tr>
@@ -451,7 +451,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				${
 					this.blockCount == 1 ?
 					html`DAG headers: ${this.headerCount?FlowFormat.commas(this.headerCount):''}` :
-					html`DAG blue score: ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
+					html`DAA score: ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
 				}
 			</div>
 		`

@@ -228,7 +228,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				${
 					this.blockCount == 1 ?
 					html`DAG headers: ${this.headerCount?FlowFormat.commas(this.headerCount):''}` :
-					html`DAG blue score: ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
+					html`DAA score: ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
 				}
 				
 			</div>
