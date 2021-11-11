@@ -38,4 +38,8 @@ export const txListStyle = css`
 	.tx-list .tx-num{min-width:60px}
 	.tx-list .br{min-width:100%;}
 	.tx-list [txout] .tx-amount{color:#a00}
+	[txmoved], .tx-list [txmoved].tx-row{
+		display:none;
+		text-decoration:line-through;background-color:rgba(255, 0, 0, 0.16);
+	}
 `

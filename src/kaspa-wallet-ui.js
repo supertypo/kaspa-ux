@@ -10,8 +10,10 @@ import {
 	saveCacheToStorage
 } from './wallet.js';
 export * from './wallet.js';
-import {initKaspaFramework, Wallet} from '@kaspa/wallet-worker';
+import {initKaspaFramework, Wallet, workerLog} from '@kaspa/wallet-worker';
 Wallet.setWorkerLogLevel(localStorage.walletWorkerLogLevel || 'none')
+
+window._xx = {Wallet, workerLog}
 
 export {html, css, FlowFormat, dpc, baseUrl, debug};
 
@@ -226,7 +228,7 @@ export class KaspaWalletUI extends BaseElement{
 					color = 'red';
 
 				return html`
-					<flow-expandable class="tx-row" static-icon expand ?txin=${tx.in} ?txout=${!tx.in}
+					<flow-expandable class="tx-row" static-icon expand ?txin=${tx.in} ?txmoved=${tx.isMoved} ?txout=${!tx.in}
 						icon="${tx.in?'sign-in':'sign-out'}" no-info>
 						<div class="tx-title" slot="title">
 							<div class="tx-date flex">${tx.date}</div>
@@ -268,7 +270,7 @@ export class KaspaWalletUI extends BaseElement{
 					else
 						color = 'red';
 					return html`
-					<div class="tx-row" ?txin=${tx.in} ?txout=${!tx.in}>
+					<div class="tx-row" ?txin=${tx.in} ?txmoved=${tx.isMoved} ?txout=${!tx.in}>
 						<fa-icon class="tx-icon" icon="${tx.in?'sign-in':'sign-out'}"></fa-icon>
 						${
 							0<=cfm&cfm<101? html`
@@ -587,6 +589,13 @@ export class KaspaWalletUI extends BaseElement{
 			wallet.on("state-update", ({cache})=>{
 				console.log("state-update", cache)
 				saveCacheToStorage(cache);
+			})
+			wallet.on("moved-transaction", (tx)=>{
+				let item = this.txs.find(t=>t.id==tx.id)
+				if(item){
+					item.isMoved = true;
+					this.requestUpdate("balance", null);
+				}
 			})
 		    wallet.on("new-transaction", (tx)=>{
 		    	//console.log("############ new-transaction", tx)
