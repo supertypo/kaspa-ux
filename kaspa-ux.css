@@ -198,7 +198,7 @@ flow-expandable h4[slot="info"].title{margin-bottom:10px;}
 /*flow-expandable:not([opened]) [slot="info"]{display:none;}*/
 .tabs{margin-top:32px;width:100%;}
 flow-tabs flow-tab{margin-left: -20px;margin-right: -20px;}
-flow-caption-bar{/*--flow-tab-min-width:220px;--flow-tab-max-width:320px;*/}
+/*flow-caption-bar{--flow-tab-min-width:220px;--flow-tab-max-width:320px;}*/
 tab-content{overflow:auto auto;flex:1;padding:10px;display:none;z-index:15;}
 flow-textarea{margin:4px;}
 tab-content>x-terminal{height:100%;}

@@ -380,7 +380,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<div class="address-box">
 				Receive Address:
 				<div class="address-holder">
-					<textarea class="address-input" readonly>${address}</textarea>
+					<textarea class="address-input" readonly .value="${address||""}"></textarea>
 					<fa-icon ?hidden=${!address} class="copy-address"
 						@click="${this.copyAddress}"
 						title="Copy to clipboard" icon="copy"></fa-icon>

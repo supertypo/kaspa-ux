@@ -183,7 +183,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		<div class="address-badge">
 			<div>Receive Address:</div>
 			<div class="address-holder">
-				<textarea class="address-input" readonly>${this.receiveAddress||''}</textarea>
+				<textarea class="address-input" readonly .value="${this.receiveAddress||''}"></textarea>
 				<fa-icon ?hidden=${!this.receiveAddress} class="copy-address"
 					@click="${this.copyAddress}"
 					title="Copy to clipboard" icon="copy"></fa-icon>
