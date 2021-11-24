@@ -8,7 +8,7 @@ class KaspaWalletReceiveDialog extends KaspaDialog{
 		}
 	}
 	static get styles(){
-		return [Dialog.styles, 
+		return [KaspaDialog.styles, 
 		css`
 			.container{max-height:400px}
 			.buttons{justify-content:center;}
