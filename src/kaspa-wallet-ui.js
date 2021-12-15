@@ -543,7 +543,7 @@ export class KaspaWalletUI extends BaseElement{
 		    	this.onWalletReady(args)
 		    })
 		    wallet.on('api-connect', ()=>{
-		    	this.isOnline = true;
+				this.isOnline = true;
 		    	this.refreshStats();
 		    })
 		    wallet.on('api-disconnect', ()=>{
@@ -552,7 +552,7 @@ export class KaspaWalletUI extends BaseElement{
 		    })
 		    wallet.on("blue-score-changed", (e)=>{
 				this.blueScore = e.blueScore;
-
+				this.isOnline = true;
 				this.refreshStats();
 				this.txDialog?.requestUpdate()
 
