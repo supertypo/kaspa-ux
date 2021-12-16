@@ -87,7 +87,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 		this.varificationStepAnswered = '';
 
 
-		console.log("indexes", wordRows, indexes, this.correctWords)
+		//console.log("indexes", wordRows, indexes, this.correctWords)
 
 		return html`
 			<p>

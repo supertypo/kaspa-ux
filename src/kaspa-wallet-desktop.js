@@ -251,7 +251,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				hideable:false,
 				isFresh:true
 			}, (err, info)=>{
-				console.log("showWalletInitDialog:result", info)
+				//console.log("showWalletInitDialog:result", info)
 				this.handleInitDialogCallback(info)
 			})
 		}

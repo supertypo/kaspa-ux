@@ -507,7 +507,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	}
 
 	showSendDialog(){
-		console.log("this.sendDialog", this.sendDialog)
+		//console.log("this.sendDialog", this.sendDialog)
 		this.sendDialog.open({wallet:this}, (args)=>{
 			this.sendTx(args);
 		})

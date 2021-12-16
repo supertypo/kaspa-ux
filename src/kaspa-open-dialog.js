@@ -252,12 +252,12 @@ class KaspaOpenDialog extends KaspaDialog{
     	if(isInvalid || !words.join("").length)
     		return this.setError("Please provide valid words");
 
-    	console.log("words", words);
+    	//console.log("words", words);
     	askForPassword({
     		title:"Password to encryt the wallet",
     		confirmBtnText:"Encrypt Wallet"
     	}, ({btn, password})=>{
-    		console.log("btn, password", btn, password, words)
+    		//console.log("btn, password", btn, password, words)
     		if(!password || btn != 'confirm')
     			return
 

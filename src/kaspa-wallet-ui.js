@@ -394,7 +394,7 @@ export class KaspaWalletUI extends BaseElement{
 				}catch(e){
 					invalidFile()
 				}
-				console.log("reader result", json);
+				//console.log("reader result", json);
 			};
 			reader.onerror = ()=>{
 				FlowDialog.alert("Error", "Unable to read file");
@@ -412,8 +412,8 @@ export class KaspaWalletUI extends BaseElement{
 			type: "attachment/kpk",
 		});
 		const objectURL = URL.createObjectURL(file);
-		console.log("objectURL1:", name)
-		console.log("objectURL", file, objectURL)
+		//console.log("objectURL1:", name)
+		//console.log("objectURL", file, objectURL)
 		this.requestFileDownload(objectURL, name)
 		//URL.revokeObjectURL(objectURL);
 	}
@@ -747,7 +747,7 @@ export class KaspaWalletUI extends BaseElement{
 				hideable:false,
 				isFresh:true
 			}, (err, info)=>{
-				console.log("showWalletInitDialog:result", info)
+				//console.log("showWalletInitDialog:result", info)
 				this.handleInitDialogCallback(info)
 			})
 		}
@@ -767,7 +767,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.initHelpers();
 
 		let {mode} = dialog;
-		console.log("$$$$$$$ mode", mode, encryptedMnemonic)
+		//console.log("$$$$$$$ mode", mode, encryptedMnemonic)
 		if(mode =="open"){
 			const wallet = await Wallet.import(password, encryptedMnemonic, {network, rpc})
 			.catch(error=>{
@@ -820,7 +820,7 @@ export class KaspaWalletUI extends BaseElement{
 		if(mode == "recover"){
 			const { network, rpc } = this;
 
-			console.log("recover:Wallet:seedPhrase, password", seedPhrase, password)
+			//console.log("recover:Wallet:seedPhrase, password", seedPhrase, password)
 			let wallet;
 			try{
 				wallet = Wallet.fromMnemonic(seedPhrase, { network, rpc });
@@ -832,7 +832,7 @@ export class KaspaWalletUI extends BaseElement{
 			if(!wallet)
 				return
 			const encryptedMnemonic = await wallet.export(password);
-			console.log("encryptedMnemonic", encryptedMnemonic)
+			//console.log("encryptedMnemonic", encryptedMnemonic)
 			/*const imported = await Wallet.import(password, encryptedMnemonic, { network, rpc })
 			.catch(error=>{
 				console.log("recover:Wallet.import error", error)

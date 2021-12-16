@@ -302,7 +302,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
     		return
     	console.log("formData", formData)
     	askForPassword({confirmBtnText:"CONFIRM SEND", pass}, ({btn, password})=>{
-    		console.log("btn, password", btn, password)
+    		//console.log("btn, password", btn, password)
     		if(btn!="confirm")
     			return
 			formData.password = password;
