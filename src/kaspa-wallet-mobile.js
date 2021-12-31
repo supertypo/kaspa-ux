@@ -323,6 +323,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							<tr><td>COUNT</td><td>${inUseUTXOs.count}</td></tr>
 							<tr><td>AMOUNT</td><td>${KAS(inUseUTXOs.satoshis||0)} KAS</td></tr>
 						</table>
+						<flow-btn class="center-btn primary v-margin"
+							@click="${this.scanMoreAddresses}">Scan More Addresses</flow-btn>
 					</div>
 				</div>`}
 			</div>

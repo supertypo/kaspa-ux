@@ -533,6 +533,20 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 
+	async scanMoreAddresses(){
+		dpc(500, async()=>{
+			let response = await this.wallet.scanMoreAddresses(1000)
+			.catch(err=>{
+				console.log("scanMoreAddresses error", err)
+				let error = err.error || err.message || 'Could not scan more addresses. Please Retry later.';
+				if(typeof error == 'string')
+					FlowDialog.alert('Error', error)
+			})
+			if(response)
+				console.log("scanMoreAddresses response", response)
+		})
+	}
+
 
 
 	getWalletInfo(wallet){
