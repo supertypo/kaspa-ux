@@ -535,7 +535,7 @@ export class KaspaWalletUI extends BaseElement{
 
 	async scanMoreAddresses(){
 		dpc(500, async()=>{
-			let response = await this.wallet.scanMoreAddresses(1000)
+			let response = await this.wallet.scanMoreAddresses(10000)
 			.catch(err=>{
 				console.log("scanMoreAddresses error", err)
 				let error = err.error || err.message || 'Could not scan more addresses. Please Retry later.';
