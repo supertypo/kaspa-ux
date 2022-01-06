@@ -170,10 +170,10 @@ export class KaspaDialog extends BaseElement{
 	pushHistory(uid=""){
 		if(!this.withHistory)
 			return
-		let name = this.name || this.constructor.name
-		console.log("name:", name)
+		let name = this.tagName || this.name || this.constructor.name;
+		name = name.replace(/\-/g, "");
 		let key = name.toLowerCase().replace(/(kaspa|dialog|mobile)/g, '')
-		let state = {type:this.constructor.name, uid, key};
+		let state = {type:name, uid, key};
 		console.log("pushHistory:state", state, key)
 		history.pushState(state, name, "/"+key+"/"+uid);
 		historyStack.push(state)
