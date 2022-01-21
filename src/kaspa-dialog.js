@@ -34,7 +34,7 @@ export class KaspaDialog extends BaseElement{
 				left:0px;
 				width:100%;
 				height:100%;
-				background-color:rgba(255, 255, 255, 0.5);
+				background-color:var(--kaspa-dialog-bg-color);
 				box-sizing:border-box;
 				font-family: "Open Sans", sans-serif;
 				display:none;

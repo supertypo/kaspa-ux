@@ -1,7 +1,8 @@
 import {
 	html, css, FlowFormat, KaspaWalletUI, dpc,
 	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
-	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent
+	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent,
+	getTheme, setTheme
 } from './kaspa-wallet-ui.js';
 export {isMobile, dontInitiatedComponent};
 export class KaspaWalletMobile extends KaspaWalletUI{
@@ -185,6 +186,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			}
 			.developer-info{margin-top:26px;}
 			.clear-used-utxos{margin:0px 10px;cursor:pointer}
+			.theme-btn{cursor:pointer}
 		`];
 	}
 	constructor() {
@@ -335,6 +337,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let {wallet} = this;
 		let isReady = !!wallet?.balance;
 		let loadingIndicator = this.isLoading || !!this.preparingTxNotifications.size
+		let theme = getTheme();
 		return html`
 		<div class="header" ?not-ready=${!isReady}>
 			<div class="logo">
@@ -351,8 +354,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<fa-icon ?hidden=${!loadingIndicator} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
+			<fa-icon class="theme-btn" @click=${this.toggleTheme}
+				icon="${theme=="light"?'moon': 'sun'}"></fa-icon>
 		</div>
 		`
+	}
+	toggleTheme(){
+		let theme = getTheme();
+		setTheme(theme=="light"?'dark':'light');
+		this.requestUpdate("theme", theme)
 	}
 	onTabClick(e){
 		//alert("onTabClick:"+e.target)

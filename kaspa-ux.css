@@ -82,7 +82,13 @@ body{
 	--flow-add2home-icon-bg:#FFF;
 	--flow-add2home-icon-size:30px;
 	--flow-add2home-padding:5px 5px;
+	--tx-bg-color-1:#FFF;
+	--tx-bg-color-2:#FEFEFE;
+	--tx-bg-color-3:#DDD;
+	--tx-border-color:#DDD;
+	--kaspa-dialog-bg-color:rgba(255, 255, 255, 0.5);
 	/*	--flow-btn-text-transform:uppercase;*/
+	
 }
 
 body.flow-theme-dark{
@@ -109,6 +115,13 @@ body.flow-theme-dark{
 	--flow-input-box-shadow:0 0px 4px 0 rgba(1, 150, 136),
 	0 0px 0px -3px rgba(121, 255, 235, 0.2),
 	0 0px 1px 0 rgba(65, 255, 212, 0.12);
+
+	--tx-bg-color-1:var(--flow-background-color);
+	--tx-bg-color-2:#282828;
+	--tx-bg-color-3:#333232;
+	--kaspa-dialog-bg-color:rgba(40,40,40,0.71);
+	--kaspa-wallet-tab-border-bottom-color:#333232;
+	--tx-border-color:#282828;
 }
 flow-add-to-home{
 	position:fixed;bottom:5px;left:5px;right:5px;z-index:1000;

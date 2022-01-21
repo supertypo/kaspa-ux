@@ -11,15 +11,15 @@ export const paginationStyle = [pCss, css`
 export const txListStyle = css`
 	.tx-list .tx-row{
 		margin:0px 5px;
-		display:flex;background-color:#FFF;
-		border-bottom:1px solid #DDD;
+		display:flex;background-color:var(--tx-bg-color-1);
+		border-bottom:1px solid var(--tx-border-color);
 		flex-wrap:wrap;padding:2px;
 		position:relative;
 	}
 	.tx-list .tx-icon{--fa-icon-color:var(--flow-primary-color)}
 	.tx-list .tx-row .tx-progressbar{position:absolute;left:5px; top:30px;}
-	.tx-list .tx-row:nth-child(2n){background-color:#FEFEFE}
-	.tx-list .tx-row:hover{background-color:#DDD}
+	.tx-list .tx-row:nth-child(2n){background-color:var(--tx-bg-color-2)}
+	.tx-list .tx-row:hover{background-color:var(--tx-bg-color-3)}
 	.tx-list .tx-date{white-space:nowrap;margin-left:16px;}
 	.tx-list .tx-id,
 	.tx-list .tx-address{
