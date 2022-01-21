@@ -337,7 +337,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let {wallet} = this;
 		let isReady = !!wallet?.balance;
 		let loadingIndicator = this.isLoading || !!this.preparingTxNotifications.size
-		let theme = getTheme();
+		let theme = localStorage.flowtheme||"light"
 		return html`
 		<div class="header" ?not-ready=${!isReady}>
 			<div class="logo">
@@ -360,7 +360,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		`
 	}
 	toggleTheme(){
-		let theme = getTheme();
+		let theme = localStorage.flowtheme||"light";
 		setTheme(theme=="light"?'dark':'light');
 		this.requestUpdate("theme", theme)
 	}
