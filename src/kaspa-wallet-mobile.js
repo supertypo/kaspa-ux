@@ -2,7 +2,7 @@ import {
 	html, css, FlowFormat, KaspaWalletUI, dpc,
 	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
 	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent,
-	getTheme, setTheme
+	getTheme, setTheme, flow
 } from './kaspa-wallet-ui.js';
 export {isMobile, dontInitiatedComponent};
 export class KaspaWalletMobile extends KaspaWalletUI{
@@ -337,7 +337,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let {wallet} = this;
 		let isReady = !!wallet?.balance;
 		let loadingIndicator = this.isLoading || !!this.preparingTxNotifications.size
-		let theme = localStorage.flowtheme||"light"
+		let theme = flow.app.getTheme("light")
 		return html`
 		<div class="header" ?not-ready=${!isReady}>
 			<div class="logo">
@@ -360,8 +360,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		`
 	}
 	toggleTheme(){
-		let theme = localStorage.flowtheme||"light";
-		setTheme(theme=="light"?'dark':'light');
+		let theme = flow.app.getTheme("light");
+		flow.app.setTheme(theme=="light"?'dark':'light');
 		this.requestUpdate("theme", theme)
 	}
 	onTabClick(e){
