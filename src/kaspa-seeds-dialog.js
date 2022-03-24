@@ -1,4 +1,7 @@
-import {html, css, KaspaDialog, chunks, getRandomInt, shuffle} from './kaspa-dialog.js';
+import {
+	html, css, KaspaDialog, chunks, getRandomInt, shuffle,
+	T, i18n
+} from './kaspa-dialog.js';
 
 class KaspaSeedsDialog extends KaspaDialog{
 
@@ -52,7 +55,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 		return {stepName};
 	}
 	renderHeading({stepName}){
-		return html`${this.hideable?this.renderBackBtn():''} Recovery Seed`;
+		return html`${this.hideable?this.renderBackBtn():''} ${T('Recovery Seed')}`;
 	}
 	renderBody({stepName}){
 		return this[`render${stepName}`]();
@@ -90,11 +93,11 @@ class KaspaSeedsDialog extends KaspaDialog{
 		//console.log("indexes", wordRows, indexes, this.correctWords)
 
 		return html`
-			<p>
+			<p is="i18n-p">
 				Your wallet is accessible by a seed phrase.
 				The seed phrase is an ordered 12-word secret phrase.
 			</p>
-			<p>
+			<p is="i18n-p">
 				Make sure no one is looking, as anyone with your
 				seed phrase can access your wallet your funds.
 				Write it down and keep it safe.
@@ -115,7 +118,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 					`;
 				})}
 			</div>
-			<p class="dull-text text-center">
+			<p class="dull-text text-center" is="i18n-p">
 				Cool fact: there are more 12-word phrase combinations than nanoseconds
 				since the big bang!
 			</p>	
@@ -130,23 +133,25 @@ class KaspaSeedsDialog extends KaspaDialog{
 		let numToStr = (num)=>{
 			return num+(({"1":"st", "2":"nd", "3":"rd"})[num]||'th');
 		}
-		let msg = `Make sure you wrote the phrase down correctly by 
-				answering this quick checkup.`;
+		let msg = i18n.t(`Make sure you wrote the phrase down correctly by 
+				answering this quick checkup.`);
 		let subMsg = '';
 		if(this.varificationStepAnswered == 'error'){
-			msg = 'Wrong. Retry or go back';
+			msg = i18n.t('Wrong. Retry or go back');
 		}else if(this.varificationStep>0){
 			if(this.varificationStep==1){
-				msg = 'Good job! Two more checks to go';
-				subMsg =`Be wary and cautious of your secret phrase.
-						Never reveal it to anyone.`
+				msg = i18n.t('Good job! Two more checks to go');
+				subMsg = i18n.t(`Be wary and cautious of your secret phrase.
+						Never reveal it to anyone.`)
 			}
 			else{
-				msg = 'Awesome, one more to go!';
-				subMsg = `It is recommended to keep several copies of your secret
-						seed hidden away in different places.`
+				msg = i18n.t('Awesome, one more to go!');
+				subMsg = i18n.t(`It is recommended to keep several copies of your secret
+						seed hidden away in different places.`)
 			}
 		}
+		let numStr = i18n.t(numToStr(index+1));
+		let varTitle = i18n.t(`What is the [x] word?`).replace('[x]', numStr);
 		return html`
 			<div class="dots">
 				${this.indexes.map((v, index)=>{
@@ -162,7 +167,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 				<p class="varification-msg">${msg}</p>
 				<div ?hidden=${!subMsg} class="sub-msg dull-text">${subMsg}</div>
 			</div>
-			<div class="varification-title">What is the ${numToStr(index+1)} word?</div>
+			<div class="varification-title">${varTitle}</div>
 			<!--div>${this.correctWords[this.varificationStep]} ${this.varificationStepAnswered}</div-->
 			<div class="button-row" @click="${this.wordClick}">
 				${words.map(word=>{
@@ -182,8 +187,8 @@ class KaspaSeedsDialog extends KaspaDialog{
 				<fa-icon class="dot" icon="check"></fa-icon>
 				<fa-icon class="dot" icon="check"></fa-icon>
 			</div>
-			<p class="text-center">Great Success!</p\]>
-			<p class="success-msg">
+			<p class="text-center" is="i18n-p">Great Success!</p\]>
+			<p class="success-msg" is="i18n-p">
 				Remember...<br />
 				Anyone with this 12-word phrase can access your wallet your funds.
 				Keep it safe!
@@ -193,13 +198,13 @@ class KaspaSeedsDialog extends KaspaDialog{
 	renderStep1Buttons(){
 		if(this.args?.showOnlySeed)
 			return// html`<flow-btn primary @click="${this.finish}">Close</flow-btn>`
-		return html`<flow-btn primary @click="${e=>this.step=2}">NEXT</flow-btn>`
+		return html`<flow-btn primary @click="${e=>this.step=2}" i18n>NEXT</flow-btn>`
 	}
 	renderStep2Buttons(){
-		return html`<flow-btn primary @click="${e=>this.step=1}">BACK TO THE WORDS</flow-btn>`
+		return html`<flow-btn primary @click="${e=>this.step=1}" i18n>BACK TO THE WORDS</flow-btn>`
 	}
 	renderStep3Buttons(){
-		return html`<flow-btn primary @click="${this.finish}">DONE</flow-btn>`
+		return html`<flow-btn primary @click="${this.finish}" i18n>DONE</flow-btn>`
 	}
 	updated(changes){
         super.updated(changes);

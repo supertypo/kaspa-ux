@@ -1,4 +1,4 @@
-import {isSmallScreen as _isSmallScreen} from './flow-ux.js';
+import {isSmallScreen as _isSmallScreen, i18n, T} from './flow-ux.js';
 window.mobileMode = window.localStorage?.getItem("mobileMode")==1||false;
 let isMobile = window.mobileMode?true:_isSmallScreen;
 window.isMobile = isMobile;
@@ -106,11 +106,11 @@ export const askForPassword = async (args, callback)=>{
 		args = {};
 	}
 	const {
-		confirmBtnText="CONFIRM",
+		confirmBtnText=i18n.t("CONFIRM"),
 		confirmBtnValue="confirm",
 		pass="",
 		msg="",
-		title="Enter a password"
+		title=i18n.t("Enter a password")
 	} = args||{}
 	let inputType = "password";
 	let icon = "eye";
@@ -128,7 +128,7 @@ export const askForPassword = async (args, callback)=>{
 		return html`
 			<div class="msg">${msg}</div>
 			<flow-input class="password full-width" outer-border
-				name="password" type="${inputType}" placeholder="Password"
+				name="password" type="${inputType}" placeholder="${T('Password')}"
 				value="${pass}">
 				<fa-icon class="fa-btn"
 					slot="sufix"
@@ -143,7 +143,10 @@ export const askForPassword = async (args, callback)=>{
 		title,
 		body:body(),
 		cls:"short-dialog",
-		btns:['Cancel',{
+		btns:[{
+			text:i18n.t('Cancel'),
+			value:'cancel'
+		},{
 			text:confirmBtnText,
 			cls:'primary',
 			value:confirmBtnValue,
@@ -151,8 +154,8 @@ export const askForPassword = async (args, callback)=>{
 				let {values} = result;
 				let {password} = values;
 				if(!validatePassword(password)){
-					errorMessage = `At least 8 characters, one capital, one lower,
-    				one number, and one symbol`
+					errorMessage = i18n.t(`At least 8 characters, one capital, one lower,
+    				one number, and one symbol`)
     				updateDialog()
     				return
     			}

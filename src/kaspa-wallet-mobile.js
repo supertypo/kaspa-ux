@@ -2,7 +2,7 @@ import {
 	html, css, FlowFormat, KaspaWalletUI, dpc,
 	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
 	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent,
-	getTheme, setTheme, flow
+	getTheme, setTheme, flow, T, i18nFormat
 } from './kaspa-wallet-ui.js';
 export {isMobile, dontInitiatedComponent};
 export class KaspaWalletMobile extends KaspaWalletUI{
@@ -214,15 +214,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<flow-menu class="tabs" selected="${selectedTab}"
 				selector=".tab" valueAttr="tab" @select="${this.onTabSelect}">
 				${this.showBalanceTab? html`<a class="tab" 
-					tab="balance" href="javascript:void 0">Balance</a>`:''}
-				<a class="tab" tab="transactions" href="javascript:void 0">Transactions</a>
-				<a class="tab" tab="wallet" href="javascript:void 0">Wallet</a>
+					tab="balance" href="javascript:void 0" is="i18n-a">Balance</a>`:''}
+				<a class="tab" tab="transactions" href="javascript:void 0" is="i18n-a">Transactions</a>
+				<a class="tab" tab="wallet" href="javascript:void 0" is="i18n-a">Wallet</a>
 				${this.hideFaucet? '': html`<a class="tab"
-					tab="faucet" href="javascript:void 0">Faucet</a>`}
+					tab="faucet" href="javascript:void 0" is="i18n-a">Faucet</a>`}
 				${this.hideNetwork? '': html`<a class="tab"
-					tab="network" href="javascript:void 0">Network</a>`}
+					tab="network" href="javascript:void 0" is="i18n-a">Network</a>`}
 				${this.hideDebug? '': html`<a class="tab"
-					tab="debuginfo" href="javascript:void 0">Debug</a>`}
+					tab="debuginfo" href="javascript:void 0" is="i18n-a">Debug</a>`}
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
@@ -240,21 +240,21 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
 					<div class="wallet-ux">
-						<div class="badge">KASPA WALLET</div>
-						${ window.PWA ? html`<div class="badge">Version ${window.PWA.version}</div>` : '' }
-						<div class="badge"><span>Status:</span> ${this.status}</div>
-						<div class="badge"><span>Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
+						<div class="badge" is="i18n-div">KASPA WALLET</div>
+						${ window.PWA ? html`<div class="badge" is="i18n-div">Version ${window.PWA.version}</div>` : '' }
+						<div class="badge"><span is="i18n-span">Status:</span> ${this.status}</div>
+						<div class="badge"><span is="i18n-span">Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
 						<flow-btn class="center-btn primary v-margin"
-							@click="${this.compoundUTXOs}">Compound Transactions</flow-btn>
+							@click="${this.compoundUTXOs}" i18n>Compound Transactions</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
-							@click="${this.showSeeds}">Backup Seed</flow-btn>
+							@click="${this.showSeeds}" i18n>Backup Seed</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
-							@click="${this.showRecoverWallet}">Recover From Seed</flow-btn>
+							@click="${this.showRecoverWallet}" i18n>Recover From Seed</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
-							@click="${this.exportWalletFile}">Export Wallet Seed File (KPK)</flow-btn>
+							@click="${this.exportWalletFile}" i18n>Export Wallet Seed File (KPK)</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
-							@click="${this.importWalletFile}">Import Wallet Seed File (KPK)</flow-btn>
+							@click="${this.importWalletFile}" i18n>Import Wallet Seed File (KPK)</flow-btn>
 						<input class="hidden-file-input" type="file" />
 						<!--div class="badge">
 							<hr style="margin:32px;"/>
@@ -262,14 +262,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<flow-expandable class="developer-info" _expand no-info no-icon icon="-">
 							<div class="badge center-icon" slot="title">
 								<fa-icon icon="caret-right"></fa-icon>
-								<span>DEVELOPER INFO</span>
+								<span is="i18n-span">DEVELOPER INFO</span>
 							</div>
-							<div class="badge"><span>Kaspa Core:</span> ${window.PWA_MODULES['@kaspa/core-lib']}</div>
-							<div class="badge"><span>Kaspa Wallet Framework:</span> ${window.PWA_MODULES['@kaspa/wallet']}</div>
-							<div class="badge"><span>Kaspa gRPC:</span> ${window.PWA_MODULES['@kaspa/grpc']}</div>
-							<div class="badge"><span>Kaspa gRPC Relay:</span> ${window.PWA_MODULES['@kaspa/grpc-web']}</div>
-							<div class="badge"><span>Kaspa UX:</span> ${window.PWA_MODULES['@kaspa/ux']}</div>
-							<div class="badge"><span>Flow UX:</span> ${window.PWA_MODULES['@aspectron/flow-ux']}</div>
+							<div class="badge"><span is="i18n-span">Kaspa Core:</span> ${window.PWA_MODULES['@kaspa/core-lib']}</div>
+							<div class="badge"><span is="i18n-span">Kaspa Wallet Framework:</span> ${window.PWA_MODULES['@kaspa/wallet']}</div>
+							<div class="badge"><span is="i18n-span">Kaspa gRPC:</span> ${window.PWA_MODULES['@kaspa/grpc']}</div>
+							<div class="badge"><span is="i18n-span">Kaspa gRPC Relay:</span> ${window.PWA_MODULES['@kaspa/grpc-web']}</div>
+							<div class="badge"><span is="i18n-span">Kaspa UX:</span> ${window.PWA_MODULES['@kaspa/ux']}</div>
+							<div class="badge"><span is="i18n-span">Flow UX:</span> ${window.PWA_MODULES['@aspectron/flow-ux']}</div>
 						</flow-expandable>
 
 					</div>
@@ -279,15 +279,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					${this.faucetStatus ? this.faucetStatus : html`
 
 						<div class="faucet-ux">
-							<div class="margin-bottom">KASPA FAUCET</div>
-							<div>Your IP is ${this.ip}</div>
-							<div class="margin">You have <b>${KAS(this.faucetFundsAvailable||0)} KAS</b> available.</div>
+							<div class="margin-bottom"  is="i18n-div">KASPA FAUCET</div>
+							<div>${i18nFormat('Your IP is [n]', this.ip||"")}</div>
+							<div class="margin">${i18nFormat('You have <b>[n] KAS</b> available.', KAS(this.faucetFundsAvailable||0) )}</div>
 
 							${this.faucetPeriod ? html`
-								<div class="margin-bottom">Additional funds will be<br/>available in ${FlowFormat.duration(this.faucetPeriod)}</div>
+								<div class="margin-bottom">${i18nFormat('Additional funds will be<br/>available in [n]', FlowFormat.duration(this.faucetPeriod))}</div>
 							`:``}
 							${ !this.faucetFundsAvailable ? html`` : html`
-								<flow-btn class="primary" @click="${this.requestFaucetFunds}">Request Funds from Faucet</flow-btn>
+								<flow-btn class="primary" @click="${this.requestFaucetFunds}" i18n>Request Funds from Faucet</flow-btn>
 							`}
 						</div>
 
@@ -316,17 +316,17 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab-content ${sCls('debuginfo')}" for="debuginfo">
 					<div class="info-ux">
 						<div class='caption'>
-							IN USE UTXOS
+							<flow-i18n>IN USE UTXOS</flow-i18n>
 							<fa-icon class="clear-used-utxos"
-								title="Clear used UTXOs" icon="broom"
+								title="${T('Clear used UTXOs')}" icon="broom"
 								@click="${this.clearUsedUTXOs}"></fa-icon>
 						</div>
 						<table>
-							<tr><td>COUNT</td><td>${inUseUTXOs.count}</td></tr>
-							<tr><td>AMOUNT</td><td>${KAS(inUseUTXOs.satoshis||0)} KAS</td></tr>
+							<tr><td is="i18n-td">COUNT</td><td>${inUseUTXOs.count}</td></tr>
+							<tr><td is="i18n-td">AMOUNT</td><td>${KAS(inUseUTXOs.satoshis||0)} KAS</td></tr>
 						</table>
 						<flow-btn class="center-btn primary v-margin"
-							@click="${this.scanMoreAddresses}">Scan More Addresses</flow-btn>
+							@click="${this.scanMoreAddresses}" i18n>Scan More Addresses</flow-btn>
 					</div>
 				</div>`}
 			</div>
@@ -347,7 +347,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<div class="flex"></div>
 			<div class='header-status' ?hidden=${!this.isOfflineBadge}>
 				<div class="header-row">
-					<div>${this.isOnline?'ONLINE':'OFFLINE'}</div>
+					<div>${T(this.isOnline?'ONLINE':'OFFLINE')}</div>
 					<div><fa-icon class="offline-icon" icon="exclamation-triangle"></fa-icon></div>
 				</div>
 			</div>
@@ -375,9 +375,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		<flow-dropdown class="icon-trigger top-menu right-align">
 			<fa-icon class="md" icon="cog" slot="trigger"></fa-icon>
 			<flow-menu @click="${this.onMenuClick}" selector="_">
-	 			<flow-menu-item data-action="showSeeds">Get Recovery Seed</flow-menu-item>
-				<flow-menu-item data-action="showRecoverWallet">Recover Wallet From Seed</flow-menu-item>
-				<!--flow-menu-item data-action="backupWallet">Backup This Wallet</flow-menu-item-->
+	 			<flow-menu-item data-action="showSeeds"><flow-i18n>Get Recovery Seed</flow-i18n></flow-menu-item>
+				<flow-menu-item data-action="showRecoverWallet"><flow-i18n>Recover Wallet From Seed</flow-i18n></flow-menu-item>
+				<!--flow-menu-item data-action="backupWallet"><flow-i18n>Backup This Wallet</flow-i18n></flow-menu-item-->
 			</flow-menu>
 		</flow-dropdown>`
 	}
@@ -390,12 +390,12 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		return html`
 		<div class="address-and-qr">
 			<div class="address-box">
-				Receive Address:
+				<flow-i18n>Receive Address:</flow-i18n>
 				<div class="address-holder">
 					<textarea class="address-input" readonly .value="${address||""}"></textarea>
 					<fa-icon ?hidden=${!address} class="copy-address"
 						@click="${this.copyAddress}"
-						title="Copy to clipboard" icon="copy"></fa-icon>
+						title="${T('Copy to clipboard')}" icon="copy"></fa-icon>
 				</div>
 			</div>
 			<flow-qrcode data="${address}"></flow-qrcode>
@@ -414,17 +414,17 @@ export class KaspaWalletMobile extends KaspaWalletUI{
   			<div class="balance-badge">
 				${ this.isLoading ? html`
 					<div class="balance">
-						<span class="value">SCANNING...</span>
+						<span class="value" is="i18n-span">SCANNING...</span>
 					</div>
 					<div class="balance pending">
-						<span class="label-pending">PLEASE WAIT <span class="dots">${this.dots}</span> ${total ? this.formatKAS(total)+' KAS':''}</span>
+						<span class="label-pending">${T('PLEASE WAIT')} <span class="dots">${this.dots}</span> ${total ? this.formatKAS(total)+' KAS':''}</span>
 					</div>
 				` : html`
 					<div class="balance">
 						<span class="value">${this.formatKAS(available)} KAS</span>
 					</div>
 					<div class="balance pending">
-						<span class="label-pending">Pending:</span>
+						<span class="label-pending" is="i18n-span">Pending:</span>
 						<span class="value-pending">${this.formatKAS(pending)} KAS</span>
 					</div>
 				`}
@@ -432,15 +432,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
             <div class="send-scan-buttons">
 				<a class="send-btn" @click="${this.showSendDialog}">
 					<fa-icon icon="arrow-alt-from-bottom"></fa-icon>
-					<span>Send</span>
+					<span is="i18n-span">Send</span>
 				</a>
 				<a class="scan-btn" @click="${this.showSendDialogWithQrScanner}">
 					<fa-icon icon="qrcode"></fa-icon>
-					<span>Scan</span>
+					<span is="i18n-span">Scan</span>
 				</a>
 				<a class="receive-btn" @click="${this.showReceiveDialog}">
 					<fa-icon icon="arrow-alt-to-bottom"></fa-icon>
-					<span>Receive</span>
+					<span is="i18n-span">Receive</span>
 				</a>
 			</div>
 		`;

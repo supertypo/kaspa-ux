@@ -1,4 +1,4 @@
-import {html, css, KaspaDialog} from './kaspa-dialog.js';
+import {html, css, KaspaDialog, T, i18n} from './kaspa-dialog.js';
 
 class KaspaWalletReceiveDialog extends KaspaDialog{
 	static get properties(){
@@ -21,20 +21,20 @@ class KaspaWalletReceiveDialog extends KaspaDialog{
 		`]
 	}
 	renderHeading(){
-		return 'RECEIVE';
+		return html`${T('RECEIVE')}`;
 	}
 	renderBody(){
 		return html`
 			<flow-qrcode data="${this.qrdata}" ntype="6"></flow-qrcode>
-			<flow-input label="Address" class="full-width" readonly 
+			<flow-input label="${T('Address')}" class="full-width" readonly 
 				value="${this.address}" sufix-btn>
 				<flow-btn slot="sufix" @click="${this.copyAddress}"
-					title="Copy to clipboard"><fa-icon icon="copy"></fa-icon></flow-btn>
+					title="${T('Copy to clipboard')}"><fa-icon icon="copy"></fa-icon></flow-btn>
 			</flow-input>
 			<input class="address" value="${this.address}">`;
 	}
 	renderButtons(){
-		return html`<flow-btn @click="${this.hide}">CLOSE</flow-btn>`
+		return html`<flow-btn @click="${this.hide}" i18n>CLOSE</flow-btn>`
 	}
 	open(args, callback){
 		this.callback = callback;
@@ -49,7 +49,7 @@ class KaspaWalletReceiveDialog extends KaspaDialog{
 		input.select();
 		input.setSelectionRange(0, 99999)
 		document.execCommand("copy");
-		FlowDialog.alert("Address has been copied to the clipboard", input.value);
+		FlowDialog.alert(i18n.t("Address has been copied to the clipboard"), input.value);
 	}
 }
 

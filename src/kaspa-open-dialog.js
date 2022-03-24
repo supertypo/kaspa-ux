@@ -1,4 +1,4 @@
-import {html, css, KaspaDialog} from './kaspa-dialog.js';
+import {html, css, KaspaDialog, i18n, T} from './kaspa-dialog.js';
 const pass = "";
 
 class KaspaOpenDialog extends KaspaDialog{
@@ -68,7 +68,7 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderHeading({modeName}){
 		if(modeName == 'Init')
 			return '';
-		return `${modeName} Wallet`;
+		return html`${T(`${modeName} Wallet`)}`;
 	}
 	renderBody({modeName}){
 		return this[`render${modeName}UI`]();
@@ -78,7 +78,7 @@ class KaspaOpenDialog extends KaspaDialog{
 	}
 	renderInitUI(){
 		return html`
-			<div class="sub-heading text-center">Welcome to Kaspa Wallet</div>
+			<div class="sub-heading text-center" is="i18n-div">Welcome to Kaspa Wallet</div>
 		`
 	}
 	renderRecoverUI(){
@@ -86,7 +86,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		let cells = [0, 1, 2, 3];
 		let seed = [];//(testSeed||'').split(" ");
 		return html`
-			<p class="sub-heading text-center">
+			<p class="sub-heading text-center" is="i18n-p">
 				Enter your 12-word seed phrase to recover your wallet (words are not case sensitive)
 			</p>
 			<div class="words" @input=${this.onSeedInput}>
@@ -114,9 +114,9 @@ class KaspaOpenDialog extends KaspaDialog{
 			<div>
 				<img class="big-logo" src="/resources/images/kaspa.png" />
 			</div>`}
-			<div class="sub-heading">Unlock the wallet with your password:</div>
+			<div class="sub-heading" is="i18n-div">Unlock the wallet with your password:</div>
 			<flow-input class="password full-width" outer-border value="${pass}"
-				type="${this.inputType}" placeholder="Password"
+				type="${this.inputType}" placeholder="${T('Password')}"
 				@keyup="${this.onOpenPassKeyup}">
 				<fa-icon class="input-type-btn" slot="sufix"
 					@click="${this.changeInputType}"
@@ -130,16 +130,16 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderCreateUI(){
 		let icon = this.inputType=="password"?'eye':'eye-slash';
 		return html`
-			<div class="sub-heading">Create a password for your new wallet</div>
+			<div class="sub-heading" is="i18n-div">Create a password for your new wallet</div>
 			<flow-input class="password full-width" outer-border value="${pass}"
-				type="${this.inputType}" placeholder="Password">
+				type="${this.inputType}" placeholder="${T('Password')}">
 				<fa-icon class="input-type-btn" slot="sufix"
 					@click="${this.changeInputType}"
 					icon="${icon}"></fa-icon>
 			</flow-input>
-			<div class="sub-heading">Confirm password</div>
+			<div class="sub-heading" is="i18n-div">Confirm password</div>
 			<flow-input class="cfm-password full-width" outer-border value="${pass}"
-				type="${this.inputType}" placeholder="Confirm Password"
+				type="${this.inputType}" placeholder="${T('Confirm Password')}"
 				@keyup="${this.onCreatePassKeyup}">
 				<fa-icon class="input-type-btn" slot="sufix"
 					@click="${this.changeInputType}"
@@ -150,29 +150,29 @@ class KaspaOpenDialog extends KaspaDialog{
 	}
 	_renderOpenButtons(){
 		return html`
-			<flow-btn @click="${e=>this.mode='create'}">NEW WALLET</flow-btn>
-			<flow-btn primary @click="${this.openWallet}">OPEN WALLET</flow-btn>`;
+			<flow-btn @click="${e=>this.mode='create'}" i18n>NEW WALLET</flow-btn>
+			<flow-btn primary @click="${this.openWallet}" i18n>OPEN WALLET</flow-btn>`;
 	}
 	renderCreateButtons(){
 		return html`
-			<flow-btn @click="${e=>this.mode=this.lastMode}">Cancel</flow-btn>
+			<flow-btn @click="${e=>this.mode=this.lastMode}" i18n>Cancel</flow-btn>
 			<flow-btn ?hidden=${this.isFresh} 
-				@click="${e=>this.mode='open'}">I have wallet</flow-btn>
-			<flow-btn primary @click="${this.showSeeds}">Next</flow-btn>
+				@click="${e=>this.mode='open'}" i18n>I have wallet</flow-btn>
+			<flow-btn primary @click="${this.showSeeds}" i18n>Next</flow-btn>
 			`;
 	}
 	renderInitButtons(){
 		return html`
 			<flow-btn class="primary"
-				@click="${e=>this.mode='create'}">Create New Wallet</flow-btn>
+				@click="${e=>this.mode='create'}" i18n>Create New Wallet</flow-btn>
 			<flow-btn class="primary"
-				@click="${e=>this.mode='recover'}">Recover from Seed</flow-btn>`;
+				@click="${e=>this.mode='recover'}" i18n>Recover from Seed</flow-btn>`;
 	}
 	renderRecoverButtons(){
 		
 		return html`
-			<flow-btn @click="${this.cancelRecover}">Cancel</flow-btn>
-			<flow-btn primary @click="${this.recoverWallet}">Recover Wallet</flow-btn>`;
+			<flow-btn @click="${this.cancelRecover}" i18n>Cancel</flow-btn>
+			<flow-btn primary @click="${this.recoverWallet}" i18n>Recover Wallet</flow-btn>`;
 	}
 	cancelRecover(){
 		if(this.args?.backToWallet){
@@ -210,10 +210,10 @@ class KaspaOpenDialog extends KaspaDialog{
     	let password = this.qS(".password").value.trim();
     	let password2 = this.qS(".cfm-password").value;
     	if(!this.checkPassword(password))
-    		return this.setError("At least 8 characters, one capital, one lower, one number, and one symbol")
+    		return this.setError(i18n.t("At least 8 characters, one capital, one lower, one number, and one symbol"))
 
     	if(password != password2)
-    		return this.setError("Passwords do not match")
+    		return this.setError(i18n.t("Passwords do not match"))
 
     	this.callback(null, {mode:"create", password, dialog:this});
     }
@@ -250,12 +250,12 @@ class KaspaOpenDialog extends KaspaDialog{
 		}
 
     	if(isInvalid || !words.join("").length)
-    		return this.setError("Please provide valid words");
+    		return this.setError(i18n.t("Please provide valid words"));
 
     	//console.log("words", words);
     	askForPassword({
-    		title:"Password to encryt the wallet",
-    		confirmBtnText:"Encrypt Wallet"
+    		title:i18n.t("Password to encryt the wallet"),
+    		confirmBtnText:i18n.t("Encrypt Wallet")
     	}, ({btn, password})=>{
     		//console.log("btn, password", btn, password, words)
     		if(!password || btn != 'confirm')

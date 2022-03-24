@@ -1,6 +1,6 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
-	dpc, FlowFormat, buildPagination, renderPagination, txListStyle, UID
+	dpc, FlowFormat, buildPagination, renderPagination, txListStyle, UID, T, i18n
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
@@ -13,7 +13,7 @@ export * from './wallet.js';
 import {initKaspaFramework, Wallet, workerLog} from '@kaspa/wallet-worker';
 Wallet.setWorkerLogLevel(localStorage.walletWorkerLogLevel || 'none')
 
-window._xx = {Wallet, workerLog}
+//window._xx = {Wallet, workerLog}
 
 export {html, css, FlowFormat, dpc, baseUrl, debug};
 
@@ -97,7 +97,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.preparingTxNotifications = new Map();
 		this.dots = '';
 		this.UTXOIndexSupport = true;
-		this.recentTransactionsHeading = "Recent Transactions";
+		this.recentTransactionsHeading = i18n.t("Recent Transactions");
 		this.walletDebugInfo = {};
 		window.__walletCmp = this;
 	}
@@ -200,6 +200,8 @@ export class KaspaWalletUI extends BaseElement{
 
 		let notifications = [...this.preparingTxNotifications.values()];
 
+		let msg = i18n.t(`Preparing transaction for [n] KAS ....`)
+				.replace('[n]', this.formatKAS(n.amount));
 		return html`
 		<div class="recent-transactions">
 			<div class="heading">
@@ -209,8 +211,8 @@ export class KaspaWalletUI extends BaseElement{
 				${notifications.map(n=>{
 					return html`<div class="tx-notification">
 						${n.compoundUTXOs?
-							`Compounding UTXOs...`:
-							`Preparing transaction for ${this.formatKAS(n.amount)} KAS ....`}
+							T(`Compounding UTXOs...`):
+							msg}
 					</div>`
 				})}
 				
@@ -243,7 +245,7 @@ export class KaspaWalletUI extends BaseElement{
 						<div class="tx-body">
 							${tx.note}
 							<div class="tx-id">${tx.id}</div>
-							<div class="tx-address">${(tx.myAddress?'THIS WALLET => ':'')+tx.address}</div>
+							<div class="tx-address">${tx.myAddress?T('THIS WALLET => '):''}${tx.address}</div>
 						</div>
 					</flow-expandable>
 				`
@@ -254,7 +256,7 @@ export class KaspaWalletUI extends BaseElement{
 	_renderAllTX({skip, items}){
 		let {blueScore=0} = this, cfm, cfmP, p, color, bScore;
 		return html`
-			${items.length?'':html`<div class="no-record">No Transactions</div>`}
+			${items.length?'':html`<div class="no-record" is="i18n-div">No Transactions</div>`}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
 					bScore = tx.blueScore||0;
@@ -283,7 +285,7 @@ export class KaspaWalletUI extends BaseElement{
 						<div class="tx-amount">${tx.in?'':'-'}${KAS(tx.amount)} KAS</div>
 						<div class="br tx-note">${tx.note}</div>
 						<div class="br tx-id">${tx.id.split(":")[0]}</div>
-						<div class="tx-address">${(tx.myAddress?'THIS WALLET => ':'')+tx.address}</div>
+						<div class="tx-address">${tx.myAddress?T('THIS WALLET => '):''}${tx.address}</div>
 					</div>`
 				})}
 			</div>
@@ -312,13 +314,13 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async showSeeds(){
-		askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
+		askForPassword({confirmBtnText:i18n.t("Next")}, async({btn, password})=>{
     		if(btn!="confirm")
     			return
     		let encryptedMnemonic = getLocalWallet().mnemonic;
     		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
     		if(!valid)
-    			return FlowDialog.alert("Error", "Invalid password");
+    			return FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid password"));
 			let mnemonic = await this.wallet.mnemonic;
 			this.openSeedsDialog({mnemonic, hideable:true, showOnlySeed:true}, ()=>{
 				//
@@ -326,14 +328,14 @@ export class KaspaWalletUI extends BaseElement{
 		})
 	}
 	async exportWalletFile(){
-		askForPassword({confirmBtnText:"Next"}, async({btn, password})=>{
+		askForPassword({confirmBtnText:i18n.t("Next")}, async({btn, password})=>{
     		if(btn!="confirm")
     			return
     		let wallet = getLocalWallet();
     		let encryptedMnemonic = wallet.mnemonic;
     		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
     		if(!valid)
-    			return FlowDialog.alert("Error", "Invalid password");
+    			return FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid password"));
 			
 			this.sendDataToDownload(JSON.stringify(wallet), 'wallet.kpk')
 		})
@@ -345,7 +347,7 @@ export class KaspaWalletUI extends BaseElement{
 		let input = this.getFileInput();
 		let a = Date.now();
 		let invalidFileAlert = ()=>{
-			FlowDialog.alert("Error", "Invalid File");
+			FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid File"));
 		}
 		let importWallet = (walletMeta)=>{
 			let {mnemonic} = walletMeta.wallet;
@@ -355,7 +357,7 @@ export class KaspaWalletUI extends BaseElement{
 	    			return
 				let valid = await Wallet.checkPasswordValidity(password, mnemonic)
 				if(!valid)
-					return FlowDialog.alert("Error", "Invalid password");
+					return FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid password"));
 
 				let walletInitArgs = {
 					password,
@@ -364,7 +366,7 @@ export class KaspaWalletUI extends BaseElement{
 					dialog:{
 						mode:"import",
 						setError:(error)=>{
-							FlowDialog.alert("Error", error);
+							FlowDialog.alert(i18n.t("Error"), error);
 						}
 					}
 				}
@@ -397,7 +399,7 @@ export class KaspaWalletUI extends BaseElement{
 				//console.log("reader result", json);
 			};
 			reader.onerror = ()=>{
-				FlowDialog.alert("Error", "Unable to read file");
+				FlowDialog.alert(i18n.t("Error"), i18n.t("Unable to read file"));
 				error = true;
 				input.value = "";
 			}
@@ -430,15 +432,28 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async showRecoverWallet(){
-		let title = html`<fa-icon class="big warning" icon="exclamation-triangle"></fa-icon> Attention !`;
+		let title = html`<fa-icon class="big warning"
+			icon="exclamation-triangle"></fa-icon> ${T('Attention !')}`;
 		let body = html`
-			<div style="min-width:300px;">
+			<div style="min-width:300px;" is="i18n-div">
 				You already have a wallet open. <br />
 				Please make sure your current wallet <br />
 				is backed up before proceeding!
 			</div>
 		`
-		let {btn} = await FlowDialog.alert({title, body, cls:'with-icon', btns:['Cancel', 'Next:primary']})
+		let {btn} = await FlowDialog.alert({
+			title,
+			body,
+			cls:'with-icon', 
+			btns:[{
+				text:i18n.t('Cancel'),
+				value:'cancel'
+			},{
+				text:i18n.t('Next'),
+				value:'next',
+				cls:'primary'
+			}]
+		})
 		if(btn != 'next')
 			return
 		showWalletInitDialog({
@@ -486,13 +501,13 @@ export class KaspaWalletUI extends BaseElement{
 			return;
 		}
 
-		let status = 'Online';
+		let status = i18n.t('Online');
 		if(this.blockCount == 1) {
-			status = `Syncing Headers`;
+			status = i18n.t(`Syncing Headers`);
 		}
 		else {
 			if(this.sync && this.sync < 99.95)
-				status = `Syncing DAG ${this.sync.toFixed(2)}% `;
+				status = i18n.t(`Syncing DAG [n]`).replace('[n]', `${this.sync.toFixed(2)}%`);
 		}
 		this.status = status;
 	}
@@ -504,8 +519,17 @@ export class KaspaWalletUI extends BaseElement{
 				would you like to compound by re-sending funds to yourself?
 			`;
 			let {btn} = await FlowDialog.alert({
-				title:"Too many transactions", body, cls:'',
-				btns:['Close', 'Yes Compound:primary:compound']
+				title:i18n.t("Too many transactions"),
+				body,
+				cls:'',
+				btns:[{
+					text:i18n.t('Close'),
+					value:'cancel'
+				},{
+					text:i18n.t('Yes Compound'),
+					cls:'primary',
+					value:'compound'
+				}]
 			})
 
 			if(btn=='compound'){
@@ -522,9 +546,9 @@ export class KaspaWalletUI extends BaseElement{
 			let response = await this.wallet.compoundUTXOs()
 			.catch(err=>{
 				console.log("compoundUTXOs error", err)
-				let error = err.error || err.message || 'Could not compound transactions. Please Retry later.';
+				let error = err.error || err.message || i18n.t('Could not compound transactions. Please Retry later.');
 				if(!error.includes("Amount is expected"))
-					FlowDialog.alert('Error', error)
+					FlowDialog.alert(i18n.t('Error'), error)
 			})
 			if(response)
 				console.log("compoundUTXOs response", response)
@@ -538,9 +562,9 @@ export class KaspaWalletUI extends BaseElement{
 			let response = await this.wallet.scanMoreAddresses(10000)
 			.catch(err=>{
 				console.log("scanMoreAddresses error", err)
-				let error = err.error || err.message || 'Could not scan more addresses. Please Retry later.';
+				let error = err.error || err.message || i18n.t('Could not scan more addresses. Please Retry later.');
 				if(typeof error == 'string')
-					FlowDialog.alert('Error', error)
+					FlowDialog.alert(i18n.t('Error'), error)
 			})
 			if(response)
 				console.log("scanMoreAddresses response", response)
@@ -650,11 +674,10 @@ export class KaspaWalletUI extends BaseElement{
 
 	async alertUTXOIndexSupportIssue(){
 		let title = html`<fa-icon class="big warning" 
-			icon="exclamation-triangle"></fa-icon> Attention !`;
+			icon="exclamation-triangle"></fa-icon> ${T('Attention !')}`;
 
-		let body = html`
-			'utxoindex' flag is missing from KASPAD config.<br />
-			Please inform the wallet administrator.<br />
+		let body = html`${T(`'utxoindex' flag is missing from KASPAD config.<br />
+			Please inform the wallet administrator.<br />`)}
 		`
 		let {btn} = await FlowDialog.alert({
 			title, body, cls:'with-icon big warning'
@@ -768,7 +791,7 @@ export class KaspaWalletUI extends BaseElement{
 		console.log("$$$$$$$ INIT NETWORK SETTINGS", { network, rpc });
 
 		if(!rpc)
-			return FlowDialog.alert("Error", "Kaspa Daemon config is missing.");
+			return FlowDialog.alert(i18n.t("Error"), i18n.t("Kaspa Daemon config is missing."));
 
 		this.initDaemonRPC();
 		this.initHelpers();
@@ -779,7 +802,7 @@ export class KaspaWalletUI extends BaseElement{
 			const wallet = await Wallet.import(password, encryptedMnemonic, {network, rpc})
 			.catch(error=>{
 				console.log("import wallet error:", error)
-				dialog.setError("Incorrect passsword.");
+				dialog.setError(i18n.t("Incorrect password."));
 			});
 
 			if(!wallet)
@@ -793,7 +816,7 @@ export class KaspaWalletUI extends BaseElement{
 			const wallet = await Wallet.import(password, encryptedMnemonic, {network, rpc})
 			.catch(error=>{
 				console.log("import wallet error:", error)
-				dialog.setError("Incorrect passsword.");
+				dialog.setError(i18n.t("Incorrect password."));
 			});
 
 			//console.log("Wallet imported", encryptedMnemonic)
@@ -833,7 +856,7 @@ export class KaspaWalletUI extends BaseElement{
 				wallet = Wallet.fromMnemonic(seedPhrase, { network, rpc });
 			}catch(error){
 				console.log("recover:Wallet.fromMnemonic error", error)
-				dialog.setError(`Invalid seed (${error.message})`);
+				dialog.setError(i18n.t("Invalid seed")+` (${error.message})`);
 			}
 
 			if(!wallet)
@@ -945,7 +968,7 @@ export class KaspaWalletUI extends BaseElement{
 			let error = (msg+"").replace("Error:", '')
 			console.log("error", error)
 			if(/Invalid Argument/.test(error))
-				error = "Please provide correct address and amount";
+				error = i18n.t("Please provide correct address and amount");
 			uid && this.removePreparingTransactionNotification({uid});
 			FlowDialog.alert("Error", error);
 		})
@@ -976,7 +999,7 @@ export class KaspaWalletUI extends BaseElement{
 			let msg = err.error || err.message || err;
 			error = (msg+"").replace("Error:", '');
 			if(/Invalid Argument/.test(error))
-				error = "Please provide address and amount";
+				error = i18n.t("Please provide address and amount");
 			console.log("error", err);
 			//error = 'Unable to estimate transaction fees';//(err+"").replace("Error:", '')
 		})
@@ -1039,13 +1062,16 @@ export class KaspaWalletUI extends BaseElement{
 		showT9({
 			value:'',
 			max,
-			heading:'Request funds',
-			inputLabel:'Amount in KAS'
+			heading:i18n.t('Request funds'),
+			inputLabel:i18n.t('Amount in KAS')
 		}, ({value:amount, dialog})=>{
 			console.log("t9 result", amount)
 			let sompis = formatForMachine(amount||0);
-			if(sompis > this.faucetFundsAvailable)
-				return dialog.setError(`You can't request more than ${KAS(this.faucetFundsAvailable||0)} KAS.`);//'
+			if(sompis > this.faucetFundsAvailable){
+				let msg = i18n.t(`You can't request more than [n] KAS.`)
+						.replace("[n]", KAS(this.faucetFundsAvailable||0))
+				return dialog.setError(msg);//'
+			}
 			
 			dialog.hide();
 

@@ -1,6 +1,7 @@
 import {
 	html, css, KaspaDialog, askForPassword, KAS, txListStyle,
-	formatForMachine, formatForHuman, paginationStyle, buildPagination, renderPagination
+	formatForMachine, formatForHuman, paginationStyle, buildPagination,
+	renderPagination, T
 } from './kaspa-dialog.js';
 
 class KaspaTXDialog extends KaspaDialog{
@@ -63,7 +64,7 @@ class KaspaTXDialog extends KaspaDialog{
 		this._onPaginationClick = this.onPaginationClick.bind(this);
 	}
 	renderHeading(){
-		return html`${this.renderBackBtn()} Transactions <div class="flex"></div>
+		return html`${this.renderBackBtn()} ${T('Transactions')} <div class="flex"></div>
 		${this.loading?html`<fa-icon class="spinner" icon="sync"></fa-icon>`:''}`;
 	}
 	renderBody(args){

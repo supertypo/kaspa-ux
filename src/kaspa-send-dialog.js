@@ -1,3 +1,4 @@
+import { i18n, T } from './flow-ux.js';
 import {
 	html, css, KaspaDialog, askForPassword, KAS,
 	formatForMachine, formatForHuman
@@ -38,7 +39,7 @@ class KaspaSendDialog extends KaspaDialog{
 		`]
 	}
 	renderHeading(){
-		return 'SEND';
+		return html`${T('SEND')}`;
 	}
 	renderBody(){
 		return html`
@@ -46,27 +47,27 @@ class KaspaSendDialog extends KaspaDialog{
 			to: kaspatest:qrhefqj5c80m59d9cdx4ssxw96vguvn9fgy6yc0qtd
 			</div-->
 			<flow-input class="address full-width" outer-border
-				label="Recipient Address (Must start with 'kaspa' prefix)"
+				label="${T(`Recipient Address (Must start with 'kaspa' prefix)`)}"
 				value="${this.address||''}"
 				placeholder="">
 			</flow-input>
 			<div col>
 				<flow-input class="amount full-width" outer-border
-					label="Amount in KAS" @keyup=${this.onAmountChange}
+					label="${T('Amount in KAS')}" @keyup=${this.onAmountChange}
 					value="${this.amount}">
 				</flow-input>
 				<div spacer></div>
 				<flow-input class="fee full-width"
-					label="Priority Fee"
+					label="${T('Priority Fee')}"
 					@keyup="${this.onNetworkFeeChange}">
 				</flow-input>
 			</div>
-			<flow-input class="note full-width" outer-border label="Note"></flow-input>
+			<flow-input class="note full-width" outer-border label="${T('Note')}"></flow-input>
 			<flow-checkbox class="calculate-network-fee" checked
-				@changed="${this.onCalculateFeeChange}">Automatically calculate network fee</flow-checkbox>
+				@changed="${this.onCalculateFeeChange}">${T('Automatically calculate network fee')}</flow-checkbox>
 			<!--flow-input class="maximum-fee full-width" label="Maximum network fee"></flow-input-->
 			<flow-checkbox class="inclusive-fee"
-				@changed="${this.onInclusiveFeeChange}">Include fee in the amount</flow-checkbox>
+				@changed="${this.onInclusiveFeeChange}">${T('Include fee in the amount')}</flow-checkbox>
 			${this.renderEstimate()}
 			<div class="error">${this.errorMessage}</div>`;
 	}
@@ -83,10 +84,10 @@ class KaspaSendDialog extends KaspaDialog{
 		return html`
 		<div class="estimate-tx">
 			<table>
-				${txSize?html`<tr><td>Transaction Size</td><td>${txSize.toFileSize()}</td></tr>`:''}
-				${dataFee?html`<tr><td>Data Fee</td><td>${KAS(dataFee)} KAS</td></tr>`:''}
-				${fee?html`<tr><td>Total Fee</td><td>${KAS(fee)} KAS</td></tr>`:''}
-				${totalAmount?html`<tr><td>Total Amount</td><td> ${KAS(totalAmount)} KAS</td></tr>`:''}
+				${txSize?html`<tr><td is="i18n-td">Transaction Size</td><td>${txSize.toFileSize()}</td></tr>`:''}
+				${dataFee?html`<tr><td is="i18n-td">Data Fee</td><td>${KAS(dataFee)} KAS</td></tr>`:''}
+				${fee?html`<tr><td is="i18n-td">Total Fee</td><td>${KAS(fee)} KAS</td></tr>`:''}
+				${totalAmount?html`<tr is="i18n-td"><td>Total Amount</td><td> ${KAS(totalAmount)} KAS</td></tr>`:''}
 			</table>
 		</div>
 		`
@@ -99,10 +100,10 @@ class KaspaSendDialog extends KaspaDialog{
 			${estimating?html`<fa-icon 
 				class="spinner" icon="sync"
 				style__="position:absolute"></fa-icon>`:''}
-			<flow-btn @click="${this.cancel}">Cancel</flow-btn>
+			<flow-btn @click="${this.cancel}" i18n>Cancel</flow-btn>
 			<flow-btn primary 
 				?disabled=${estimating || !this.estimateTxSignal || !estimateFee}
-				@click="${this.sendAfterConfirming}">SEND
+				@click="${this.sendAfterConfirming}" i18n>SEND
 			</flow-btn>`
 	}
 	open(args, callback){
@@ -201,10 +202,19 @@ class KaspaSendDialog extends KaspaDialog{
     	if(!estimate)
     		return
     	if(estimate.fee > this.alertFeeAmount){
+			let msg = i18n.t('Transaction Fee ([n] KAS) is too large.');
+			msg = msg.replace('[n]', KAS(estimate.fee));
     		let {btn} = await FlowDialog.alert("Warning", 
-    			html`Transaction Fee (${KAS(estimate.fee)} KAS) is too large.`,
+    			html`${msg}`,
     			'',
-    			['Cancel', 'Submit:primary']);
+    			[{
+					text:i18n.t('Cancel'),
+					value:'cancel'
+				},{
+					text:i18n.t('Submit'),
+					value:'submit',
+					cls:'primary'
+				}]);
 
     		if(btn !='submit')
     			return
@@ -213,7 +223,7 @@ class KaspaSendDialog extends KaspaDialog{
     	if(!formData)
     		return
     	console.log("formData", formData)
-    	askForPassword({confirmBtnText:"CONFIRM SEND", pass}, ({btn, password})=>{
+    	askForPassword({confirmBtnText:i18n.t("CONFIRM SEND"), pass}, ({btn, password})=>{
     		//console.log("btn, password", btn, password)
     		if(btn!="confirm")
     			return

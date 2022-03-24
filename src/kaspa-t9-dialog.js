@@ -1,3 +1,4 @@
+import { i18n } from './flow-ux.js';
 import {
 	html, css, KaspaDialog, askForPassword, KAS,
 	formatForMachine, formatForHuman
@@ -47,8 +48,8 @@ class KaspaT9Dialog extends KaspaDialog{
 		<flow-t9 value="${value}" @changed="${this.onT9Change}"></flow-t9>
 		<div class="error">${this.errorMessage}</div>
 		<div class="buttons">
-			<flow-btn ?hidden=${!this.max} @click="${this.setMaxValue}">MAX</flow-btn>
-			<flow-btn class="primary" @click="${this.sendBack}">DONE</flow-btn>
+			<flow-btn ?hidden=${!this.max} @click="${this.setMaxValue}" i18n>MAX</flow-btn>
+			<flow-btn class="primary" @click="${this.sendBack}" i18n>DONE</flow-btn>
 		</div>
 		`;
 	}
@@ -71,8 +72,8 @@ class KaspaT9Dialog extends KaspaDialog{
 		this.args = args;
 		this.value = args.value||'';
 		this.max = args.max||'';
-		this.heading = args.title||args.heading||'Amount';
-		this.inputLabel = args.inputLabel||'Amount in KAS';
+		this.heading = args.title||args.heading||i18n.t('Amount');
+		this.inputLabel = args.inputLabel||i18n.t('Amount in KAS');
 		this.show();
 	}
     cancel(){

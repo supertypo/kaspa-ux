@@ -1,4 +1,4 @@
-import {html, css, FlowFormat} from './kaspa-wallet-ui.js';
+import {html, css, FlowFormat, i18n, T} from './kaspa-wallet-ui.js';
 import {KaspaWalletMobile} from './kaspa-wallet-mobile.js';
 
 export class KaspaWalletDesktop extends KaspaWalletMobile{
@@ -112,7 +112,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		super();
 		this.selectedTab = "transactions";
 		this.showBalanceTab = false;
-		this.recentTransactionsHeading = "Transactions under process";
+		this.recentTransactionsHeading = i18n.t("Transactions under process");
 		this.updateTXLimit();
 		this.addEventListener("new-wallet", ()=>{
 			console.log("new-wallet")
@@ -165,12 +165,15 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		let notifications = [...this.preparingTxNotifications.values()];
 		if(!notifications.length)
 			return '';
+		let msg = i18n.t(`Preparing transaction for [n] KAS ....`)
+				.replace('[n]', this.formatKAS(n.amount));
+
 		return html`<div class="tx-notifications">
 				${notifications.map(n=>{
 					return html`<div class="tx-notification">
 						${n.compoundUTXOs?
-							`Compounding UTXOs...`:
-							`Preparing transaction for ${this.formatKAS(n.amount)} KAS ....`}
+							html`${T('Compounding UTXOs...')}`:
+							msg}
 					</div>`
 				})}
 			</div>`;
@@ -181,12 +184,12 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 
 		return html`
 		<div class="address-badge">
-			<div>Receive Address:</div>
+			<div is="i18n-div">Receive Address:</div>
 			<div class="address-holder">
 				<textarea class="address-input" readonly .value="${this.receiveAddress||''}"></textarea>
 				<fa-icon ?hidden=${!this.receiveAddress} class="copy-address"
 					@click="${this.copyAddress}"
-					title="Copy to clipboard" icon="copy"></fa-icon>
+					title="${T('Copy to clipboard')}" icon="copy"></fa-icon>
 			</div>
 		</div>`
 	}
@@ -201,11 +204,11 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		return html`
   			<div class="balance-badge">
                 <div class="balance">
-                    <span class="label">Available</span>
+                    <span class="label" is="i18n-span">Available</span>
                     <span class="value">${this.formatKAS(available)} KAS</span>
                 </div>
                 <div class="balance pending">
-                    <span class="label-pending">Pending</span>
+                    <span class="label-pending" is="i18n-span">Pending</span>
                     <span class="value-pending">${this.formatKAS(pending)} KAS</span>
                 </div>
             </div>
@@ -218,17 +221,18 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 			<div class="qr-code-holder">
 				<flow-qrcode data="${this.receiveAddress||""}" ntype="6"></flow-qrcode>
 				<div class="buttons-holder">
-					<flow-btn primary @click="${this.showSendDialog}">SEND</flow-btn>
+					<flow-btn primary @click="${this.showSendDialog}" i18n>SEND</flow-btn>
 					<div style="flex:1;width:20px;"></div>
-					<flow-btn primary ?hidden=${this.hideQRScanner} @click="${this.showSendDialogWithQrScanner}">Scan QR code</flow-btn>
+					<flow-btn primary ?hidden=${this.hideQRScanner}
+						@click="${this.showSendDialogWithQrScanner}" i18n>Scan QR code</flow-btn>
 				</div>
 			</div>
 			<div class="status">
-				Wallet Status: ${this.status||'Offline'}<br/>
+				${T('Wallet Status:')} ${this.status||T('Offline')}<br/>
 				${
 					this.blockCount == 1 ?
-					html`DAG headers: ${this.headerCount?FlowFormat.commas(this.headerCount):''}` :
-					html`DAA score: ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
+					html`${T('DAG headers:')} ${this.headerCount?FlowFormat.commas(this.headerCount):''}` :
+					html`${T('DAA score:')} ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
 				}
 				
 			</div>

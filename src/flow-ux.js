@@ -1,7 +1,10 @@
 export * from '/flow/flow-ux/src/flow-format.js';
 export * from '/flow/flow-ux/src/base-element.js';
 export * from '/flow/flow-ux/src/flow-swipeable.js';
+import {i18n, T, i18nFormat} from '/flow/flow-ux/src/flow-i18n.js';
 import {paginationStyle as pCss, css} from '/flow/flow-ux/src/base-element.js';
+
+export {i18n, T, i18nFormat};
 export const paginationStyle = [pCss, css`
 	.pagination a{
 		padding:var(--flow-btn-padding);

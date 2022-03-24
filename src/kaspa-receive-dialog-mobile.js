@@ -1,5 +1,5 @@
 import {
-	html, css, KaspaDialog, askForPassword, KAS,
+	html, css, KaspaDialog, T, askForPassword, KAS,
 	formatForMachine, formatForHuman
 } from './kaspa-dialog.js';
 const pass = "";
@@ -55,12 +55,12 @@ class KaspaReceiveDialogMobile extends KaspaDialog{
 		return html`
 			<flow-qrcode data="${address+amountStr}" ntype="6"></flow-qrcode>
 			<flow-input class="address full-width" suffix-btn
-				label="Request URL" readonly value="${address+amountStr}">
+				label="${T('Request URL')}" readonly value="${address+amountStr}">
 				<flow-btn slot="suffix" class="primary"
 					@click="${this.copyAddress}" icon="copy"></flow-btn>
 			</flow-input>
 			<flow-input class="amount full-width" suffix-btn
-				label="Amount in KAS" @keyup=${this.onAmountChange}
+				label="${T('Amount in KAS')}" @keyup=${this.onAmountChange}
 				value="${this.amount}">
 				<flow-btn slot="suffix" class="primary"
 					@click="${this.showT9}" icon="keyboard"></flow-btn>
@@ -96,7 +96,8 @@ class KaspaReceiveDialogMobile extends KaspaDialog{
 		let input = e.target.closest("flow-input");
 		let {value=''} = input;
 		showT9({
-			value, heading:input.label.replace("in KAS", ""),
+			value,
+			heading:input.label.replace("in KAS", ""),
 			inputLabel:input.label
 		}, ({value, dialog})=>{
 			console.log("t9 result", value)

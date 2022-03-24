@@ -10,7 +10,7 @@ const historyStack = [];
 if(isMobile){
 	window.addEventListener("popstate", (e)=>{
 		let state = historyStack.pop()
-		console.log("popstate:::state", state)
+		//console.log("popstate:::state", state)
 		let ce = new CustomEvent("_popstate", {detail:{state:e.state, oldState:state}})
 		window.dispatchEvent(ce)
 	});
@@ -174,7 +174,7 @@ export class KaspaDialog extends BaseElement{
 		name = name.replace(/\-/g, "");
 		let key = name.toLowerCase().replace(/(kaspa|dialog|mobile)/g, '')
 		let state = {type:name, uid, key};
-		console.log("pushHistory:state", state, key)
+		//console.log("pushHistory:state", state, key)
 		history.pushState(state, name, "/"+key+"/"+uid);
 		historyStack.push(state)
 	}

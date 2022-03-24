@@ -1,3 +1,4 @@
+import { i18n } from './flow-ux.js';
 import {
 	html, css, KaspaDialog, askForPassword, KAS,
 	formatForMachine, formatForHuman
@@ -47,7 +48,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		<div class="error">${this.errorMessage}</div>
 		<div class="buttons">
 			<flow-btn class="primary" 
-				@click="${this.sendBack}"> Close </flow-btn>
+				@click="${this.sendBack}" i18n> Close </flow-btn>
 		</div>
 		`;
 
@@ -87,7 +88,7 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		if(value && this.isAddressQuery){
 			isValid = await this.wallet.isValidAddress(value)
 			if(!isValid)
-				this.setError("Invalid Address")
+				this.setError(i18n.t("Invalid Address"))
 		}
 		this.isValid = isValid;
 		if(isValid)
@@ -98,8 +99,8 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.callback = callback;
 		this.args = args;
 		this.value = args.value||'';
-		this.heading = args.title||args.heading||'Scan QR code';
-		this.inputLabel = args.inputLabel||'Scan result';
+		this.heading = args.title||args.heading||i18n.t('Scan QR code');
+		this.inputLabel = args.inputLabel||i18n.t('Scan result');
 		this.isAddressQuery = !!args.isAddressQuery;
 		this.wallet = args.wallet
 		this.show();
