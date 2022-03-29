@@ -2,14 +2,16 @@ import {
 	html, css, FlowFormat, KaspaWalletUI, dpc,
 	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
 	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent,
-	getTheme, setTheme, flow, T, i18nFormat
+	getTheme, setTheme, flow, T, i18nFormat, i18nHTMLFormat,
+	FlowI18nDialog
 } from './kaspa-wallet-ui.js';
 export {isMobile, dontInitiatedComponent};
 export class KaspaWalletMobile extends KaspaWalletUI{
 
 	static get properties() {
 		return {
-			txSkip:{type:Number}
+			txSkip:{type:Number},
+			hideI18nIcon:{type:Boolean}
 		};
 	}
 
@@ -186,7 +188,19 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			}
 			.developer-info{margin-top:26px;}
 			.clear-used-utxos{margin:0px 10px;cursor:pointer}
-			.theme-btn{cursor:pointer}
+			.theme-btn,.language-icon{cursor:pointer}
+			.language-icon{position:relative;margin:0px 10px 0 5px}
+			.language-icon fa-icon{margin-right:10px}
+			.language-icon:after{
+				content:"";
+				position:absolute;
+				top:9px;
+				right:-2px;
+				width:0px;
+				height:0px;
+				border:5px solid transparent;
+				border-top:5px solid var(--flow-primary-color);
+			}
 		`];
 	}
 	constructor() {
@@ -281,10 +295,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<div class="faucet-ux">
 							<div class="margin-bottom"  is="i18n-div">KASPA FAUCET</div>
 							<div>${i18nFormat('Your IP is [n]', this.ip||"")}</div>
-							<div class="margin">${i18nFormat('You have <b>[n] KAS</b> available.', KAS(this.faucetFundsAvailable||0) )}</div>
+							<div class="margin">${i18nHTMLFormat('You have <b>[n] KAS</b> available.', KAS(this.faucetFundsAvailable||0) )}</div>
 
 							${this.faucetPeriod ? html`
-								<div class="margin-bottom">${i18nFormat('Additional funds will be<br/>available in [n]', FlowFormat.duration(this.faucetPeriod))}</div>
+								<div class="margin-bottom">${i18nHTMLFormat('Additional funds will be<br/>available in [n]', FlowFormat.duration(this.faucetPeriod))}</div>
 							`:``}
 							${ !this.faucetFundsAvailable ? html`` : html`
 								<flow-btn class="primary" @click="${this.requestFaucetFunds}" i18n>Request Funds from Faucet</flow-btn>
@@ -354,10 +368,19 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<fa-icon ?hidden=${!loadingIndicator} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
+			${this.hideI18nIcon? '': html`<div class="language-icon">
+				<fa-icon icon="icons:language"
+				@click="${this.onLangClick}"></fa-icon></div>`}
 			<fa-icon class="theme-btn" @click=${this.toggleTheme}
 				icon="${theme=="light"?'moon': 'sun'}"></fa-icon>
 		</div>
 		`
+	}
+	onLangClick(e){
+		this.openI18nDialog(e.target);
+	}
+	openI18nDialog(target){
+		FlowI18nDialog.open(target);
 	}
 	toggleTheme(){
 		let theme = flow.app.getTheme("light");
