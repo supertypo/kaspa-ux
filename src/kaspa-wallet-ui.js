@@ -484,7 +484,7 @@ export class KaspaWalletUI extends BaseElement{
 	async setWallet(wallet){
 		if(localStorage.walletLogLevel)
 			wallet.setLogLevel(localStorage.walletLogLevel)
-		console.log("setWallet:", wallet)
+		//console.log("setWallet:", wallet)
 		this.txs = [];
 		this.receiveAddress = "";
 		this.fire("new-wallet")
