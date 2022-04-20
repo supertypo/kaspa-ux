@@ -1,6 +1,7 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
-	dpc, FlowFormat, buildPagination, renderPagination, txListStyle, UID, T, i18n
+	dpc, FlowFormat, buildPagination, renderPagination, txListStyle, UID, T, i18n,
+	i18nHTMLFormat
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
@@ -49,7 +50,8 @@ export class KaspaWalletUI extends BaseElement{
 			hideNetwork:{type:Boolean},
 			hideDebug:{type:Boolean},
 			hideQRScanner:{type:Boolean},
-			hideOpenWalletLogo:{type:Boolean}
+			hideOpenWalletLogo:{type:Boolean},
+			skipUTXOIndexCheck:{type:Boolean}
 			//UTXOIndexSupport:{type:Boolean}
 		};
 	}
@@ -660,9 +662,10 @@ export class KaspaWalletUI extends BaseElement{
 
 		    wallet.on("grpc-flags", (flags)=>{
 		    	console.log("grpc-flags", flags)
+				//console.log("grpc-flags:skipUTXOIndexCheck", this.skipUTXOIndexCheck)
 		    	this.grpcFlags = flags;
 		    	this.UTXOIndexSupport = !!flags.utxoIndex;
-		    	if(!this.UTXOIndexSupport){
+		    	if(!this.skipUTXOIndexCheck && !this.UTXOIndexSupport){
 		    		this.alertUTXOIndexSupportIssue()
 		    	}
 		    	resolve();
@@ -676,7 +679,7 @@ export class KaspaWalletUI extends BaseElement{
 		let title = html`<fa-icon class="big warning" 
 			icon="exclamation-triangle"></fa-icon> ${T('Attention !')}`;
 
-		let body = html`${T(`'utxoindex' flag is missing from KASPAD config.<br />
+		let body = html`${i18nHTMLFormat(`'utxoindex' flag is missing from KASPAD config.<br />
 			Please inform the wallet administrator.<br />`)}
 		`
 		let {btn} = await FlowDialog.alert({
