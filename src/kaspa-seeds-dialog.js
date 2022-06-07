@@ -22,12 +22,12 @@ class KaspaSeedsDialog extends KaspaDialog{
 			.text-center{text-align:center;}
 			.words{margin:20px 0px;}
 			.words .row, .button-row{display:flex;justify-content:center;}
-			.words .cell{flex:1;text-align:center;padding:5px}
-			.words .word{margin:4px;color:var(--flow-primary-color)}
+			.words .cell{flex:1;text-align:center;padding:5px;user-select:none}
+			.words .word{margin:4px;color:var(--flow-primary-color);user-select:initial}
 			.dots{text-align:center;padding:10px;}
 			.dots .dot{margin:2px}
 			.button-row{margin:20px 0px;flex-wrap: wrap;}
-			.button-row flow-btn{margin:10px; flex:1;}
+			.button-row flow-btn{margin:10px; flex:1;--flow-btn-display:inline-block}
 			.dot[icon="check"]{--fa-icon-color:var(--flow-primary-color)}
 			.dot[icon="times"]{--fa-icon-color:#F00;}
 			.varification-msg{margin-bottom:5px;text-align:center}

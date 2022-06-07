@@ -115,7 +115,7 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		this.recentTransactionsHeading = i18n.t("Transactions under process");
 		this.updateTXLimit();
 		this.addEventListener("new-wallet", ()=>{
-			console.log("new-wallet")
+			//console.log("new-wallet")
 			this.updateTXLimit();
 		})
 	}

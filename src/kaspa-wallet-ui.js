@@ -109,8 +109,6 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async initNetworkSettings() {
-		console.log("$$$$$$$$$$$$$$$ rpcBuilder", this.rpcBuilder);
-
 		if(this.rpc) {
 			this.rpc.disconnect();
 			// !!! FIXME delete wallet instance?
@@ -753,7 +751,7 @@ export class KaspaWalletUI extends BaseElement{
 		
 		console.log("connectedCallback1", openDialog)
 		const {workerCorePath} = window.KaspaConfig||{}
-		console.log("workerCorePath", workerCorePath)
+		//console.log("workerCorePath", workerCorePath)
 		initKaspaFramework({
 			workerPath: workerCorePath||"/kaspa-wallet-worker/worker.js?ident="+(window.KaspaConfig?.ident||"")
 		}).then(()=>{
@@ -812,6 +810,7 @@ export class KaspaWalletUI extends BaseElement{
 				return
 
 			dialog.hide();
+			//console.log("open wallet", wallet)
 			this.setWallet(wallet);
 			return
 		}
