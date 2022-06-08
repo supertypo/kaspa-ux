@@ -88,7 +88,7 @@ body{
 	--tx-border-color:#DDD;
 	--kaspa-dialog-bg-color:rgba(255, 255, 255, 0.5);
 	/*	--flow-btn-text-transform:uppercase;*/
-	
+	--flow-btn-display:inline-block;
 }
 
 body.flow-theme-dark{
@@ -122,7 +122,6 @@ body.flow-theme-dark{
 	--kaspa-dialog-bg-color:rgba(40,40,40,0.71);
 	--kaspa-wallet-tab-border-bottom-color:#333232;
 	--tx-border-color:#282828;
-	--flow-btn-display:inline-block;
 }
 flow-add-to-home{
 	position:fixed;bottom:5px;left:5px;right:5px;z-index:1000;
