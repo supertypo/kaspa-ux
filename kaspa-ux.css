@@ -365,10 +365,10 @@ flow-selector .menu-item{padding:2px 4px;}
 	padding:5px;color:red;min-height:30px;font-size:0.8rem;box-sizing:border-box;
 }
 .short-dialog .fa-btn{align-self:center;margin:5px 10px;cursor:pointer;}
-.short-dialog .full-width{width:100%;max-width:100%;}
+.short-dialog .full-width{width:100%;width:calc(100% - 4px);max-width:100%;}
 .short-dialog dialog{min-width:10px;width:95%;max-width:510px;box-sizing:border-box;}
 .is-mobile .short-dialog dialog,
-.is-mobile dialog{
+.is-mobile flow-dialog:not(.flow-menu) dialog{
 	width:100%;margin:0px;height:100%;max-width:none;max-height:none;border-radius:0px;
 	display:flex;flex-direction:column;justify-content:center;border:0px;
 	box-sizing:border-box;align-items:center;
