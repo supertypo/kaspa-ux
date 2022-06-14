@@ -3,8 +3,9 @@ window.mobileMode = window.localStorage?.getItem("mobileMode")==1||false;
 let isMobile = window.mobileMode?true:_isSmallScreen;
 window.isMobile = isMobile;
 
-import {helper, Storage} from '@kaspa/wallet-worker';
+import {helper, Storage, CONFIRMATION_COUNT} from '@kaspa/wallet-worker';
 export const {Deferred, KAS, Decimal} = helper;
+export {CONFIRMATION_COUNT};
 const storage = new Storage({logLevel:'debug'});
 let {baseUrl, debug, MAX_UTXOS_THRESHOLD=1000, dontInitiatedComponent=false} = window.KaspaConfig || {};
 if(!baseUrl){

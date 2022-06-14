@@ -8,7 +8,7 @@ import {
 	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
 	getLocalWallet, setLocalWallet, baseUrl, debug, MAX_UTXOS_THRESHOLD_COMPOUND,
 	getCacheFromStorage,
-	saveCacheToStorage
+	saveCacheToStorage, CONFIRMATION_COUNT
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet, workerLog} from '@kaspa/wallet-worker';
@@ -187,7 +187,7 @@ export class KaspaWalletUI extends BaseElement{
 					bScore = tx.blueScore||0;
 					if(blueScore<bScore || !bScore)
 						return false
-					return (blueScore - bScore < 100)
+					return (blueScore - bScore < CONFIRMATION_COUNT)
 				})
 			}
 		}else{
@@ -200,8 +200,6 @@ export class KaspaWalletUI extends BaseElement{
 
 		let notifications = [...this.preparingTxNotifications.values()];
 
-		let msg = i18n.t(`Preparing transaction for [n] KAS ....`)
-				.replace('[n]', this.formatKAS(n.amount));
 		return html`
 		<div class="recent-transactions">
 			<div class="heading">
@@ -212,7 +210,8 @@ export class KaspaWalletUI extends BaseElement{
 					return html`<div class="tx-notification">
 						${n.compoundUTXOs?
 							T(`Compounding UTXOs...`):
-							msg}
+							i18n.t(`Preparing transaction for [n] KAS ....`)
+							.replace('[n]', this.formatKAS(n.amount))}
 					</div>`
 				})}
 				
@@ -220,8 +219,8 @@ export class KaspaWalletUI extends BaseElement{
 			<div class="tx-rows">
 			${items.map(tx=>{
 				cfm = blueScore - (tx.blueScore||0);
-				cfmP = Math.min(100, cfm);
-				p = cfmP/100;
+				cfmP = Math.min(CONFIRMATION_COUNT, cfm);
+				p = cfmP/CONFIRMATION_COUNT;
 				if(p>0.7)
 					color = '#60b686';
 				else if(p>0.5)
@@ -238,7 +237,7 @@ export class KaspaWalletUI extends BaseElement{
 								${tx.in?'':'-'}${this.formatKAS(tx.amount)} KAS
 							</div>
 						</div>
-						${ 0<=cfm&cfm<101? html`<flow-progressbar class="tx-progressbar" 
+						${ 0<=cfm&cfm<=CONFIRMATION_COUNT? html`<flow-progressbar class="tx-progressbar" 
 							style="--flow-progressbar-color:${color}"
 							value="${p}" text="${cfmP||''}"></flow-progressbar>`:''
 						}
@@ -262,9 +261,9 @@ export class KaspaWalletUI extends BaseElement{
 					bScore = tx.blueScore||0;
 					cfm = blueScore - bScore;
 					if(blueScore < bScore)
-						cfm = 101;
-					cfmP = Math.min(100, cfm)
-					p = cfmP/100;
+						cfm = CONFIRMATION_COUNT+1;
+					cfmP = Math.min(CONFIRMATION_COUNT, cfm)
+					p = cfmP/CONFIRMATION_COUNT;
 					if(p>0.7)
 						color = '#60b686';
 					else if(p>0.5)
@@ -275,7 +274,7 @@ export class KaspaWalletUI extends BaseElement{
 					<div class="tx-row" ?txin=${tx.in} ?txmoved=${tx.isMoved} ?txout=${!tx.in}>
 						<fa-icon class="tx-icon" icon="${tx.in?'sign-in':'sign-out'}"></fa-icon>
 						${
-							0<=cfm&cfm<101? html`
+							0<=cfm&cfm<=CONFIRMATION_COUNT? html`
 							<flow-progressbar class="tx-progressbar" 
 								style="--flow-progressbar-color:${color}"
 								value="${p}" text="${cfmP||''}"></flow-progressbar>

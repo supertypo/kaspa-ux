@@ -165,15 +165,14 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		let notifications = [...this.preparingTxNotifications.values()];
 		if(!notifications.length)
 			return '';
-		let msg = i18n.t(`Preparing transaction for [n] KAS ....`)
-				.replace('[n]', this.formatKAS(n.amount));
 
 		return html`<div class="tx-notifications">
 				${notifications.map(n=>{
 					return html`<div class="tx-notification">
 						${n.compoundUTXOs?
 							html`${T('Compounding UTXOs...')}`:
-							msg}
+							i18n.t(`Preparing transaction for [n] KAS ....`)
+								.replace('[n]', this.formatKAS(n.amount))}
 					</div>`
 				})}
 			</div>`;
