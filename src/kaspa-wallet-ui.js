@@ -8,7 +8,7 @@ import {
 	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
 	getLocalWallet, setLocalWallet, baseUrl, debug, MAX_UTXOS_THRESHOLD_COMPOUND,
 	getCacheFromStorage,
-	saveCacheToStorage, CONFIRMATION_COUNT
+	saveCacheToStorage, CONFIRMATION_COUNT, COINBASE_CFM_COUNT
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet, workerLog} from '@kaspa/wallet-worker';
@@ -187,7 +187,7 @@ export class KaspaWalletUI extends BaseElement{
 					bScore = tx.blueScore||0;
 					if(blueScore<bScore || !bScore)
 						return false
-					return (blueScore - bScore < CONFIRMATION_COUNT)
+					return (blueScore - bScore < (tx.isCoinbase? COINBASE_CFM_COUNT : CONFIRMATION_COUNT))
 				})
 			}
 		}else{
@@ -218,9 +218,10 @@ export class KaspaWalletUI extends BaseElement{
 			</div>
 			<div class="tx-rows">
 			${items.map(tx=>{
+				let COUNT = tx.isCoinbase? COINBASE_CFM_COUNT : CONFIRMATION_COUNT;
 				cfm = blueScore - (tx.blueScore||0);
-				cfmP = Math.min(CONFIRMATION_COUNT, cfm);
-				p = cfmP/CONFIRMATION_COUNT;
+				cfmP = Math.min(COUNT, cfm);
+				p = cfmP/COUNT;
 				if(p>0.7)
 					color = '#60b686';
 				else if(p>0.5)
@@ -237,7 +238,7 @@ export class KaspaWalletUI extends BaseElement{
 								${tx.in?'':'-'}${this.formatKAS(tx.amount)} KAS
 							</div>
 						</div>
-						${ 0<=cfm&cfm<=CONFIRMATION_COUNT? html`<flow-progressbar class="tx-progressbar" 
+						${ 0<=cfm&cfm<=COUNT? html`<flow-progressbar class="tx-progressbar" 
 							style="--flow-progressbar-color:${color}"
 							value="${p}" text="${cfmP||''}"></flow-progressbar>`:''
 						}
@@ -258,12 +259,13 @@ export class KaspaWalletUI extends BaseElement{
 			${items.length?'':html`<div class="no-record" is="i18n-div">No Transactions</div>`}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
+					let COUNT = tx.isCoinbase? COINBASE_CFM_COUNT : CONFIRMATION_COUNT;
 					bScore = tx.blueScore||0;
 					cfm = blueScore - bScore;
 					if(blueScore < bScore)
-						cfm = CONFIRMATION_COUNT+1;
-					cfmP = Math.min(CONFIRMATION_COUNT, cfm)
-					p = cfmP/CONFIRMATION_COUNT;
+						cfm = COUNT+1;
+					cfmP = Math.min(COUNT, cfm)
+					p = cfmP/COUNT;
 					if(p>0.7)
 						color = '#60b686';
 					else if(p>0.5)
@@ -274,7 +276,7 @@ export class KaspaWalletUI extends BaseElement{
 					<div class="tx-row" ?txin=${tx.in} ?txmoved=${tx.isMoved} ?txout=${!tx.in}>
 						<fa-icon class="tx-icon" icon="${tx.in?'sign-in':'sign-out'}"></fa-icon>
 						${
-							0<=cfm&cfm<=CONFIRMATION_COUNT? html`
+							0<=cfm&cfm<=COUNT? html`
 							<flow-progressbar class="tx-progressbar" 
 								style="--flow-progressbar-color:${color}"
 								value="${p}" text="${cfmP||''}"></flow-progressbar>
