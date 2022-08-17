@@ -4,7 +4,26 @@ export * from '/flow/flow-ux/src/flow-swipeable.js';
 import {i18n, T, i18nFormat, i18nHTMLFormat, FlowI18nDialog} from '/flow/flow-ux/src/flow-i18n.js';
 import {paginationStyle as pCss, css} from '/flow/flow-ux/src/base-element.js';
 
-export {i18n, T, i18nFormat, i18nHTMLFormat, FlowI18nDialog};
+const throttle = (func, time) => {
+	let timeoutId;
+	let runTs;
+	return (...args)=>{
+	  if (!runTs) {
+		func(...args)
+		runTs = Date.now();
+	  } else {
+		timeoutId && clearTimeout(timeoutId);
+		timeoutId = setTimeout(()=>{
+			if ((Date.now() - runTs) >= time) {
+				func(...args);
+				runTs = Date.now();
+			}
+		 }, time - (Date.now() - runTs));
+	  }
+	}
+  }
+
+export {i18n, T, throttle, i18nFormat, i18nHTMLFormat, FlowI18nDialog};
 export const paginationStyle = [pCss, css`
 	.pagination a{
 		padding:var(--flow-btn-padding);

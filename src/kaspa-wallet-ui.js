@@ -1,7 +1,7 @@
 import {
 	html, css, BaseElement, ScrollbarStyle, SpinnerStyle,
 	dpc, FlowFormat, buildPagination, renderPagination, txListStyle, UID, T, i18n,
-	i18nHTMLFormat
+	i18nHTMLFormat, throttle
 } from './flow-ux.js'
 export * from './flow-ux.js'
 import {
@@ -23,6 +23,8 @@ export class KaspaWalletUI extends BaseElement{
 	static get properties() {
 		return {
 			wallet:{type:Object},
+			autoCompound:{type:Boolean},
+			useLatestAddressForCompound:{type:Boolean},
 			isLoading:{type:Boolean},
 			isOnline:{type:Boolean},
 			isOfflineBadge:{type:Boolean},
@@ -110,6 +112,40 @@ export class KaspaWalletUI extends BaseElement{
 		this.recentTransactionsHeading = i18n.t("Recent Transactions");
 		this.walletDebugInfo = {};
 		window.__walletCmp = this;
+
+		this.throttledCompoundUTXO = throttle(async ()=>{
+			if(this.waitingForCompound)
+				return
+			this.waitingForCompound = true;
+			if (this.autoCompound){
+				await this._compoundUTXOs(15000, false);
+				this.waitingForCompound = false;
+				return
+			}
+
+			let body = html`
+				This wallet has too many transactions<br >
+				would you like to compound by re-sending funds to yourself?
+			`;
+			let {btn} = await FlowDialog.alert({
+				title:i18n.t("Too many transactions"),
+				body,
+				cls:'',
+				btns:[{
+					text:i18n.t('Close'),
+					value:'cancel'
+				},{
+					text:i18n.t('Yes Compound'),
+					cls:'primary',
+					value:'compound'
+				}]
+			})
+
+			if(btn=='compound'){
+				await this.compoundUTXOs();
+			}
+			this.waitingForCompound = false;
+		}, 1000)
 	}
 
 	setRPCBuilder(rpcBuilder){
@@ -522,47 +558,38 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async onWalletReady({confirmedUtxosCount}){
-		if(confirmedUtxosCount > MAX_UTXOS_THRESHOLD_COMPOUND){
-			let body = html`
-				This wallet has too many transactions<br >
-				would you like to compound by re-sending funds to yourself?
-			`;
-			let {btn} = await FlowDialog.alert({
-				title:i18n.t("Too many transactions"),
-				body,
-				cls:'',
-				btns:[{
-					text:i18n.t('Close'),
-					value:'cancel'
-				},{
-					text:i18n.t('Yes Compound'),
-					cls:'primary',
-					value:'compound'
-				}]
-			})
-
-			if(btn=='compound'){
-				this.compoundUTXOs();
-			}
-    	}
-			
+		this.compoundIfNeeded(confirmedUtxosCount)
+	}
+	async compoundIfNeeded(utxoCount){
+		if(utxoCount < MAX_UTXOS_THRESHOLD_COMPOUND)
+			return
+		this.throttledCompoundUTXO();
 	}
 
-	async compoundUTXOs(){
+	compoundUTXOs(){
+		return this._compoundUTXOs();
+	}
+	_compoundUTXOs(delay=500, errorAlert=true){
 		const uid = UID();
 		this.addPreparingTransactionNotification({uid, compoundUTXOs:true})
-		dpc(500, async()=>{
-			let response = await this.wallet.compoundUTXOs()
-			.catch(err=>{
-				console.log("compoundUTXOs error", err)
-				let error = err.error || err.message || i18n.t('Could not compound transactions. Please Retry later.');
-				if(!error.includes("Amount is expected"))
-					FlowDialog.alert(i18n.t('Error'), error)
-			})
-			if(response)
-				console.log("compoundUTXOs response", response)
+		return new Promise((resolve)=>{
+			dpc(delay, async()=>{
+				let useLatestChangeAddress = !!this.useLatestAddressForCompound;
+				console.log("useLatestChangeAddress:"+useLatestChangeAddress)
+				let response = await this.wallet.compoundUTXOs({useLatestChangeAddress})
+				.catch(err=>{
+					console.log("compoundUTXOs error", err)
+					let error = err.error || err.message || i18n.t('Could not compound transactions. Please Retry later.');
+					if(errorAlert && !error.includes("Amount is expected"))
+						FlowDialog.alert(i18n.t('Error'), error)
+				})
+				if(response)
+					console.log("compoundUTXOs response", response)
 
-			this.removePreparingTransactionNotification({uid});
+				this.removePreparingTransactionNotification({uid});
+
+				resolve()
+			})
 		})
 	}
 
@@ -636,8 +663,10 @@ export class KaspaWalletUI extends BaseElement{
 				*/
 
 		    });
-		    wallet.on("balance-update", ()=>{
+		    wallet.on("balance-update", ({confirmedUtxosCount})=>{
 		    	this.requestUpdate("balance", null);
+				console.log("balance-update: confirmedUtxosCount: "+confirmedUtxosCount)
+				this.compoundIfNeeded(confirmedUtxosCount);
 		    })
 		    wallet.on("debug-info", ({debugInfo})=>{
 		    	this.walletDebugInfo = {...this.walletDebugInfo, ...debugInfo}
@@ -746,19 +775,19 @@ export class KaspaWalletUI extends BaseElement{
 		${error?html`<div class="error">Error: ${error}</div>`:''}
 		<div class="info-table">
 			<div>
-				<div>Address</div>
-				<div>Started from</div>
-				<div>Progress</div>
-				<div>Final index</div>
+				<div is="i18n-div">Address</div>
+				<div is="i18n-div">Started from</div>
+				<div is="i18n-div">Progress</div>
+				<div is="i18n-div">Final index</div>
 			</div>
 			<div>
-				<div>${T('Receive')}</div>
+				<div is="i18n-div">Receive</div>
 				<div>${receiveStart}</div>
 				<div>${receiveProgress||''}</div>
 				<div>${receiveFinal||''}</div>
 			</div>
 			<div>
-				<div>${T('Change')}</div>
+				<div is="i18n-div">Change</div>
 				<div>${changeStart}</div>
 				<div>${changeProgress||''}</div>
 				<div>${changeFinal||''}</div>

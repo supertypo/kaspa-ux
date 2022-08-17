@@ -7,7 +7,7 @@ import {helper, Storage, CONFIRMATION_COUNT, COINBASE_CFM_COUNT} from '@kaspa/wa
 export const {Deferred, KAS, Decimal} = helper;
 export {CONFIRMATION_COUNT, COINBASE_CFM_COUNT};
 const storage = new Storage({logLevel:'debug'});
-let {baseUrl, debug, MAX_UTXOS_THRESHOLD=1000, dontInitiatedComponent=false} = window.KaspaConfig || {};
+let {baseUrl, debug, MAX_UTXOS_THRESHOLD=80, dontInitiatedComponent=false} = window.KaspaConfig || {};
 if(!baseUrl){
 	baseUrl = (new URL("../", import.meta.url)).href;
 	debug && console.log("KaspaUX: baseUrl", baseUrl)
