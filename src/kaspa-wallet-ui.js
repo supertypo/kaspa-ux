@@ -84,6 +84,14 @@ export class KaspaWalletUI extends BaseElement{
 			.recent-transactions .heading { text-align:center;}
 			.tx-notification{padding:5px;text-align:center}
 			.hidden-file-input{position:absolute;top:-100%;}
+			div.info-table{display:table;border-collapse:collapse;}
+			div.info-table>div{display:table-row;}
+			div.info-table>div>div{
+				display:table-cell;
+				padding: 2px 4px;
+				border: 1px solid rgba(200, 200, 200, 0.2);
+				text-align: center;
+			}
 		`];
 	}
 	constructor() {
@@ -559,16 +567,26 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async scanMoreAddresses(){
+		let {receiveEnd=-1, changeEnd=-1} = this._lastScan||{}
 		dpc(500, async()=>{
-			let response = await this.wallet.scanMoreAddresses(10000)
+			let response = await this.wallet.scanMoreAddresses(10000, false, receiveEnd, changeEnd)
 			.catch(err=>{
 				console.log("scanMoreAddresses error", err)
 				let error = err.error || err.message || i18n.t('Could not scan more addresses. Please Retry later.');
 				if(typeof error == 'string')
 					FlowDialog.alert(i18n.t('Error'), error)
 			})
-			if(response)
+			if(response){
 				console.log("scanMoreAddresses response", response)
+				let {receive, change} =  response;
+				this._lastScan = this._lastScan||{};
+				if (receive.end){
+					this._lastScan.receiveEnd = receive.end-1;
+				}
+				if (change.end){
+					this._lastScan.changeEnd = change.end-1;
+				}
+			}
 		})
 	}
 
@@ -670,8 +688,83 @@ export class KaspaWalletUI extends BaseElement{
 		    	resolve();
 		    })
 
+			wallet.on("scan-more-addresses-started", ({receiveStart, changeStart})=>{
+				console.log("scan-more-addresses-started: receiveStart, changeStart", receiveStart, changeStart)
+				this.extraScanning = {
+					status:"started",
+					error:null,
+					receiveStart,
+					changeStart,
+					receiveFinal:"",
+					changeFinal:""
+				};
+				this.requestUpdate("extraScanning", null);
+			})
+
+			wallet.on("scan-more-addresses-ended", ({error, receiveFinal, changeFinal})=>{
+				Object.assign(this.extraScanning, {
+					status:"ended",
+					error,
+					receiveFinal,
+					changeFinal
+				});
+				this.requestUpdate("extraScanning", null);
+			})
+
+			wallet.on("sync-progress", ({start, end, addressType})=>{
+				if (this.extraScanning?.status == "started"){
+					this.extraScanning[addressType+'Progress'] = end;
+					this.requestUpdate("extraScanning", null);
+				}
+			})
+
 		    wallet.checkGRPCFlags();
 		})
+	}
+
+	renderExtraScaning(){
+		if (!this.extraScanning){
+			return ''
+		}
+		let {
+			status,
+			error,
+			receiveStart,
+			changeStart,
+			receiveFinal,
+			changeFinal,
+			receiveProgress,
+			changeProgress
+		} = this.extraScanning;
+
+		if (receiveProgress == receiveStart)
+			receiveProgress = '';
+		if (changeProgress == changeStart)
+			changeProgress = '';
+
+		return html`<div class="caption">${T(`Scanning ${status}`)}</div>
+		${error?html`<div class="error">Error: ${error}</div>`:''}
+		<div class="info-table">
+			<div>
+				<div>Address</div>
+				<div>Started from</div>
+				<div>Progress</div>
+				<div>Final index</div>
+			</div>
+			<div>
+				<div>${T('Receive')}</div>
+				<div>${receiveStart}</div>
+				<div>${receiveProgress||''}</div>
+				<div>${receiveFinal||''}</div>
+			</div>
+			<div>
+				<div>${T('Change')}</div>
+				<div>${changeStart}</div>
+				<div>${changeProgress||''}</div>
+				<div>${changeFinal||''}</div>
+			</div>
+		</div>
+		`
 	}
 
 	async alertUTXOIndexSupportIssue(){

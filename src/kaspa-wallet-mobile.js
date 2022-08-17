@@ -222,6 +222,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let isReady = !!wallet?.balance;
 		const sCls = tab=>tab==selectedTab?'selected flow-swipeable':'flow-swipeable';
 		const {inUseUTXOs={satoshis:0, count:0}} = this.walletDebugInfo;
+		let PWAVersion = window.PWA?.version||'';
 		return html`
 		${this.renderHeaderBar()}
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>
@@ -255,7 +256,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				<div class="tab-content ${sCls('wallet')}" for="wallet">
 					<div class="wallet-ux">
 						<div class="badge" is="i18n-div">KASPA WALLET</div>
-						${ window.PWA ? html`<div class="badge" is="i18n-div">Version ${window.PWA.version}</div>` : '' }
+						${ PWAVersion ? html`<div class="badge"><span is="i18n-span">Version</span> ${PWAVersion}</div>` : '' }
 						<div class="badge"><span is="i18n-span">Status:</span> ${this.status}</div>
 						<div class="badge"><span is="i18n-span">Network:</span> ${(this.receiveAddress||"").split(":")[0]||""}</div>
 
@@ -341,6 +342,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						</table>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.scanMoreAddresses}" i18n>Scan More Addresses</flow-btn>
+						${this.renderExtraScaning()}
 					</div>
 				</div>`}
 			</div>
