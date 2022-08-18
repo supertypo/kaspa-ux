@@ -396,6 +396,7 @@ flow-dialog.big .heading{font-size:1.85rem}
 flow-dialog.big .body{font-size:1.4rem;line-height:1.3;}
 flow-dialog.warning .heading,
 flow-dialog.warning .body{color:red;}
+flow-dialog .error-debug-info{max-height:40vh;overflow:auto;}
 
 fa-icon.big{--fa-icon-size:40px;}
 fa-icon.warning{--fa-icon-color:red}

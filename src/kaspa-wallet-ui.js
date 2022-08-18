@@ -31,7 +31,7 @@ export class KaspaWalletUI extends BaseElement{
 			errorMessage:{type:String},
 			receiveAddress:{type:String},
 			changeAddress:{type:String},
-			txs:{type:Array},
+			//txs:{type:Array},
 			blueScore:{type:Number},
 			status:{type:String},
 			walletMeta:{type:Object, value:{}},
@@ -99,10 +99,13 @@ export class KaspaWalletUI extends BaseElement{
 	constructor() {
 		super();
 		this.txs = [];
+		this.utxos = new Map();
 		this.walletSignal = Deferred();
 		this.walletMeta = {};
 		this.isOnline = false;
 		this.txLimit = Math.floor( (window.innerHeight - 165) / 72);
+		this.utxosLimit = this.txLimit;
+		this.hideUTXOs = true;
 
 		this.isOfflineBadge = false;
 		this.debugscanner = window.location.href.includes("debugscanner")
@@ -347,6 +350,40 @@ export class KaspaWalletUI extends BaseElement{
 			${renderPagination(pagination, this._onTXPaginationClick)}
 		`
 	}
+	_renderUTXOs({skip, items}){
+		return html`
+			${items.length?'':html`<div class="no-record" is="i18n-div">No UTXOS</div>`}
+			<div class="tx-list">
+				${items.map((tx, i)=>{
+					//console.log("_renderUTXOs:tx", tx)
+					//return html`<div>${JSON.stringify(tx)}</div>`;
+					
+					return html`
+					<div class="tx-row" ?iscoinbase=${!tx.isCoinbase}>
+						<div class="tx-date" title="#${skip+i+1} UTXO">
+							${tx.blockDaaScore} (${tx.mass})
+						</div>
+						<div class="tx-amount">${KAS(tx.satoshis)} KAS</div>
+						<div class="br tx-mass"></div>
+						<div class="br tx-id">${tx.id}</div>
+						<div class="tx-address">${tx.address}</div>
+					</div>`
+					
+				})}
+			</div>
+		`
+	}
+
+	renderUTXOs(){
+		if(!this.wallet)
+			return '';
+		let {utxosLimit:limit=20, utxos:totalItems, utxoSkip:skip=0} = this;
+		let pagination = buildPagination(totalItems.size, skip, limit)
+		let items = [...totalItems.values()].slice(skip, skip+limit);
+		return html`
+			${this._renderUTXOs({skip, items})}
+			${renderPagination(pagination, this._onUTXOPaginationClick)}`
+	}
 
 	onMenuClick(e){
 		let target = e.target.closest("flow-menu-item")
@@ -578,10 +615,22 @@ export class KaspaWalletUI extends BaseElement{
 				console.log("useLatestChangeAddress:"+useLatestChangeAddress)
 				let response = await this.wallet.compoundUTXOs({useLatestChangeAddress})
 				.catch(err=>{
-					console.log("compoundUTXOs error", err)
+					console.log("compoundUTXOs error", err, errorAlert)
 					let error = err.error || err.message || i18n.t('Could not compound transactions. Please Retry later.');
-					if(errorAlert && !error.includes("Amount is expected"))
-						FlowDialog.alert(i18n.t('Error'), error)
+					if(errorAlert && !error.includes("Amount is expected")){
+						let debugInfo = '';
+						if (err.debugInfo){
+							debugInfo = html`<flow-expandable no-info>
+									<div slot="title">More Info:</div>
+									<div class="error-debug-info">${JSON.stringify(err.debugInfo)}</div>
+								</flow-expandable>`;
+						}
+						
+						FlowDialog.alert(
+							i18n.t('Error'),
+							html`${error}${debugInfo}`
+						)
+					}
 				})
 				if(response)
 					console.log("compoundUTXOs response", response)
@@ -590,6 +639,23 @@ export class KaspaWalletUI extends BaseElement{
 
 				resolve()
 			})
+		})
+	}
+
+	async showUTXOs(){
+		if(this.utxosSyncStarted)
+			return
+		this.hideUTXOs = false;
+		this.requestUpdate("hideUTXOs", true);
+		dpc(500, async()=>{
+			this.utxosSyncStarted = true
+			this.wallet.on("utxo-sync", ({utxos})=>{
+				utxos.forEach(tx=>{
+					this.utxos.set(tx.id, tx);
+				})
+				this.requestUpdate("utxos", null);
+			})
+			this.wallet.startUTXOsPolling()
 		})
 	}
 
@@ -665,8 +731,10 @@ export class KaspaWalletUI extends BaseElement{
 		    });
 		    wallet.on("balance-update", ({confirmedUtxosCount})=>{
 		    	this.requestUpdate("balance", null);
-				console.log("balance-update: confirmedUtxosCount: "+confirmedUtxosCount)
-				this.compoundIfNeeded(confirmedUtxosCount);
+				//console.log("balance-update: confirmedUtxosCount: "+confirmedUtxosCount)
+				if (this.autoCompound){
+					this.compoundIfNeeded(confirmedUtxosCount);
+				}
 		    })
 		    wallet.on("debug-info", ({debugInfo})=>{
 		    	this.walletDebugInfo = {...this.walletDebugInfo, ...debugInfo}

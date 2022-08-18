@@ -208,6 +208,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		this.selectedTab = "balance";
 		this.showBalanceTab = true;
 		this._onTXPaginationClick = this.onTXPaginationClick.bind(this);
+		this._onUTXOPaginationClick = this.onUTXOPaginationClick.bind(this);
 	}
 	toggleFullScreen(){
 		if (this.fullscreen)
@@ -238,6 +239,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 					tab="network" href="javascript:void 0" is="i18n-a">Network</a>`}
 				${this.hideDebug? '': html`<a class="tab"
 					tab="debuginfo" href="javascript:void 0" is="i18n-a">Debug</a>`}
+				${this.hideUTXOs? '': html`<a class="tab"
+					tab="utxos" href="javascript:void 0" is="i18n-a">UTXOs</a>`}
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>
@@ -341,10 +344,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							<tr><td is="i18n-td">AMOUNT</td><td>${KAS(inUseUTXOs.satoshis||0)} KAS</td></tr>
 						</table>
 						<flow-btn class="center-btn primary v-margin"
+							@click="${this.showUTXOs}" i18n>Show UTXOs</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
 							@click="${this.scanMoreAddresses}" i18n>Scan More Addresses</flow-btn>
 						${this.renderExtraScaning()}
 					</div>
 				</div>`}
+				<div class="tab-content v-box pb-0 ${sCls('utxos')}" for="utxos">
+					${this.renderUTXOs()}
+				</div>
 			</div>
 		</div>
 		`
@@ -473,10 +481,15 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 
 	onTXPaginationClick(e){
 		let skip = e.target.closest("[data-skip]")?.dataset.skip;
-		//console.log("skip", skip, e.target)
 		if(skip === undefined)
 			return
 		this.txSkip = +skip;
+	}
+	onUTXOPaginationClick(e){
+		let skip = e.target.closest("[data-skip]")?.dataset.skip;
+		if(skip === undefined)
+			return
+		this.utxoSkip = +skip;
 	}
 	/*
 	renderStatus(){
