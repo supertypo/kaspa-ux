@@ -355,9 +355,6 @@ export class KaspaWalletUI extends BaseElement{
 			${items.length?'':html`<div class="no-record" is="i18n-div">No UTXOS</div>`}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
-					//console.log("_renderUTXOs:tx", tx)
-					//return html`<div>${JSON.stringify(tx)}</div>`;
-					
 					return html`
 					<div class="tx-row" ?iscoinbase=${!tx.isCoinbase}>
 						<div class="tx-date" title="#${skip+i+1} UTXO">
@@ -368,7 +365,6 @@ export class KaspaWalletUI extends BaseElement{
 						<div class="br tx-id">${tx.id}</div>
 						<div class="tx-address">${tx.address}</div>
 					</div>`
-					
 				})}
 			</div>
 		`
@@ -603,6 +599,22 @@ export class KaspaWalletUI extends BaseElement{
 		this.throttledCompoundUTXO();
 	}
 
+	buildDebugInfoForDialog(err){
+		let {debugInfo, extraDebugInfo} = err;
+		if (debugInfo || extraDebugInfo){
+			return html`
+			<flow-expandable no-info>
+				<div slot="title">More Info:</div>
+				<div class="error-debug-info">
+					${extraDebugInfo?JSON.stringify(extraDebugInfo):''}
+					<br /><hr /><br />
+					${debugInfo?JSON.stringify(debugInfo):''}
+				</div>
+			</flow-expandable>`;
+		}
+		return '';
+	}
+
 	compoundUTXOs(){
 		return this._compoundUTXOs();
 	}
@@ -617,18 +629,10 @@ export class KaspaWalletUI extends BaseElement{
 				.catch(err=>{
 					console.log("compoundUTXOs error", err, errorAlert)
 					let error = err.error || err.message || i18n.t('Could not compound transactions. Please Retry later.');
-					if(errorAlert && !error.includes("Amount is expected")){
-						let debugInfo = '';
-						if (err.debugInfo){
-							debugInfo = html`<flow-expandable no-info>
-									<div slot="title">More Info:</div>
-									<div class="error-debug-info">${JSON.stringify(err.debugInfo)}</div>
-								</flow-expandable>`;
-						}
-						
+					if(errorAlert && !error.includes("Amount is expected")){		
 						FlowDialog.alert(
 							i18n.t('Error'),
-							html`${error}${debugInfo}`
+							html`${error}${this.buildDebugInfoForDialog(err)}`
 						)
 					}
 				})
@@ -643,11 +647,14 @@ export class KaspaWalletUI extends BaseElement{
 	}
 
 	async showUTXOs(){
-		if(this.utxosSyncStarted)
+		if(this.utxosSyncStarted){
+			this.selectTab("utxos");
 			return
+		}
 		this.hideUTXOs = false;
 		this.requestUpdate("hideUTXOs", true);
 		dpc(500, async()=>{
+			this.selectTab("utxos");
 			this.utxosSyncStarted = true
 			this.wallet.on("utxo-sync", ({utxos})=>{
 				utxos.forEach(tx=>{
@@ -1163,7 +1170,7 @@ export class KaspaWalletUI extends BaseElement{
 			if(/Invalid Argument/.test(error))
 				error = i18n.t("Please provide correct address and amount");
 			uid && this.removePreparingTransactionNotification({uid});
-			FlowDialog.alert("Error", error);
+			FlowDialog.alert("Error", html`${error}${this.buildDebugInfoForDialog(err)}`);
 		})
 
 		if(uid){

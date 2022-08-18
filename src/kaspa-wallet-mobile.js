@@ -350,9 +350,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						${this.renderExtraScaning()}
 					</div>
 				</div>`}
-				<div class="tab-content v-box pb-0 ${sCls('utxos')}" for="utxos">
+				${this.hideUTXOs? '': html`<div class="tab-content v-box pb-0 ${sCls('utxos')}" for="utxos">
 					${this.renderUTXOs()}
-				</div>
+				</div>`}
 			</div>
 		</div>
 		`
