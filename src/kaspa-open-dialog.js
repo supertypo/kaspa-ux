@@ -157,7 +157,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		return html`
 			<flow-btn @click="${e=>this.mode=this.lastMode}" i18n>Cancel</flow-btn>
 			<flow-btn ?hidden=${this.isFresh} 
-				@click="${e=>this.mode='open'}" i18n>I have wallet</flow-btn>
+				@click="${e=>this.mode='recover'}" i18n>I have a wallet</flow-btn>
 			<flow-btn primary @click="${this.showSeeds}" i18n>Next</flow-btn>
 			`;
 	}
@@ -178,7 +178,7 @@ class KaspaOpenDialog extends KaspaDialog{
 		if(this.args?.backToWallet){
 			return this.hide()
 		}
-		this.mode = "init";
+		this.mode = this.lastMode || "init";
 	}
 	updated(changes){
         super.updated(changes);
