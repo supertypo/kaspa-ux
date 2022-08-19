@@ -679,6 +679,7 @@ export class KaspaWalletUI extends BaseElement{
 
 	reloadUTXOs(){
 		this.reloadingUTXOs = true;
+		this.utxos.clear();
 		this.wallet.startUTXOsPolling();
 		dpc(5000, ()=>{
 			this.reloadingUTXOs = false;
