@@ -240,7 +240,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				${this.hideDebug? '': html`<a class="tab"
 					tab="debuginfo" href="javascript:void 0" is="i18n-a">Debug</a>`}
 				${this.hideUTXOs? '': html`<a class="tab"
-					tab="utxos" href="javascript:void 0" is="i18n-a">UTXOs</a>`}
+					tab="utxos" href="javascript:void 0" is="i18n-a">UTXOs</a>
+					<fa-icon ?active=${selectedTab=="utxos"}
+						class="reload-utxo-btn ${this.reloadingUTXOs?'spinner':''}"
+						icon="sync" @click=${this.reloadUTXOs}></fa-icon>`}
 			</flow-menu>
 		</div>
 		<div class="tab-contents flow-swipeable-container" ?not-ready=${!isReady}>

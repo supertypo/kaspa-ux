@@ -94,6 +94,12 @@ export class KaspaWalletUI extends BaseElement{
 				border: 1px solid rgba(200, 200, 200, 0.2);
 				text-align: center;
 			}
+			.reload-utxo-btn{
+				position:relative;
+				top:20px;
+				cursor:pointer;
+				margin:0px 10px;
+			}
 		`];
 	}
 	constructor() {
@@ -114,6 +120,7 @@ export class KaspaWalletUI extends BaseElement{
 		this.UTXOIndexSupport = true;
 		this.recentTransactionsHeading = i18n.t("Recent Transactions");
 		this.walletDebugInfo = {};
+		this.reloadingUTXOs = false;
 		window.__walletCmp = this;
 
 		this.throttledCompoundUTXO = throttle(async ()=>{
@@ -351,8 +358,12 @@ export class KaspaWalletUI extends BaseElement{
 		`
 	}
 	_renderUTXOs({skip, items}){
+		let noRecordMsg = this.reloadingUTXOs?
+			html`<div class="no-record" is="i18n-div">Loading...</div>`:
+			html`<div class="no-record" is="i18n-div">No UTXOS</div>`;
+
 		return html`
-			${items.length?'':html`<div class="no-record" is="i18n-div">No UTXOS</div>`}
+			${items.length?'':noRecordMsg}
 			<div class="tx-list">
 				${items.map((tx, i)=>{
 					return html`
@@ -662,7 +673,15 @@ export class KaspaWalletUI extends BaseElement{
 				})
 				this.requestUpdate("utxos", null);
 			})
-			this.wallet.startUTXOsPolling()
+			this.reloadUTXOs()
+		})
+	}
+
+	reloadUTXOs(){
+		this.reloadingUTXOs = true;
+		this.wallet.startUTXOsPolling();
+		dpc(5000, ()=>{
+			this.reloadingUTXOs = false;
 		})
 	}
 
