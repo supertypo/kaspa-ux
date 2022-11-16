@@ -171,4 +171,4 @@ export const askForPassword = async (args, callback)=>{
 }
 
 window.Decimal = Decimal;
-window.askForPassword = askForPassword;
+//window.askForPassword = askForPassword;

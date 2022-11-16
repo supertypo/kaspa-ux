@@ -1,4 +1,5 @@
 import {html, css, KaspaDialog, i18n, T} from './kaspa-dialog.js';
+import {askForPassword} from "./wallet.js";
 const pass = "";
 
 class KaspaOpenDialog extends KaspaDialog{

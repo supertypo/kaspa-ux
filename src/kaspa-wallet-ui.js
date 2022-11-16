@@ -8,10 +8,12 @@ import {
 	Deferred, GetTS, KAS, formatForMachine, formatForHuman,
 	getLocalWallet, setLocalWallet, baseUrl, debug, MAX_UTXOS_THRESHOLD_COMPOUND,
 	getCacheFromStorage,
-	saveCacheToStorage, CONFIRMATION_COUNT, COINBASE_CFM_COUNT
+	saveCacheToStorage, CONFIRMATION_COUNT, COINBASE_CFM_COUNT,
+	askForPassword
 } from './wallet.js';
 export * from './wallet.js';
 import {initKaspaFramework, Wallet, workerLog} from '@kaspa/wallet-worker';
+export {Wallet};
 Wallet.setWorkerLogLevel(localStorage.walletWorkerLogLevel || 'none')
 
 //window._xx = {Wallet, workerLog}
@@ -99,6 +101,14 @@ export class KaspaWalletUI extends BaseElement{
 				top:20px;
 				cursor:pointer;
 				margin:0px 10px;
+			}
+			.download-transactions-btn{
+				cursor:pointer;
+				margin:0px 0px 0px 10px;
+			}
+			a{
+				color:var(--flow-primary-color);
+				text-decoration:none;
 			}
 		`];
 	}
@@ -298,8 +308,13 @@ export class KaspaWalletUI extends BaseElement{
 						}
 						<div class="tx-body">
 							${tx.note}
-							<div class="tx-id">${tx.id}</div>
-							<div class="tx-address">${tx.myAddress?T('THIS WALLET => '):''}${tx.address}</div>
+							<div class="tx-id">
+								<a target="_blank" href="https://explorer.kaspa.org/txs/${tx.id}">${tx.id}</a>
+							</div>
+							<div class="tx-address">
+								${tx.myAddress?T('THIS WALLET => '):''}
+								<a target="_blank" href="https://explorer.kaspa.org/addresses/${tx.address}">${tx.address}</a>
+							</div>
 						</div>
 					</flow-expandable>
 				`
@@ -339,12 +354,73 @@ export class KaspaWalletUI extends BaseElement{
 						<div class="tx-date" title="#${skip+i+1} Transaction">${tx.date}</div>
 						<div class="tx-amount">${tx.in?'':'-'}${KAS(tx.amount)} KAS</div>
 						<div class="br tx-note">${tx.note}</div>
-						<div class="br tx-id">${tx.id.split(":")[0]}</div>
-						<div class="tx-address">${tx.myAddress?T('THIS WALLET => '):''}${tx.address}</div>
+						<div class="br tx-id">
+							<a target="_blank" href="https://explorer.kaspa.org/txs/${tx.id.split(":")[0]}">${tx.id.split(":")[0]}</a>
+						</div>
+						<div class="tx-address">
+							${tx.myAddress?T('THIS WALLET => '):''}
+							<a target="_blank" href="https://explorer.kaspa.org/addresses/${tx.address}">${tx.address}</a>
+						</div>
 					</div>`
 				})}
 			</div>
 		`
+	}
+
+	exportTransactions(){
+		let {txs:items=[], blueScore=0} = this;
+
+		let fields = ["id", "address", "amount", "direction", "confirmation", "note", "this wallet", "date"];
+		let rows = [];
+
+		rows.push(fields.map(field=>{
+			return field.toUpperCase()
+		}).join(","))
+
+		items.map((tx, i)=>{
+			if (tx.isMoved){
+				return
+			}
+			let COUNT = tx.isCoinbase? COINBASE_CFM_COUNT : CONFIRMATION_COUNT;
+			let bScore = tx.blueScore||0;
+			let cfm = blueScore - bScore;
+			if(blueScore < bScore)
+				cfm = COUNT+1;
+			let cfmP = Math.min(COUNT, cfm)
+			cfm = (cfmP/COUNT).toFixed(2);
+			let row = [];
+			fields.forEach(field=>{
+				switch(field){
+					case 'id':
+						row.push(tx.id.split(":")[0])
+					break;
+					case 'address':
+						row.push(tx.address)
+					break;
+					case 'amount':
+						row.push(`${tx.in?'':'-'}${KAS(tx.amount)}`)
+					break;
+					case 'direction':
+						row.push(tx.in?'RECEIVE':'SEND')
+					break;
+					case 'confirmation':
+						row.push(cfm)
+					break;
+					case 'note':
+						row.push(tx.note||'')
+					break;
+					case 'this wallet':
+						row.push(tx.myAddress?'YES':'')
+					break;
+
+				}
+			});
+
+			rows.push(row.join(","));
+		})
+
+		let csvData = rows.join("\n");
+		this.sendDataToDownload(csvData, 'transactions.csv')
 	}
 	renderAllTX(){
 		if(!this.wallet)
@@ -373,8 +449,12 @@ export class KaspaWalletUI extends BaseElement{
 						</div>
 						<div class="tx-amount">${KAS(tx.satoshis)} KAS</div>
 						<div class="br tx-mass"></div>
-						<div class="br tx-id">${tx.id}</div>
-						<div class="tx-address">${tx.address}</div>
+						<div class="br tx-id">
+							<a target="_blank" href="https://explorer.kaspa.org/txs/${tx.txId}">${tx.id}</a>
+						</div>
+						<div class="tx-address">
+							<a target="_blank" href="https://explorer.kaspa.org/addresses/${tx.address}">${tx.address}</a>
+						</div>
 					</div>`
 				})}
 			</div>

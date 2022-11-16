@@ -87,6 +87,7 @@ body{
 	--tx-bg-color-3:#DDD;
 	--tx-border-color:#DDD;
 	--kaspa-dialog-bg-color:rgba(255, 255, 255, 0.5);
+	--kaspa-lock-screen-bg-color:rgb(255, 255, 255);
 	/*	--flow-btn-text-transform:uppercase;*/
 	--flow-btn-display:inline-block;
 }
@@ -120,6 +121,7 @@ body.flow-theme-dark{
 	--tx-bg-color-2:#282828;
 	--tx-bg-color-3:#333232;
 	--kaspa-dialog-bg-color:rgba(40,40,40,0.71);
+	--kaspa-lock-screen-bg-color:rgb(40,40,40);
 	--kaspa-wallet-tab-border-bottom-color:#333232;
 	--tx-border-color:#282828;
 }
@@ -385,7 +387,7 @@ flow-selector .menu-item{padding:2px 4px;}
 
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(359deg)}}
 .spin{
-	webkit-animation: spin 2s linear infinite;
+	-webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
 }
 flow-dialog.with-icon dialog .heading{display:flex;align-items:center;}

@@ -3,7 +3,7 @@ import {
 	baseUrl, KAS, renderPagination, buildPagination, paginationStyle,
 	swipeableStyle, FlowSwipeable, isMobile, dontInitiatedComponent,
 	getTheme, setTheme, flow, T, i18nFormat, i18nHTMLFormat,
-	FlowI18nDialog
+	FlowI18nDialog, askForPassword, i18n, getLocalWallet, Wallet
 } from './kaspa-wallet-ui.js';
 export {isMobile, dontInitiatedComponent};
 export class KaspaWalletMobile extends KaspaWalletUI{
@@ -11,7 +11,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 	static get properties() {
 		return {
 			txSkip:{type:Number},
-			hideI18nIcon:{type:Boolean}
+			hideI18nIcon:{type:Boolean},
+			locked:{type:Boolean, reflect:true},
+			reloadOnLock:{type:Boolean}
 		};
 	}
 
@@ -102,6 +104,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				background-color:transparent;color:var(--flow-primary-color);
 				font-family:"Exo 2";word-wrap:break-word;height:110px;
 				resize:none;
+				cursor:pointer;
 			}
 			flow-qrcode{
 				flex:1;width:150px;max-width:150px;margin:15px;
@@ -188,7 +191,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			}
 			.developer-info{margin-top:26px;}
 			.clear-used-utxos{margin:0px 10px;cursor:pointer}
-			.theme-btn,.language-icon{cursor:pointer}
+			.theme-btn,.language-icon,.lock-btn{cursor:pointer}
 			.language-icon{position:relative;margin:0px 10px 0 5px}
 			.language-icon fa-icon{margin-right:10px}
 			.language-icon:after{
@@ -201,12 +204,34 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				border:5px solid transparent;
 				border-top:5px solid var(--flow-primary-color);
 			}
+			.lock-screen{
+				--fa-icon-size: 60px;
+    			--fa-icon-margin: 35px;
+				display:none;
+				flex-direction:column;
+				align-items:center;
+				justify-content: center;
+				position:fixed;
+				z-index:1000000;
+				background-color:var(--kaspa-lock-screen-bg-color);
+				top:0px;bottom:0px;
+				left:0px;right:0px;
+			}
+			.lock-screen .big-logo{
+				max-width: 150px;
+				margin: 10px auto 20px;
+				display: block;
+			}
+			:host([locked]) .lock-screen{
+				display:flex;
+			}
 		`];
 	}
 	constructor() {
 		super();
 		this.selectedTab = "balance";
 		this.showBalanceTab = true;
+		this.locked = false;
 		this._onTXPaginationClick = this.onTXPaginationClick.bind(this);
 		this._onUTXOPaginationClick = this.onUTXOPaginationClick.bind(this);
 	}
@@ -268,6 +293,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.compoundUTXOs}" i18n>Compound Transactions</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
+							@click="${this.exportTransactions}" i18n>Export transactions as CSV</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.showSeeds}" i18n>Backup Seed</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
@@ -358,6 +385,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				</div>`}
 			</div>
 		</div>
+		${this.renderLockScreen()}
 		`
 	}
 	renderHeaderBar(){
@@ -381,6 +409,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<fa-icon ?hidden=${!loadingIndicator} 
 				class="spinner" icon="sync"
 				style="position:absolute"></fa-icon>
+			<fa-icon class="lock-btn" ?hidden=${(this.locked || !this.wallet)}
+				@click=${this.lockWallet}
+				icon="lock"></fa-icon>
 			${this.hideI18nIcon? '': html`<div class="language-icon">
 				<fa-icon icon="icons:language"
 				@click="${this.onLangClick}"></fa-icon></div>`}
@@ -388,6 +419,39 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				icon="${theme=="light"?'moon': 'sun'}"></fa-icon>
 		</div>
 		`
+	}
+
+	renderLockScreen(){
+		return html`
+			<div class="lock-screen">
+				<div><img class="big-logo" src="/resources/images/kaspa.png"></div>
+				<fa-icon icon="lock"></fa-icon>
+				<flow-btn primary i18n @click="${this.unlockWallet}">UNLOCK WALLET</flow-btn>
+			</div>
+		`;
+	}
+
+	unlockWallet(){
+		askForPassword({confirmBtnText:i18n.t("UNLOCK")}, async({btn, password})=>{
+    		if(btn!="confirm")
+    			return
+    		let encryptedMnemonic = getLocalWallet().mnemonic;
+    		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
+    		if(!valid)
+    			return FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid password"));
+
+			this.locked = false;
+			this.requestUpdate("locked", true);
+		})
+	}
+
+	lockWallet(){
+		if (this.reloadOnLock){
+			window.location.reload();
+			return
+		}
+		this.locked = true;
+		this.requestUpdate("locked", false);
 	}
 	onLangClick(e){
 		this.openI18nDialog(e.target);
@@ -428,7 +492,9 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			<div class="address-box">
 				<flow-i18n>Receive Address:</flow-i18n>
 				<div class="address-holder">
-					<textarea class="address-input" readonly .value="${address||""}"></textarea>
+					<textarea class="address-input" readonly 
+						@click="${()=>this.openAddressExplorer(address)}"
+						.value="${address||""}"></textarea>
 					<fa-icon ?hidden=${!address} class="copy-address"
 						@click="${this.copyAddress}"
 						title="${T('Copy to clipboard')}" icon="copy"></fa-icon>
@@ -436,6 +502,24 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			</div>
 			<flow-qrcode data="${address}"></flow-qrcode>
 		</div>`
+	}
+	openAddressExplorer(address){
+		if (!address)
+			return
+		let url = `https://explorer.kaspa.org/addresses/${address}`;
+
+		window.open(url);
+
+		/*
+		let a = document.createElement("a");
+		a.setAttribute("href", url);
+		a.setAttribute("target", "_blank");
+		document.body.appendChild(a);
+		a.click();
+		setTimeout(()=>{
+			a.remove();
+		}, 100)
+		*/
 	}
 	renderBalanceAndButton(){
 		if(!this.wallet || !this.wallet.balance)
