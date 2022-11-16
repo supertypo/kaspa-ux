@@ -87,7 +87,7 @@ body{
 	--tx-bg-color-3:#DDD;
 	--tx-border-color:#DDD;
 	--kaspa-dialog-bg-color:rgba(255, 255, 255, 0.5);
-	--kaspa-lock-screen-bg-color:rgb(255, 255, 255);
+	--kaspa-lock-screen-bg-color:var(--flow-background-color);
 	/*	--flow-btn-text-transform:uppercase;*/
 	--flow-btn-display:inline-block;
 }
@@ -121,7 +121,6 @@ body.flow-theme-dark{
 	--tx-bg-color-2:#282828;
 	--tx-bg-color-3:#333232;
 	--kaspa-dialog-bg-color:rgba(40,40,40,0.71);
-	--kaspa-lock-screen-bg-color:rgb(40,40,40);
 	--kaspa-wallet-tab-border-bottom-color:#333232;
 	--tx-border-color:#282828;
 }

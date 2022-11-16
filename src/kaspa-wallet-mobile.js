@@ -211,7 +211,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 				flex-direction:column;
 				align-items:center;
 				justify-content: center;
-				position:fixed;
+				position:absolute;
 				z-index:1000000;
 				background-color:var(--kaspa-lock-screen-bg-color);
 				top:0px;bottom:0px;

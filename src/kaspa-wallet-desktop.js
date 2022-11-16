@@ -15,6 +15,9 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				padding:var(--kaspa-wallet-container-padding, 15px);
 				position:relative;flex:1;overflow:auto
 			}
+			:host([locked]) .container{
+				overflow:hidden;
+			}
 			.wallet-warning{
 				max-width:640px;margin:5px auto;padding:10px;text-align:center;
 				background-color:var(--kaspa-wallet-warning-bg, #fdf8e4);
