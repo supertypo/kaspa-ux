@@ -16,8 +16,6 @@ import {initKaspaFramework, Wallet, workerLog} from '@kaspa/wallet-worker';
 export {Wallet};
 Wallet.setWorkerLogLevel(localStorage.walletWorkerLogLevel || 'none')
 
-//window._xx = {Wallet, workerLog}
-
 export {html, css, FlowFormat, dpc, baseUrl, debug};
 
 export class KaspaWalletUI extends BaseElement{
@@ -33,7 +31,6 @@ export class KaspaWalletUI extends BaseElement{
 			errorMessage:{type:String},
 			receiveAddress:{type:String},
 			changeAddress:{type:String},
-			//txs:{type:Array},
 			blueScore:{type:Number},
 			status:{type:String},
 			walletMeta:{type:Object, value:{}},
@@ -56,7 +53,6 @@ export class KaspaWalletUI extends BaseElement{
 			hideQRScanner:{type:Boolean},
 			hideOpenWalletLogo:{type:Boolean},
 			skipUTXOIndexCheck:{type:Boolean}
-			//UTXOIndexSupport:{type:Boolean}
 		};
 	}
 
@@ -568,7 +564,6 @@ export class KaspaWalletUI extends BaseElement{
 				}catch(e){
 					invalidFile()
 				}
-				//console.log("reader result", json);
 			};
 			reader.onerror = ()=>{
 				FlowDialog.alert(i18n.t("Error"), i18n.t("Unable to read file"));
@@ -586,10 +581,7 @@ export class KaspaWalletUI extends BaseElement{
 			type: "attachment/kpk",
 		});
 		const objectURL = URL.createObjectURL(file);
-		//console.log("objectURL1:", name)
-		//console.log("objectURL", file, objectURL)
-		this.requestFileDownload(objectURL, name)
-		//URL.revokeObjectURL(objectURL);
+		this.requestFileDownload(objectURL, name);
 	}
 
 	requestFileDownload(file, name){
@@ -1057,19 +1049,11 @@ export class KaspaWalletUI extends BaseElement{
 		let uploadFileDialog = document.createElement("kaspa-upload-file-dialog");
 		this.parentNode.appendChild(uploadFileDialog);
 
-		//this.sendDataToDownload(JSON.stringify({wallet:1}), 'xxxxx.kpk')
-		/*uploadFileDialog.open({}, (args)=>{
-			console.log("uploadFileDialog:args", args)
-		})*/
-		
-		console.log("connectedCallback1", openDialog)
 		const {workerCorePath} = window.KaspaConfig||{}
-		//console.log("workerCorePath", workerCorePath)
 		initKaspaFramework({
 			workerPath: workerCorePath||"/kaspa-wallet-worker/worker.js?ident="+(window.KaspaConfig?.ident||"")
 		}).then(()=>{
-			let encryptedMnemonic = getLocalWallet()?.mnemonic
-			console.log("connectedCallback2")
+			let encryptedMnemonic = getLocalWallet()?.mnemonic;
 			this.initWallet(encryptedMnemonic)
 		})
 	}
@@ -1145,8 +1129,6 @@ export class KaspaWalletUI extends BaseElement{
 			return
 		}
 		if(mode == "create"){
-			// TODO - GET CURRENT NETWORK TYPE
-			// TODO - CREATE CORRESPONDING RPC
 			dialog.hide();
 			const wallet = new Wallet(null,null, {network,rpc});
 			const mnemonic = await wallet.mnemonic;
@@ -1156,7 +1138,6 @@ export class KaspaWalletUI extends BaseElement{
 
 				encryptedMnemonic = await wallet.export(password);
 				setLocalWallet(encryptedMnemonic, this.walletMeta);
-				//setLocalSetting("have-backup", 1);
 				this.setWallet(wallet);
 			})
 			return
@@ -1177,17 +1158,7 @@ export class KaspaWalletUI extends BaseElement{
 			if(!wallet)
 				return
 			const encryptedMnemonic = await wallet.export(password);
-			//console.log("encryptedMnemonic", encryptedMnemonic)
-			/*const imported = await Wallet.import(password, encryptedMnemonic, { network, rpc })
-			.catch(error=>{
-				console.log("recover:Wallet.import error", error)
-			})
-			if(!imported){
-				dialog.setError("Invalid password.");
-				return
-			}*/
 			setLocalWallet(encryptedMnemonic, this.walletMeta);
-			//setLocalSetting("have-backup", 1);
 			dialog.hide();
 			this.setWallet(wallet);
 			return
@@ -1197,13 +1168,11 @@ export class KaspaWalletUI extends BaseElement{
 		let encryptedMnemonic = getLocalWallet().mnemonic;
 		this.openSeedsDialog({encryptedMnemonic, step:1}, ({finished})=>{
 			if(finished){
-				//setLocalSetting("have-backup", 1);
 				this.requestUpdate("have-backup", null)
 			}
 		})
 	}
 	openSeedsDialog(args, callback){
-		//console.log("encryptedMnemonic", encryptedMnemonic)
 		this.seedsDialog.open(args, callback)
 	}
 	showTxDialog(){
@@ -1211,11 +1180,9 @@ export class KaspaWalletUI extends BaseElement{
 			this.txDialog = document.createElement("kaspa-tx-dialog");
 			this.parentNode.appendChild(this.txDialog);
 		}
-		console.log("this.txDialog", this.txDialog)
 		this.txDialog.open({wallet:this}, (args)=>{})
 	}
 	showSendDialog(){
-		console.log("this.sendDialog", this.sendDialog)
 		this.sendDialog.open({wallet:this}, (args)=>{
 			this.sendTx(args);
 		})
@@ -1380,7 +1347,6 @@ export class KaspaWalletUI extends BaseElement{
 			heading:i18n.t('Request funds'),
 			inputLabel:i18n.t('Amount in KAS')
 		}, ({value:amount, dialog})=>{
-			console.log("t9 result", amount)
 			let sompis = formatForMachine(amount||0);
 			if(sompis > this.faucetFundsAvailable){
 				let msg = i18n.t(`You can't request more than [n] KAS.`)

@@ -89,7 +89,6 @@ class KaspaTXDialog extends KaspaDialog{
 	}
 	onPaginationClick(e){
 		let skip = e.target.closest("[data-skip]").dataset.skip;
-		console.log("skip", skip, e.target)
 		if(skip === undefined)
 			return
 		this.skip = +skip;

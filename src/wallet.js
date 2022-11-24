@@ -38,7 +38,6 @@ export const GetTS = (d=null)=>{
     let hour = d.getHours(); hour = hour < 10 ? '0' + hour : hour;
     let min = d.getMinutes(); min = min < 10 ? '0' + min : min;
     let sec = d.getSeconds(); sec = sec < 10 ? '0' + sec : sec;
-    //var time = year + '-' + month + '-' + date + ' ' + hour + ':' + min + ':' + sec;
     return `${year}-${month}-${date} ${hour}:${min}:${sec}`;
 }
 
@@ -88,11 +87,6 @@ export const saveCacheToStorage = (cache)=>{
 
 export const getUniqueId = (mnemonic)=>{
 	const secret = 'c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e';
-	/*
-	return crypto.createHmac('sha256', secret)
-		.update(mnemonic)
-		.digest('hex');
-	*/
 	return crypto.scryptSync(mnemonic, secret, 20, { N: 1024 }).toString('hex');
 }
 
@@ -118,7 +112,6 @@ export const askForPassword = async (args, callback)=>{
 	let errorMessage = "";
 	const updateDialog = ()=>{
 		dialog.body = body();
-		//dialog.requestUpdate("body", null)
 	}
 	const changeInputType = ()=>{
 		inputType = inputType=="password"?"text":"password";
@@ -171,4 +164,3 @@ export const askForPassword = async (args, callback)=>{
 }
 
 window.Decimal = Decimal;
-//window.askForPassword = askForPassword;

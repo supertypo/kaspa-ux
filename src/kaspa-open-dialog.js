@@ -198,8 +198,6 @@ class KaspaOpenDialog extends KaspaDialog{
     }
     openWallet(){
     	let password = this.qS(".password").value;
-    	// if(!this.checkPassword(password))
-    	// 	return this.setError("At least 8 characters, one capital, one lower, one number, and one symbol")
 
 		this.callback(null, {password, dialog:this});
     }
@@ -253,12 +251,10 @@ class KaspaOpenDialog extends KaspaDialog{
     	if(isInvalid || !words.join("").length)
     		return this.setError(i18n.t("Please provide valid words"));
 
-    	//console.log("words", words);
     	askForPassword({
     		title:i18n.t("Password to encryt the wallet"),
     		confirmBtnText:i18n.t("Encrypt Wallet")
     	}, ({btn, password})=>{
-    		//console.log("btn, password", btn, password, words)
     		if(!password || btn != 'confirm')
     			return
 

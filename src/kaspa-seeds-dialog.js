@@ -197,7 +197,7 @@ class KaspaSeedsDialog extends KaspaDialog{
 	}
 	renderStep1Buttons(){
 		if(this.args?.showOnlySeed)
-			return// html`<flow-btn primary @click="${this.finish}">Close</flow-btn>`
+			return
 		return html`<flow-btn primary @click="${e=>this.step=2}" i18n>NEXT</flow-btn>`
 	}
 	renderStep2Buttons(){

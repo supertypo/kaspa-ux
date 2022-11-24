@@ -1,9 +1,10 @@
 import { i18n, T } from './flow-ux.js';
 import {
 	html, css, KaspaDialog, askForPassword, KAS,
-	formatForMachine, formatForHuman
+	formatForMachine, getLocalWallet
 } from './kaspa-dialog.js';
 const pass = "";
+import {Wallet} from '@kaspa/wallet-worker';
 
 class KaspaSendDialog extends KaspaDialog{
 	static get properties(){
@@ -75,12 +76,6 @@ class KaspaSendDialog extends KaspaDialog{
 		if(this.estimateError)
 			return html`<div class="estimate-tx-error">${this.estimateError}</div>`;
 		let {dataFee, fee, totalAmount, txSize} = this.estimate||{}
-		// return html`<div class="estimate-tx">
-		// 	${txSize?html`<span class="tx-size">Transaction size: ${txSize.toFileSize()}<span>`:''}
-		// 	${dataFee?html`<span class="tx-data-fee">Data fee: ${KAS(dataFee)} KAS<span>`:''}
-		// 	${fee?html`<span class="tx-fee">Total fee: ${KAS(fee)} KAS<span>`:''}
-		// 	${totalAmount?html`<span class="tx-total">Total: ${KAS(totalAmount)} KAS<span>`:''}
-		// </div>`
 		return html`
 		<div class="estimate-tx">
 			<table>
@@ -95,7 +90,6 @@ class KaspaSendDialog extends KaspaDialog{
 	renderButtons(){
 		const estimating = this.estimateTxSignal && !this.estimateTxSignal.isResolved;
 		const estimateFee = this.estimate?.fee;
-		//console.log("renderButtons:estimate", this.estimate)
 		return html`
 			${estimating?html`<fa-icon 
 				class="spinner" icon="sync"
@@ -140,14 +134,6 @@ class KaspaSendDialog extends KaspaDialog{
     	let fee = this.qS(".fee").value;
     	let calculateNetworkFee = !!this.qS(".calculate-network-fee").checked;
     	let inclusiveFee = !!this.qS(".inclusive-fee").checked;
-    	/*
-    	let networkFeeMax = this.qS(".maximum-fee").value;
-    	if(networkFeeMax && fee && fee>networkFeeMax){
-    		this.setError("Invalid fee")
-    		return
-    	}
-    	*/
-
     	return {
     		amount:formatForMachine(amount),
     		fee:formatForMachine(fee),
@@ -189,7 +175,6 @@ class KaspaSendDialog extends KaspaDialog{
 
     	console.log("formData:", formData)
     	let {error, data:estimate} = await this.wallet.estimateTx(formData);
-    	//console.log("estimateTx:error:", error, "estimate:", estimate)
     	this.estimateError = error;
     	if(estimate){
     		this.estimate = estimate;
@@ -223,11 +208,17 @@ class KaspaSendDialog extends KaspaDialog{
     	if(!formData)
     		return
     	console.log("formData", formData)
-    	askForPassword({confirmBtnText:i18n.t("CONFIRM SEND"), pass}, ({btn, password})=>{
-    		//console.log("btn, password", btn, password)
+    	askForPassword({confirmBtnText:i18n.t("CONFIRM SEND"), pass}, async({btn, password})=>{
     		if(btn!="confirm")
     			return
 			formData.password = password;
+
+			let wallet = getLocalWallet();
+    		let encryptedMnemonic = wallet.mnemonic;
+    		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
+    		if(!valid)
+    			return FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid password"));
+
 			this.hide();
 			this.callback(formData);
     	})

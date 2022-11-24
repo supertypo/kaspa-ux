@@ -116,12 +116,6 @@ class KaspaSendDialogMobile extends KaspaDialog{
 		if(this.estimateError)
 			return html`<div class="estimate-tx-error">${this.estimateError}</div>`;
 		let {dataFee, fee, totalAmount, txSize} = this.estimate||{}
-		// return html`<div class="estimate-tx">
-		// 	${txSize?html`<span class="tx-size">Transaction size: ${txSize.toFileSize()}<span>`:''}
-		// 	${dataFee?html`<span class="tx-data-fee">Data fee: ${KAS(dataFee)} KAS<span>`:''}
-		// 	${fee?html`<span class="tx-fee">Total fee: ${KAS(fee)} KAS<span>`:''}
-		// 	${totalAmount?html`<span class="tx-total">Total: ${KAS(totalAmount)} KAS<span>`:''}
-		// </div>`
 
 		return html`
 		<div class="estimate-tx">
@@ -172,9 +166,7 @@ class KaspaSendDialogMobile extends KaspaDialog{
 			this.setAddress(address)
 		})
 	}
-	// showAddressInputField(){
-	// 	this.address = "-";
-	// }
+
 	async copyFromClipboard(){
 		const address = await navigator.clipboard.readText();
 		this.setAddress(address)
@@ -228,13 +220,6 @@ class KaspaSendDialogMobile extends KaspaDialog{
     	let fee = this.qS(".fee").value || 0;
     	let calculateNetworkFee = !!this.qS(".calculate-network-fee").checked;
     	let inclusiveFee = !!this.qS(".inclusive-fee").checked;
-    	/*
-    	let networkFeeMax = this.qS(".maximum-fee").value;
-    	if(networkFeeMax && fee && fee>networkFeeMax){
-    		this.setError("Invalid fee")
-    		return
-    	}
-    	*/
 
     	return {
     		amount:formatForMachine(amount),

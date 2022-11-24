@@ -486,7 +486,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			return '';
 
 		let address = this.receiveAddress||"";
-		//console.log("address", address)
 		return html`
 		<div class="address-and-qr">
 			<div class="address-box">
@@ -509,17 +508,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		let url = `https://explorer.kaspa.org/addresses/${address}`;
 
 		window.open(url);
-
-		/*
-		let a = document.createElement("a");
-		a.setAttribute("href", url);
-		a.setAttribute("target", "_blank");
-		document.body.appendChild(a);
-		a.click();
-		setTimeout(()=>{
-			a.remove();
-		}, 100)
-		*/
 	}
 	renderBalanceAndButton(){
 		if(!this.wallet || !this.wallet.balance)
@@ -527,9 +515,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 
 		const { balance : { available, pending } } = this.wallet;
 		const total = available+pending;
-		// let availableBalance = 67580000000000;
-		// let totalBalance = 100000000000000.40;
-		// let pending = totalBalance - availableBalance;
 		return html`
   			<div class="balance-badge">
 				${ this.isLoading ? html`

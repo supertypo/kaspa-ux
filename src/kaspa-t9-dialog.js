@@ -60,12 +60,10 @@ class KaspaT9Dialog extends KaspaDialog{
 		this.callback({value:this.value, dialog:this})
 	}
 	onInputChange(e){
-		//console.log("onInputChange", e.detail)
 		this.value = e.detail.value;
 	}
 	onT9Change(e){
 		this.value = e.detail.value;
-		//console.log("onT9Change:this.value", this.value)
 	}
 	open(args, callback){
 		this.callback = callback;

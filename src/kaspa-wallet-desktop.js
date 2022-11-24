@@ -118,7 +118,6 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 		this.recentTransactionsHeading = i18n.t("Transactions under process");
 		this.updateTXLimit();
 		this.addEventListener("new-wallet", ()=>{
-			//console.log("new-wallet")
 			this.updateTXLimit();
 		})
 	}
@@ -202,9 +201,6 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 			return html``;
 
 		const { balance : { available, pending } } = this.wallet;
-		// let availableBalance = 67580000000000;
-		// let totalBalance = 100000000000000.40;
-		// let pending = totalBalance - availableBalance;
 		return html`
   			<div class="balance-badge">
                 <div class="balance">
@@ -259,7 +255,6 @@ export class KaspaWalletDesktop extends KaspaWalletMobile{
 				hideable:false,
 				isFresh:true
 			}, (err, info)=>{
-				//console.log("showWalletInitDialog:result", info)
 				this.handleInitDialogCallback(info)
 			})
 		}

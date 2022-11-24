@@ -51,8 +51,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 				@click="${this.sendBack}" i18n> Close </flow-btn>
 		</div>
 		`;
-
-		// ?disabled=${!this.isValid}
 	}
 	stopQRScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
@@ -62,7 +60,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	startScanning(){
 		let scanner = this.qS("flow-qrcode-scanner");
 		scanner.start();
-		// scanner.updated();
 		this.stopped = false;
 	}
 	sendBack(e){
@@ -73,7 +70,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.callback({value:this.value, dialog:this})
 	}
 	onInputChange(e){
-		//console.log("onInputChange", e.detail)
 		let value = e.detail.value;
 		this.setValue(value);
 	}
@@ -93,7 +89,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 		this.isValid = isValid;
 		if(isValid)
 			this.sendValueBack();
-		//console.log("onT9Change:this.value", this.value)
 	}
 	open(args, callback){
 		this.callback = callback;
