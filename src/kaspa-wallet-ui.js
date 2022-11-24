@@ -338,7 +338,7 @@ export class KaspaWalletUI extends BaseElement{
 					else
 						color = 'red';
 					return html`
-					<div class="tx-row" ?txin=${tx.in} ?txmoved=${tx.isMoved} ?txout=${!tx.in}>
+					<div class="tx-row" ?txin=${tx.in} tx-version=${tx.version} ?txmoved=${tx.isMoved} ?txout=${!tx.in}>
 						<fa-icon class="tx-icon" icon="${tx.in?'sign-in':'sign-out'}"></fa-icon>
 						${
 							0<=cfm&cfm<=COUNT? html`
