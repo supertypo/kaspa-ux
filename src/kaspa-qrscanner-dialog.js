@@ -3,7 +3,6 @@ import {
 	html, css, KaspaDialog, askForPassword, KAS,
 	formatForMachine, formatForHuman
 } from './kaspa-dialog.js';
-const pass = "";
 
 class KaspaQRScannerDialog extends KaspaDialog{
 	static get properties(){
@@ -33,8 +32,6 @@ class KaspaQRScannerDialog extends KaspaDialog{
 	renderHeading({estimating}){
 		return html`${this.renderBackBtn()} ${this.heading}`
 	}
-
-	// ?stopped=${this.stopped}
 	renderBody(){
 		let value = this.value || '';
 		let debug = this.debug;

@@ -40,21 +40,6 @@ class KaspaFaucetDialog extends KaspaDialog{
             ` }
         `;
     }
-    
-//     ${ !available ? html`` : html`
-//     <flow-input class="full-width" clear-btn value="${value}"
-//         label="${inputLabel}" readonly @changed=${this.onInputChange}>
-//     </flow-input>
-//     <flow-t9 value="${value}" @changed="${this.onT9Change}"
-//         @__btn-click=${this.onBtnClick}></flow-t9>
-//     <div class="buttons">
-//         <flow-btn @click="${this.setMaxValue}">Max</flow-btn>
-//         <flow-btn class="primary" @click="${this.sendBack}">Get</flow-btn>
-//     </div>
-// `}
-
-
-
 
 	renderButtons(){
 		return html`<flow-btn @click="${this.hide}">CLOSE</flow-btn>`
