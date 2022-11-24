@@ -370,7 +370,7 @@ export class KaspaWalletUI extends BaseElement{
 	exportTransactions(){
 		let {txs:items=[], blueScore=0} = this;
 
-		let fields = ["id", "address", "amount", "direction", "confirmation", "note", "this wallet", "date"];
+		let fields = ["date", "id", "address", "amount", "direction", "confirmation", "note", "this wallet"];
 		let rows = [];
 
 		rows.push(fields.map(field=>{
@@ -411,6 +411,9 @@ export class KaspaWalletUI extends BaseElement{
 					break;
 					case 'this wallet':
 						row.push(tx.myAddress?'YES':'')
+					break;
+					case 'date':
+						row.push(tx.version==2 ? tx.date : '')
 					break;
 
 				}
@@ -857,6 +860,18 @@ export class KaspaWalletUI extends BaseElement{
 					item.isMoved = true;
 					this.requestUpdate("balance", null);
 				}
+			})
+			wallet.on("update-transactions", (list)=>{
+		    	//console.log("############ update-transaction", list)
+				list.forEach(tx=>{
+					if (tx.ts){
+						tx.date = GetTS(new Date(tx.ts));
+					}
+					let tx_old = this.txs.find(t=>t.id == tx.id);
+					if (tx_old){
+						Object.assign(tx_old, tx);
+					}
+				});
 			})
 		    wallet.on("new-transaction", (tx)=>{
 		    	//console.log("############ new-transaction", tx)
