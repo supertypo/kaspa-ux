@@ -920,7 +920,7 @@ export class KaspaWalletUI extends BaseElement{
 			})
 
 			wallet.on("transactions-update-status", (info)=>{
-		    	console.log("############ transactions-update-status", info.status)
+		    	//console.log("############ transactions-update-status", info.status)
 				if (info.status=="finished"){
 					this.updatingTransactionsTime = false;
 				}
