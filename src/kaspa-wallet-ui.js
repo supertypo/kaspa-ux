@@ -684,6 +684,9 @@ export class KaspaWalletUI extends BaseElement{
 
 	copyAddress(){
 		let input = this.renderRoot.querySelector(".address-input");
+		this.copyInputToClipboard(input)
+	}
+	copyInputToClipboard(input){
 		input.select();
 		input.setSelectionRange(0, 99999)
 		document.execCommand("copy");

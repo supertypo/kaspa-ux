@@ -189,7 +189,39 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			flow-expandable[no-icon]{
 				--flow-expandable-icon-box-max-width:0px;
 			}
-			.developer-info{margin-top:26px;}
+			.donation-info{margin-top:26px;text-align:center}
+			.donation-info .donation-address-box.badge{
+				margin-top:5px;
+				display:flex;
+				align-items:center;
+				white-space:nowrap;
+    			max-width:90%;
+			}
+			flow-expandable.donation-info[expand] .donation-address-box fa-icon{
+				transform: rotate(0deg);
+			}
+			.donation-info .donation-address-box fa-icon{
+				cursor:pointer;
+			}
+			.donation-info input.address{
+				border: 0px;
+				appearance: none;
+				outline: none;
+				flex: 1 1 0%;
+    			width: 100px;
+				margin:0px 5px 0px 5px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				font-size: 16px;
+				max-width: 500px;
+				min-width: 100px;
+				background-color: transparent;
+				color: var(--flow-primary-color);
+				font-family: "Exo 2";
+				overflow-wrap: break-word;
+				resize: none;
+				cursor: pointer;
+			}
 			.clear-used-utxos{margin:0px 10px;cursor:pointer}
 			.theme-btn,.language-icon,.lock-btn{cursor:pointer}
 			.language-icon{position:relative;margin:0px 10px 0 5px}
@@ -249,6 +281,13 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		const sCls = tab=>tab==selectedTab?'selected flow-swipeable':'flow-swipeable';
 		const {inUseUTXOs={satoshis:0, count:0}} = this.walletDebugInfo;
 		let PWAVersion = window.PWA?.version||'';
+
+		let donationAddresses = [
+			["Devfund donations:", "kaspa:precqv0krj3r6uyyfa36ga7s0u9jct0v4wg8ctsfde2gkrsgwgw8jgxfzfc98"],
+			["Mining address:", "kaspa:pzhh76qc82wzduvsrd9xh4zde9qhp0xc8rl7qu2mvl2e42uvdqt75zrcgpm00"],
+			//["KDX/WebWallet donations:", "kaspa:qrncjga8hej9q59q85ge5js6m4y97el6ahp3m87hyzqdtaq6pf0v7xek7x900"],
+		]
+
 		return html`
 		${this.renderHeaderBar()}
 		<div class="tabs-container hide-scrollbar" ?not-ready=${!isReady}>
@@ -323,9 +362,29 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.importWalletFile}" i18n>Import Wallet Seed File (KPK)</flow-btn>
 						<input class="hidden-file-input" type="file" />
-						<!--div class="badge">
-							<hr style="margin:32px;"/>
-						</div-->
+						
+						<flow-expandable class="donation-info" no-info no-icon icon="-">
+							<div class="badge center-icon" slot="title">
+								<fa-icon icon="caret-right"></fa-icon>
+								<span is="i18n-span">DONATIONS</span>
+							</div>
+							<p is="i18n-p">
+								if you wish to further the development of the kaspa ecosystem, we accept kaspa donations at the following addresses:
+							</p>
+							${
+								donationAddresses.map((t) => {
+									let [title, address] = t;
+									return html`
+									<div class="donation-address-box badge">
+										<flow-i18n text="${title}"></flow-i18n>
+										<input class="address" value="${address}" />
+										<fa-icon @click="${this.copyDonationAddress}"
+											icon="copy" title="${i18n.t("Copy to clipboard")}"></fa-icon>
+									</div>`
+								})
+							}
+						</flow-expandable>
+
 						<flow-expandable class="developer-info" _expand no-info no-icon icon="-">
 							<div class="badge center-icon" slot="title">
 								<fa-icon icon="caret-right"></fa-icon>
@@ -406,6 +465,14 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		</div>
 		${this.renderLockScreen()}
 		`
+	}
+	copyDonationAddress(e){
+		let el = e.target?.closest(".donation-address-box");
+		let input = el?.querySelector("input.address");
+		if (!input){
+			return
+		}
+		this.copyInputToClipboard(input);
 	}
 	renderHeaderBar(){
 		let {wallet} = this;
