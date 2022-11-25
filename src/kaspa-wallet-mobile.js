@@ -306,7 +306,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 									this.updatingTransactionsTimeStatus.total==0 || 
 									(this.updatingTransactionsTimeStatus.total == this.updatingTransactionsTimeStatus.updated)?
 									"All transactions updated":
-									html`Transactions update:
+									html`Transactions updated:
 									${this.updatingTransactionsTimeStatus.updated}
 									/
 									${this.updatingTransactionsTimeStatus.total}`
