@@ -397,6 +397,7 @@ export class KaspaWalletUI extends BaseElement{
 			return
 	
 		this.updatingTransactionsTime = true;
+		this.requestUpdate("updatingTransactionsTime", null);
 
 		//const uid = UID();
 		//this.addPreparingTransactionNotification({uid, updatingTransactions:true})
