@@ -582,22 +582,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			return
 		this.utxoSkip = +skip;
 	}
-	/*
-	renderStatus(){
-		if(!this.wallet)
-			return '';
-		return html`
-			<div class="status">
-				Wallet Status: ${this.status||'Offline'}<br/>
-				${
-					this.blockCount == 1 ?
-					html`DAG headers: ${this.headerCount?FlowFormat.commas(this.headerCount):''}` :
-					html`DAA score: ${this.blueScore?FlowFormat.commas(this.blueScore):''}`
-				}
-			</div>
-		`
-	}
-	*/
 	firstUpdated(){
 		super.firstUpdated();
 		let swipeableContainer = this.renderRoot.querySelector(".flow-swipeable-container");
@@ -605,7 +589,6 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 			drag:false,
 			onSwipe:({index, element})=>{
 				let tab = element?.getAttribute("for");
-				//console.log("onSwipe:", {index, element, tab})
 				if(!tab)
 					return
 				this.selectTab(tab);
@@ -632,23 +615,10 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 		if(index <0)
 			return
 		this.swipeable.setActive(index)
-		/*
-		console.log("onTabSelect", selected)
-		let oldContent = this.renderRoot.querySelector(".tab-content.selected");
-		let newContent = this.renderRoot.querySelector(`.tab-content[for='${selected}']`);
-		oldContent.classList.add("deactivating");
-		oldContent.classList.remove("selected");
-		newContent.classList.add("selected");
-		this.selectedTab = selected;
-		dpc(500, ()=>{
-			oldContent.classList.remove("deactivating");
-		})
-		*/
 
 	}
 
 	showSendDialog(){
-		//console.log("this.sendDialog", this.sendDialog)
 		this.sendDialog.open({wallet:this}, (args)=>{
 			this.sendTx(args);
 		})

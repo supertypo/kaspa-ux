@@ -1,7 +1,8 @@
 import {
 	html, css, KaspaDialog, askForPassword, KAS,
-	formatForMachine, T, i18n, formatForHuman
+	formatForMachine, T, i18n, formatForHuman, getLocalWallet
 } from './kaspa-dialog.js';
+import {Wallet} from '@kaspa/wallet-worker';
 const pass = "";
 
 class KaspaSendDialogMobile extends KaspaDialog{
@@ -296,11 +297,19 @@ class KaspaSendDialogMobile extends KaspaDialog{
     	if(!formData)
     		return
     	console.log("formData", formData)
-    	askForPassword({confirmBtnText:i18n.t("CONFIRM SEND"), pass}, ({btn, password})=>{
+    	askForPassword({confirmBtnText:i18n.t("CONFIRM SEND"), pass}, async({btn, password})=>{
     		//console.log("btn, password", btn, password)
     		if(btn!="confirm")
     			return
 			formData.password = password;
+
+			let wallet = getLocalWallet();
+    		let encryptedMnemonic = wallet.mnemonic;
+    		let valid = await Wallet.checkPasswordValidity(password, encryptedMnemonic);
+    		if(!valid)
+    			return FlowDialog.alert(i18n.t("Error"), i18n.t("Invalid password"));
+
+
 			this.hide();
 			this.callback(formData);
     	})

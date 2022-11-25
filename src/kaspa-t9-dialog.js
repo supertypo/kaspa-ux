@@ -1,6 +1,6 @@
 import { i18n } from './flow-ux.js';
 import {
-	html, css, KaspaDialog, askForPassword, KAS,
+	html, css, KaspaDialog, KAS,
 	formatForMachine, formatForHuman
 } from './kaspa-dialog.js';
 const pass = "";

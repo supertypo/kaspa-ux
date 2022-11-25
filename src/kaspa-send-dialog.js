@@ -44,9 +44,6 @@ class KaspaSendDialog extends KaspaDialog{
 	}
 	renderBody(){
 		return html`
-			<!--div class="sub-heading">Send funds
-			to: kaspatest:qrhefqj5c80m59d9cdx4ssxw96vguvn9fgy6yc0qtd
-			</div-->
 			<flow-input class="address full-width" outer-border
 				label="${T(`Recipient Address (Must start with 'kaspa' prefix)`)}"
 				value="${this.address||''}"

@@ -41,7 +41,6 @@ export const txListStyle = css`
 	.tx-list .tx-icon{--fa-icon-color:var(--flow-primary-color)}
 	.tx-list .tx-row .tx-progressbar{position:absolute;left:5px; top:30px;}
 	.tx-list .tx-row:nth-child(2n){background-color:var(--tx-bg-color-2)}
-	/*.tx-list .tx-row:hover{background-color:var(--tx-bg-color-3)}*/
 	.tx-list .tx-date{white-space:nowrap;margin-left:16px;}
 	.tx-list .tx-id,
 	.tx-list .tx-address{

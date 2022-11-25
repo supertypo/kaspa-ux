@@ -1,8 +1,7 @@
 import {
-	html, css, KaspaDialog, T, askForPassword, KAS,
+	html, css, KaspaDialog, T, KAS,
 	formatForMachine, formatForHuman
 } from './kaspa-dialog.js';
-const pass = "";
 
 class KaspaReceiveDialogMobile extends KaspaDialog{
 	static get properties(){

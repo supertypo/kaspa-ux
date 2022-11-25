@@ -11,12 +11,6 @@ class KaspaFaucetDialog extends KaspaDialog{
 		css`
 			.container{max-height:400px}
 			.buttons{justify-content:flex-end}
-/*
-            input.address{
-				font-size:1px;padding:0px;margin:0px;border:0px;width:1px;height:1px;
-				z-index:-1;position:absolute;opacity:0;
-            }
-*/
 			flow-input flow-btn{margin-bottom:0px;}
 		`]
 	}

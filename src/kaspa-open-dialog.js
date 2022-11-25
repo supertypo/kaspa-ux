@@ -85,7 +85,7 @@ class KaspaOpenDialog extends KaspaDialog{
 	renderRecoverUI(){
 		let rows = [0, 1, 2];
 		let cells = [0, 1, 2, 3];
-		let seed = [];//(testSeed||'').split(" ");
+		let seed = [];
 		return html`
 			<p class="sub-heading text-center" is="i18n-p">
 				Enter your 12-word seed phrase to recover your wallet (words are not case sensitive)

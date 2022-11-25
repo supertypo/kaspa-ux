@@ -89,9 +89,6 @@ class KaspaSeedsDialog extends KaspaDialog{
 		this.varificationStep = 0;
 		this.varificationStepAnswered = '';
 
-
-		//console.log("indexes", wordRows, indexes, this.correctWords)
-
 		return html`
 			<p is="i18n-p">
 				Your wallet is accessible by a seed phrase.

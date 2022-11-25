@@ -403,7 +403,7 @@ export class KaspaWalletUI extends BaseElement{
 		//this.addPreparingTransactionNotification({uid, updatingTransactions:true})
 		return new Promise((resolve)=>{
 			dpc(2000, async()=>{
-				let response = await this.wallet.startUpdatingTransactions()
+				let response = await this.wallet.startUpdatingTransactions(4)
 				.catch(err=>{
 					console.log("updateTransactionsTime error", err)
 					let error = err.error || err.message || i18n.t('Unable to update transactions time. Please retry later.');

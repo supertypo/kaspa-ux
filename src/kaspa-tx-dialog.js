@@ -1,6 +1,6 @@
 import {
-	html, css, KaspaDialog, askForPassword, KAS, txListStyle,
-	formatForMachine, formatForHuman, paginationStyle, buildPagination,
+	html, css, KaspaDialog, KAS, txListStyle,
+	paginationStyle, buildPagination,
 	renderPagination, T
 } from './kaspa-dialog.js';
 
