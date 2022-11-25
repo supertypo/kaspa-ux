@@ -399,11 +399,9 @@ export class KaspaWalletUI extends BaseElement{
 		this.updatingTransactionsTime = true;
 		this.requestUpdate("updatingTransactionsTime", null);
 
-		//const uid = UID();
-		//this.addPreparingTransactionNotification({uid, updatingTransactions:true})
 		return new Promise((resolve)=>{
 			dpc(2000, async()=>{
-				let response = await this.wallet.startUpdatingTransactions(4)
+				let response = await this.wallet.startUpdatingTransactions()
 				.catch(err=>{
 					console.log("updateTransactionsTime error", err)
 					let error = err.error || err.message || i18n.t('Unable to update transactions time. Please retry later.');
@@ -414,10 +412,6 @@ export class KaspaWalletUI extends BaseElement{
 				})
 				if(response)
 					console.log("updateTransactionsTime response", response)
-
-				//this.removePreparingTransactionNotification({uid});
-
-				//this.updatingTransactionsTime = false;
 				resolve()
 			})
 		})
