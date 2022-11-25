@@ -132,7 +132,6 @@ export class KaspaWalletUI extends BaseElement{
 		this.recentTransactionsHeading = i18n.t("Recent Transactions");
 		this.walletDebugInfo = {};
 		this.reloadingUTXOs = false;
-		window.__walletCmp = this;
 
 		this.throttledCompoundUTXO = throttle(async ()=>{
 			if(this.waitingForCompound)

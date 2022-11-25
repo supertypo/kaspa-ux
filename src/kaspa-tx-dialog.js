@@ -99,7 +99,7 @@ class KaspaTXDialog extends KaspaDialog{
 		this.requestUpdate("tx-list", null)
 	}
     getFormData(){
-    	let address = this.qS(".address").value;
+    	//let address = this.qS(".address").value;
     }
 }
 

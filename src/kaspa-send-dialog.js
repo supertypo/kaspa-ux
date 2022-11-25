@@ -63,7 +63,6 @@ class KaspaSendDialog extends KaspaDialog{
 			<flow-input class="note full-width" outer-border label="${T('Note')}"></flow-input>
 			<flow-checkbox class="calculate-network-fee" checked
 				@changed="${this.onCalculateFeeChange}">${T('Automatically calculate network fee')}</flow-checkbox>
-			<!--flow-input class="maximum-fee full-width" label="Maximum network fee"></flow-input-->
 			<flow-checkbox class="inclusive-fee"
 				@changed="${this.onInclusiveFeeChange}">${T('Include fee in the amount')}</flow-checkbox>
 			${this.renderEstimate()}
@@ -170,7 +169,7 @@ class KaspaSendDialog extends KaspaDialog{
     	if(!formData)
     		return
 
-    	console.log("formData:", formData)
+    	//console.log("formData:", formData)
     	let {error, data:estimate} = await this.wallet.estimateTx(formData);
     	this.estimateError = error;
     	if(estimate){
@@ -204,7 +203,7 @@ class KaspaSendDialog extends KaspaDialog{
     	const formData = this.getFormData();
     	if(!formData)
     		return
-    	console.log("formData", formData)
+    	//console.log("formData", formData)
     	askForPassword({confirmBtnText:i18n.t("CONFIRM SEND"), pass}, async({btn, password})=>{
     		if(btn!="confirm")
     			return

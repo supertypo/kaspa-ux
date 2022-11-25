@@ -3,7 +3,6 @@ import {
 	html, css, KaspaDialog, KAS,
 	formatForMachine, formatForHuman
 } from './kaspa-dialog.js';
-const pass = "";
 
 class KaspaT9Dialog extends KaspaDialog{
 	static get properties(){
