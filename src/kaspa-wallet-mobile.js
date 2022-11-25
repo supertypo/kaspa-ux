@@ -296,6 +296,25 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.exportTransactions}" i18n>Export transactions as CSV</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
+							?disabled=${this.updatingTransactionsTime}
+							@click="${this.updateTransactionsTime}" i18n>Update transactions time</flow-btn>
+						${
+							this.updatingTransactionsTimeStatus?
+							html`
+							<div class="transactions-update-status">
+								${
+									this.updatingTransactionsTimeStatus.total==0 || 
+									(this.updatingTransactionsTimeStatus.total == this.updatingTransactionsTimeStatus.updated)?
+									"All transactions updated":
+									html`Transactions update:
+									${this.updatingTransactionsTimeStatus.updated}
+									/
+									${this.updatingTransactionsTimeStatus.total}`
+								}
+							</div>
+							`:''
+						}
+						<flow-btn class="center-btn primary v-margin"
 							@click="${this.showSeeds}" i18n>Backup Seed</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.showRecoverWallet}" i18n>Recover From Seed</flow-btn>

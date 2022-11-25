@@ -106,6 +106,11 @@ export class KaspaWalletUI extends BaseElement{
 				color:var(--flow-primary-color);
 				text-decoration:none;
 			}
+			.transactions-update-status{
+				text-align: center;
+				font-size: 0.8rem;
+				margin-bottom: 20px;
+			}
 		`];
 	}
 	constructor() {
@@ -361,6 +366,60 @@ export class KaspaWalletUI extends BaseElement{
 				})}
 			</div>
 		`
+	}
+
+	async updateTransactionsTime(){
+		if(!this.wallet)
+			return
+		if (this.updatingTransactionsTime){
+			FlowDialog.alert(
+				i18n.t('Updating transactions time'),
+				i18n.t('Transactions update process is in-progress'),
+			);
+			return
+		}
+
+		let {btn} = await FlowDialog.alert({
+			title:i18n.t('Update transactions time'),
+			body:html`<div>${i18n.t('Updating transactions will take time depending upto your transactions list.')}</div>
+					 <div>${i18n.t('Are you sure to update transactions?')}</div>`,
+			cls:'with-icon',
+			btns:[{
+				text:i18n.t('Cancel'),
+				value:'cancel'
+			},{
+				text:i18n.t('Update'),
+				value:'update',
+				cls:'primary'
+			}]
+		})
+		if(btn != 'update')
+			return
+	
+		this.updatingTransactionsTime = true;
+
+		//const uid = UID();
+		//this.addPreparingTransactionNotification({uid, updatingTransactions:true})
+		return new Promise((resolve)=>{
+			dpc(2000, async()=>{
+				let response = await this.wallet.startUpdatingTransactions()
+				.catch(err=>{
+					console.log("updateTransactionsTime error", err)
+					let error = err.error || err.message || i18n.t('Unable to update transactions time. Please retry later.');
+					FlowDialog.alert(
+						i18n.t('Transactions update process failed'),
+						html`${error}${this.buildDebugInfoForDialog(err)}`
+					)
+				})
+				if(response)
+					console.log("updateTransactionsTime response", response)
+
+				//this.removePreparingTransactionNotification({uid});
+
+				//this.updatingTransactionsTime = false;
+				resolve()
+			})
+		})
 	}
 
 	exportTransactions(){
@@ -864,6 +923,20 @@ export class KaspaWalletUI extends BaseElement{
 						Object.assign(tx_old, tx);
 					}
 				});
+			})
+
+			wallet.on("transactions-update-status", (info)=>{
+		    	console.log("############ transactions-update-status", info.status)
+				if (info.status=="finished"){
+					this.updatingTransactionsTime = false;
+				}
+				if (info.total != undefined){
+					this.updatingTransactionsTimeStatus = Object.assign(
+						this.updatingTransactionsTimeStatus||{},
+						info
+					);
+				}
+				this.requestUpdate("updatingTransactionsTimeStatus", null)
 			})
 		    wallet.on("new-transaction", (tx)=>{
 		    	//console.log("############ new-transaction", tx)
