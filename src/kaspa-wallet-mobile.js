@@ -297,7 +297,7 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 							@click="${this.exportTransactions}" i18n>Export transactions as CSV</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
 							?disabled=${this.updatingTransactionsTime}
-							@click="${this.updateTransactionsTime}" i18n>Update transactions time</flow-btn>
+							@click="${this.updateTransactionsTime}" i18n>Update transaction times</flow-btn>
 						${
 							this.updatingTransactionsTimeStatus?
 							html`

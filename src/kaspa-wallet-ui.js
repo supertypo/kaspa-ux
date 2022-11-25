@@ -372,16 +372,16 @@ export class KaspaWalletUI extends BaseElement{
 			return
 		if (this.updatingTransactionsTime){
 			FlowDialog.alert(
-				i18n.t('Updating transactions time'),
+				i18n.t('Updating transaction times'),
 				i18n.t('Transactions update process is in-progress'),
 			);
 			return
 		}
 
 		let {btn} = await FlowDialog.alert({
-			title:i18n.t('Update transactions time'),
-			body:html`<div>${i18n.t('Updating transactions will take time depending upto your transactions list.')}</div>
-					 <div>${i18n.t('Are you sure to update transactions?')}</div>`,
+			title:i18n.t('Update transaction times'),
+			body:html`<div>${i18n.t('Updating transaction times may take time if you have a lot of transactions,')}</div>
+					 <div>${i18n.t('are you sure?')}</div>`,
 			cls:'with-icon',
 			btns:[{
 				text:i18n.t('Cancel'),
@@ -920,7 +920,7 @@ export class KaspaWalletUI extends BaseElement{
 			})
 
 			wallet.on("transactions-update-status", (info)=>{
-		    	//console.log("############ transactions-update-status", info.status)
+		    	console.log("############ transactions-update-status", info.status)
 				if (info.status=="finished"){
 					this.updatingTransactionsTime = false;
 				}
