@@ -426,6 +426,10 @@ export class KaspaWalletUI extends BaseElement{
 			return field.toUpperCase()
 		}).join(","))
 
+		let escape = str=>{
+			return `"${str.replaceAll('"', '""')}"`
+		}
+
 		items.map((tx, i)=>{
 			if (tx.isMoved){
 				return
@@ -447,7 +451,7 @@ export class KaspaWalletUI extends BaseElement{
 						row.push(tx.address)
 					break;
 					case 'amount':
-						row.push(`${tx.in?'':'-'}${KAS(tx.amount)}`)
+						row.push(escape(`${tx.in?'':'-'}${KAS(tx.amount)}`))
 					break;
 					case 'direction':
 						row.push(tx.in?'RECEIVE':'SEND')
@@ -456,13 +460,19 @@ export class KaspaWalletUI extends BaseElement{
 						row.push(cfm)
 					break;
 					case 'note':
-						row.push(tx.note||'')
+						row.push(escape(tx.note||''))
 					break;
 					case 'this wallet':
 						row.push(tx.myAddress?'YES':'')
 					break;
 					case 'date':
-						row.push(tx.version==2 ? tx.date : '')
+						if (tx.version==1){
+							row.push('N/A');
+						}else if (tx.version==2){
+							row.push(tx.date)
+						}else{
+							row.push('')
+						}
 					break;
 
 				}
