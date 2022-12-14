@@ -454,6 +454,8 @@ export class KaspaWalletMobile extends KaspaWalletUI{
 						<flow-btn class="center-btn primary v-margin"
 							@click="${this.showUTXOs}" i18n>Show UTXOs</flow-btn>
 						<flow-btn class="center-btn primary v-margin"
+							@click="${this.forceTxTimeUpdate}" i18n>Force transaction times update</flow-btn>
+						<flow-btn class="center-btn primary v-margin"
 							@click="${this.scanMoreAddresses}" i18n>Scan More Addresses</flow-btn>
 						${this.renderExtraScaning()}
 					</div>

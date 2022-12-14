@@ -367,7 +367,15 @@ export class KaspaWalletUI extends BaseElement{
 		`
 	}
 
+	async forceTxTimeUpdate(){
+		this.selectTab("wallet");
+		await this.updateTransactionsTimeImpl(10);
+	}
 	async updateTransactionsTime(){
+		await this.updateTransactionsTimeImpl();
+	}
+
+	async updateTransactionsTimeImpl(version){
 		if(!this.wallet)
 			return
 		if (this.updatingTransactionsTime){
@@ -400,7 +408,9 @@ export class KaspaWalletUI extends BaseElement{
 
 		return new Promise((resolve)=>{
 			dpc(2000, async()=>{
-				let response = await this.wallet.startUpdatingTransactions()
+				//let version = localStorage.force_tx_time==1?5:undefined;
+				//console.log("force_tx_time:version", version);
+				let response = await this.wallet.startUpdatingTransactions(version)
 				.catch(err=>{
 					console.log("updateTransactionsTime error", err)
 					let error = err.error || err.message || i18n.t('Unable to update transactions time. Please retry later.');
