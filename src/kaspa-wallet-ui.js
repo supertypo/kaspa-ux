@@ -312,7 +312,7 @@ export class KaspaWalletUI extends BaseElement{
 								<a target="_blank" href="https://explorer.kaspa.org/txs/${tx.id}">${tx.id}</a>
 							</div>
 							<div class="tx-address">
-								${tx.myAddress?T('THIS WALLET => '):''}
+								${tx.myAddress?T('COMPOUNDING WALLET => '):''}
 								<a target="_blank" href="https://explorer.kaspa.org/addresses/${tx.address}">${tx.address}</a>
 							</div>
 						</div>
@@ -358,7 +358,7 @@ export class KaspaWalletUI extends BaseElement{
 							<a target="_blank" href="https://explorer.kaspa.org/txs/${tx.id.split(":")[0]}">${tx.id.split(":")[0]}</a>
 						</div>
 						<div class="tx-address">
-							${tx.myAddress?T('THIS WALLET => '):''}
+							${tx.myAddress?T('COMPOUNDING WALLET => '):''}
 							<a target="_blank" href="https://explorer.kaspa.org/addresses/${tx.address}">${tx.address}</a>
 						</div>
 					</div>`
@@ -429,7 +429,7 @@ export class KaspaWalletUI extends BaseElement{
 	exportTransactions(){
 		let {txs:items=[], blueScore=0} = this;
 
-		let fields = ["date", "id", "address", "amount", "direction", "confirmation", "note", "this wallet"];
+		let fields = ["date", "id", "address", "amount", "direction", "confirmation", "note", "compounding wallet"];
 		let rows = [];
 
 		rows.push(fields.map(field=>{
@@ -472,7 +472,7 @@ export class KaspaWalletUI extends BaseElement{
 					case 'note':
 						row.push(escape(tx.note||''))
 					break;
-					case 'this wallet':
+					case 'compounding wallet':
 						row.push(tx.myAddress?'YES':'')
 					break;
 					case 'date':
