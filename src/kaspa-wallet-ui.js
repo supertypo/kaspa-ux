@@ -1324,7 +1324,7 @@ export class KaspaWalletUI extends BaseElement{
 			address, amount, note, fee,
 			calculateNetworkFee, inclusiveFee
 		} = args;
-		console.log("sendTx:args", args)
+		//console.log("sendTx:args", args)
 		let uid;
 		if(amount > 10){
 			uid = UID();
