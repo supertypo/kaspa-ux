@@ -252,7 +252,7 @@ class KaspaOpenDialog extends KaspaDialog{
     		return this.setError(i18n.t("Please provide valid words"));
 
     	askForPassword({
-    		title:i18n.t("Password to encryt the wallet"),
+    		title:i18n.t("Password to encrypt the wallet"),
     		confirmBtnText:i18n.t("Encrypt Wallet")
     	}, ({btn, password})=>{
     		if(!password || btn != 'confirm')
