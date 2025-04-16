@@ -74,14 +74,14 @@ class KaspaUpgradeDialog extends KaspaDialog{
 		We’ve launched a new version of the Kaspa Wallet at <br>
 		<span class="highlight">https://kaspa-ng.org</span>
 		</p>
-		<flow-btn primary @click="${this.openKNG}" i18n>Go to New Wallet</flow-btn>
+		<flow-btn primary @click="${this.openKNG}" i18n>Go to the new Kaspa NG Wallet</flow-btn>
 		<div class="spacer"></div>
 		<p>
 		Already have funds on the old wallet?<br>
 		You can still use <span class="highlight">https://wallet.kaspanet.io</span>
 		</p>
 		<flow-btn primary @click="${this.continueLegacy}" i18n>Continue on Legacy Wallet</flow-btn>
-		<div class="note">Thank you for being part of the Kaspa community!</div>
+		<div class="note">Thank you for being a part of the Kaspa community!</div>
 		
 		<div class="bottom-spacer" ?hidden=${!isMobile}></div>`
 	}
